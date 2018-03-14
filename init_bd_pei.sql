@@ -29,7 +29,6 @@
 -- 2018-02-27 : FV / ajout domaine de valeur ouvert lt_pei_marque, lt_pei_raccord, lt_pei_delegat et quelques changements mineurs (libelle et ordre de champs), 
 -- 2018-02-28 : FV / correctifs sur les controles croisés et la remise à 0 de valeur sans logique selon le type de PEI, 
 -- 2018-03-01 : FV / correctifs sur les controles croisés
--- 2018-03-14 : FV / test modif github
 
 -- GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 -- type PI/BI ---- param de mesures = debit, pression
