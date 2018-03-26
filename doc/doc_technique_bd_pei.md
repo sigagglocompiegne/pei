@@ -85,3 +85,15 @@ Particularité(s) à noter :
 
 ## Liste de valeurs
 
+
+---
+
+## Schéma fonctionnel
+
+### Modèle conceptuel simplifié
+
+![mcd](../img/MCD.jpg)
+
+### Schéma fonctionnel
+
+![schema_fonctionnel](../img/schema_fonctionnel.jpg)
