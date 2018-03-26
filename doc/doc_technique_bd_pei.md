@@ -1,5 +1,19 @@
-# Documentation de la base de données PEI
+# Documentation technique de la base de données PEI
 
+## Principes
+  * **généralité** :
+ les .
+ 
+ * **résumé fonctionnel** :
+ les .
+
+## Classes d'objets
+
+L'ensemble des classes d'objets de gestion sont stockés dans le schéma m_reseau_humide et celles applicatives dans le schéma x_apps.
+
+ ### classe d'objet géographique et patrimoniale :
+
+   `geo_pei` : table géographique des attributs patrimoniaux des points d'eau incendie.
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
