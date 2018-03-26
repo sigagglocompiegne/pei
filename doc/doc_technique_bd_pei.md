@@ -9,7 +9,7 @@
 
 ## Classes d'objets
 
-L'ensemble des classes d'objets de gestion sont stockés dans le schéma m_reseau_humide et celles applicatives dans le schéma x_apps.
+L'ensemble des classes d'objets sont stockées dans le schéma m_defense_incendie, celles applicatives dans le schéma x_apps, celles pour les exports opendata dans le schéma x_opendata.
 
  ### classe d'objet géographique et patrimoniale :
 
