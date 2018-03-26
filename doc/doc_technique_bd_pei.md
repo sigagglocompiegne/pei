@@ -2,14 +2,15 @@
 
 ## Principes
   * **généralité** :
- les .
+ Le SDIS a arrêté les contrôles techniques des poteaux incendie en 2015, laissant cette obligations aux collectivités. Celles-ci ont des approches différentiées dans la gestion des contrôles techniques, soit en régie soit en sous traitance auprès du concessionnaire en charge de l'eau potable ou auprès d'autres prestataires.
+ inventaire issu mlashup de donénes commune, osm, sdis, base de données structurée en parrallèle de la détermination du format d'échange des PEI sous l'égide de l'AFIGEO.
  
  * **résumé fonctionnel** :
  les .
 
 ## Classes d'objets
 
-L'ensemble des classes d'objets sont stockées dans le schéma m_defense_incendie, celles applicatives dans le schéma x_apps, celles pour les exports opendata dans le schéma x_opendata.
+L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defense_incendie, celles dérivées et applicatives dans le schéma x_apps, celles dérivées pour les exports opendata dans le schéma x_opendata.
 
  ### classe d'objet géographique et patrimoniale :
 
