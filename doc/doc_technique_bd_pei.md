@@ -4,13 +4,14 @@
   
   * **généralité**
   
- Courant 2015, le SDIS a signifié l'arrêt de la prise en charge des contrôles techniques des Points d'Eau Incendie (PEI) au profit des collectivités gestionnaires. Dès lors, ces dernières sont tenues d'assurer un contrôle technique (conforme) de chaque PEI tous les 2 ans afin que ceux-ci soient intégrés dans la Défense Extérieure Contre l'Incendie (DECI).
+Courant 2015, le SDIS a signifié l'arrêt de la prise en charge des contrôles techniques des Points d'Eau Incendie (PEI) au profit des collectivités gestionnaires. Dès lors, ces dernières sont tenues d'assurer un contrôle technique (conforme) de chaque PEI tous les 2 ans afin que ceux-ci soient intégrés dans la Défense Extérieure Contre l'Incendie (DECI).
  Les collectivités ont des approches différentiées dans la gestion des contrôles techniques, soit en régie propre, soit en sous traitance, généralement auprès du concessionnaire en charge de l'eau potable ou auprès d'autres prestataires.
  
- La conception de la base de données PEI a donc pour objectif d'une part, de couvrir la logique d'un inventaire et d'une gestion patrimoniale des PEI, d'autre part, de permettre la gestion des contrôles techniques. La base de données ici développée a été conçue en parrallèle des démarches menée sous l'égide de l'AFIGEO et visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
+La conception de la base de données PEI a donc pour objectif d'une part, de couvrir la logique d'un inventaire et d'une gestion patrimoniale des PEI, d'autre part, de permettre la gestion des contrôles techniques. La base de données ici développée a été conçue en parrallèle des démarches menée sous l'égide de l'AFIGEO et visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
  
  * **résumé fonctionnel** :
- Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
+
+Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
 
 ## Classes d'objets
 
