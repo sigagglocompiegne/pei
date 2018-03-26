@@ -78,3 +78,10 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |ope_ct|Opérateur du dernier contrôle|character varying(254)| |
 |presta_ct|Prestataire du dernier contrôle|character varying(254)| |
 |date_co|Date de la dernière reconnaissance opérationnelle|date| |
+
+Particularité(s) à noter :
+
+---
+
+## Liste de valeurs
+
