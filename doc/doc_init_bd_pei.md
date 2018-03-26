@@ -1,6 +1,6 @@
 # Documentation de la base de données PEI
 
-/* 
+
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
 |id_pei|Identifiant unique du PEI|bigint|nextval('m_defense_incendie.geo_pei_id_seq'::regclass)|
@@ -33,4 +33,3 @@
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
 |geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
 |geom1|Géomètrie de la zone de defense incendie de l'objet PEI|USER-DEFINED| |
-*/
