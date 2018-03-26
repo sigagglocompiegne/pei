@@ -48,3 +48,27 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
 |geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
 |geom1|Géomètrie de la zone de defense incendie de l'objet PEI|USER-DEFINED| |
+
+ ### classe d'objet des contrôles :
+
+   `an_pei_ctr` : table des attributs des contrôles techniques des points d'eau incendie.
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|  
+|id_pei|Identifiant unique du PEI|bigint| |
+|id_sdis|Identifiant unique du PEI du SDIS|character varying(254)| |
+|press_stat|Pression statique en bar à un débit de 0 m3/h|real| |
+|press_dyn|Pression dynamique résiduelle en bar à un débit de 60 m3/h|real| |
+|debit|Valeur de débit mesuré exprimé en m3/h sous une pression de 1 bar|real| |
+|debit_max|Valeur de débit maximal à gueule bée mesuré exprimé en m3/h|real| |
+|debit_r_ci|Valeur de débit de remplissage pour les CI en m3/h|real| |
+|etat_anom|Etat d'anomalies du PEI|character varying(1)| |
+|lt_anom|Liste des anomalies du PEI|character varying(254)| |
+|etat_acces|Etat de l'accessibilité du PEI|character varying(1)| |
+|etat_sign|Etat de la signalisation du PEI|character varying(1)| |
+|etat_conf|Etat de la conformité technique du PEI|character varying(1)| |
+|date_mes|Date de mise en service du PEI (correspond à la date du premier contrôle débit-pression effectué sur le terrain)|date| |
+|date_ct|Date du dernier contrôle|date| |
+|ope_ct|Opérateur du dernier contrôle|character varying(254)| |
+|presta_ct|Prestataire du dernier contrôle|character varying(254)| |
+|date_co|Date de la dernière reconnaissance opérationnelle|date| |
