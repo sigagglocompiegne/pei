@@ -2,11 +2,13 @@
 
 ## Principes
   * **généralité** :
- Le SDIS a arrêté les contrôles techniques des poteaux incendie en 2015, laissant cette obligations aux collectivités. Celles-ci ont des approches différentiées dans la gestion des contrôles techniques, soit en régie soit en sous traitance auprès du concessionnaire en charge de l'eau potable ou auprès d'autres prestataires.
- inventaire issu mlashup de donénes commune, osm, sdis, base de données structurée en parrallèle de la détermination du format d'échange des PEI sous l'égide de l'AFIGEO.
+ Courant 2015, le SDIS a signifié l'arrêt de la prise en charge des contrôles techniques des points d'eau incendie aux collectivités gestionnaires. Dès lors, les collectivités sont tenues d'assurer un contrôle technique (conforme) de chaque PEI tous les 2 ans afin que ceux-ci soient intégrés dans la défense extérieure contre l'incendie (DECI).
+ Les collectivités ont des approches différentiées dans la gestion des contrôles techniques, soit en régie propre, soit en sous traitance, généralement auprès du concessionnaire en charge de l'eau potable ou auprès d'autres prestataires.
+ 
+ La base de données a donc pour objectif premier de couvrir la logique d'un inventaire et d'une gestion patrimoniale des Points d'Eau Incendie et de permettre dans un second temps, une gestion des contrôles techniques. La base de données ici développée a été conçue en parrallèle des démarches sous l'égide de l'AFIGEO visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a participée.
  
  * **résumé fonctionnel** :
- les .
+ Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
 
 ## Classes d'objets
 
