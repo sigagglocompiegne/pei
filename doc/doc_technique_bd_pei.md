@@ -2,14 +2,15 @@
 
 ## Principes
   
-  * **généralité**
+* **généralité**
   
 Courant 2015, le SDIS a signifié l'arrêt de la prise en charge des contrôles techniques des Points d'Eau Incendie (PEI) au profit des collectivités gestionnaires. Dès lors, ces dernières sont tenues d'assurer un contrôle technique (conforme) de chaque PEI tous les 2 ans afin que ceux-ci soient intégrés dans la Défense Extérieure Contre l'Incendie (DECI).
- Les collectivités ont des approches différentiées dans la gestion des contrôles techniques, soit en régie propre, soit en sous traitance, généralement auprès du concessionnaire en charge de l'eau potable ou auprès d'autres prestataires.
+
+A cet effet, les collectivités se sont engagées dans des approches différentiées dans cette , soit en régie propre, soit en sous traitance, généralement auprès du concessionnaire en charge de l'eau potable ou auprès d'autres prestataires.
  
-La conception de la base de données PEI a donc pour objectif d'une part, de couvrir la logique d'un inventaire et d'une gestion patrimoniale des PEI, d'autre part, de permettre la gestion des contrôles techniques. La base de données ici développée a été conçue en parrallèle des démarches menée sous l'égide de l'AFIGEO et visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
+La conception de la base de données PEI a donc pour objectif d'une part, de couvrir la logique d'un inventaire et d'une gestion patrimoniale des PEI, d'autre part, de permettre la gestion des contrôles techniques. La base de données ici développée a été conçue en parrallèle des démarches menées sous l'égide de l'AFIGEO et visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
  
- * **résumé fonctionnel** :
+* **résumé fonctionnel** :
 
 Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
 
@@ -17,9 +18,9 @@ Choix du service de conservation de l'unique dernier contrôle technique du PEI 
 
 L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defense_incendie, celles dérivées et applicatives dans le schéma x_apps, celles dérivées pour les exports opendata dans le schéma x_opendata.
 
- ### classe d'objet géographique et patrimoniale :
+### classe d'objet géographique et patrimoniale :
 
-   `geo_pei` : table géographique des attributs patrimoniaux des points d'eau incendie.
+`geo_pei` : table géographique des attributs patrimoniaux des points d'eau incendie.
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
@@ -54,9 +55,9 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
 |geom1|Géomètrie de la zone de defense incendie de l'objet PEI|USER-DEFINED| |
 
- ### classe d'objet des contrôles :
+### classe d'objet des contrôles :
 
-   `an_pei_ctr` : table des attributs des contrôles techniques des points d'eau incendie.
+`an_pei_ctr` : table des attributs des contrôles techniques des points d'eau incendie.
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
