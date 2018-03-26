@@ -1,7 +1,9 @@
 # Documentation technique de la base de données PEI
 
 ## Principes
-  * **généralité** :
+  
+  * **généralité**
+  
  Courant 2015, le SDIS a signifié l'arrêt de la prise en charge des contrôles techniques des Points d'Eau Incendie (PEI) au profit des collectivités gestionnaires. Dès lors, ces dernières sont tenues d'assurer un contrôle technique (conforme) de chaque PEI tous les 2 ans afin que ceux-ci soient intégrés dans la Défense Extérieure Contre l'Incendie (DECI).
  Les collectivités ont des approches différentiées dans la gestion des contrôles techniques, soit en régie propre, soit en sous traitance, généralement auprès du concessionnaire en charge de l'eau potable ou auprès d'autres prestataires.
  
