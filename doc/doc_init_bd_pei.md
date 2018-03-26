@@ -1,3 +1,5 @@
+# Documentation de la base de données PEI
+
 /* 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
