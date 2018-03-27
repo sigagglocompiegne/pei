@@ -98,7 +98,6 @@ Particularité(s) à noter :
 
 Particularité(s) à noter :
 * Domaine de valeur issu du format d'échange défini par l'AFIGEO
-* Une clé primaire existe sur le champ code 
 
 Valeurs possibles :
 
@@ -121,7 +120,6 @@ Valeurs possibles :
 
 Particularité(s) à noter :
 * Domaine de valeur issu du format d'échange défini par l'AFIGEO
-* Une clé primaire existe sur le champ code 
 
 
 Valeurs possibles :
@@ -145,7 +143,6 @@ Valeurs possibles :
 
 Particularité(s) à noter :
 * Domaine de valeur (code_open, valeur) issu du format d'échange défini par l'AFIGEO
-* Une clé primaire existe sur le champ code 
 
 Valeurs possibles :
 
@@ -170,7 +167,6 @@ Valeurs possibles :
 
 Particularité(s) à noter :
 * Domaine de valeur (code_open, valeur) issu du format d'échange défini par l'AFIGEO
-* Une clé primaire existe sur le champ code 
 
 Valeurs possibles :
 
@@ -179,6 +175,23 @@ Valeurs possibles :
 |01|Public|public|
 |02|Privé|prive|
 
+---
+
+`lt_pei_etat_pei` : Liste permettant de décrire l'état d'actualité du PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative à l'état d'actualité du PEI|character(3)| |
+|valeur|Valeur de la liste énumérée relative à l'état d'actualité du PEI|character varying(80)| |
+
+Valeurs possibles :
+
+|code | valeur | 
+|:---|:---|   
+|01|Projet|
+|02|Existant|
+|03|Supprimé|
+|00|Non renseigné|
 
 ---
 
@@ -190,7 +203,7 @@ Valeurs possibles :
 |valeur|Valeur de la liste énumérée relative au type d'anomalie d'un PEI|character varying(80)| |
 
 Particularité(s) à noter :
-* fonctionnement générateur d'application permet la saisie de choix multiple par la concaténation des différents valeurs séparées par un ";". Il n'y a donc pas de gestion d'une cardinalité 1-n depuis la classe an_pei_ctr et pas de clé étrangère depuis cette dernière.
+* Le fonctionnement du générateur d'application web permet la saisie de choix multiple par la concaténation des différents valeurs séparées par un ";". Il n'y a donc pas de nécessiter à gérer une cardinalité 1-n depuis la classe an_pei_ctr et donc pas de clé étrangère depuis cette dernière.
 * Une clé primaire existe sur le champ code 
 
 
