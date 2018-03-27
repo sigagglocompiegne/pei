@@ -96,4 +96,4 @@ Particularité(s) à noter :
 
 ### Schéma fonctionnel
 
-![schema_fonctionnel](/img/schema_fonctionnel.jpg)
+![schema_fonctionnel](img/schema_fonctionnel.jpg)
