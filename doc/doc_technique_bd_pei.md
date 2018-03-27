@@ -248,7 +248,7 @@ Valeurs possibles :
 |valeur|Valeur de la liste énumérée relative au nom du CS SDIS en charge du PEI|character varying(80)| |
 
 Particularité(s) à noter :
-* Information héritée de données issues de sources tierce mais difficile à maintenir car relevant de la gestion du SDIS lui même
+* Information connue par héritage de données PEI issues de sources tierces et difficile à maintenir car relevant de la gestion propre du SDIS
 
 Valeurs possibles :
 
