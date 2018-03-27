@@ -1,3 +1,5 @@
+![GeoCompiegnois](img/Logo_web-GeoCompiegnois.png)
+
 # Point d'Eau Incendie
 
 le projet contient :
