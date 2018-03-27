@@ -139,9 +139,9 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de PEI|character(3)| |
-|valeur|Valeur de la liste énumérée relative au type de PEI|character varying(80)| |
-|code_open|Valeur de la liste énumérée relative au type de PEI|character varying(30)| |
+|code|Code de la liste énumérée relative au type de source du PEI|character(3)| |
+|valeur|Valeur de la liste énumérée relative au type de source du PEI|character varying(80)| |
+|code_open|Code pour les exports opendata de la liste énumérée relative au type de source du PEI|character varying(30)| |
 
 Particularité(s) à noter :
 * Domaine de valeur (code_open, valeur) issu du format d'échange défini par l'AFIGEO
@@ -157,6 +157,27 @@ Valeurs possibles :
 |CE|Cours d'eau|cours_eau|
 |AEP|Réseau AEP|reseau_aep|
 |IRR|Réseau d'irrigation|reseau_irrigation|
+
+---
+
+`lt_pei_statut` : Liste permettant de décrire le statut juridique du PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au statut juridique du PEI|character(3)| |
+|valeur|Valeur de la liste énumérée relative au statut juridique du PEI|character varying(80)| |
+|code_open|Code pour les exports opendata de la liste énumérée relative au statut juridique du PEI|character varying(30)| |
+
+Particularité(s) à noter :
+* Domaine de valeur (code_open, valeur) issu du format d'échange défini par l'AFIGEO
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|code | valeur | code_open |
+|:---|:---|:---|   
+|01|Public|public|
+|02|Privé|prive|
 
 
 ---
