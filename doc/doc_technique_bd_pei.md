@@ -88,6 +88,29 @@ Particularité(s) à noter :
 ## Liste de valeurs
 
 
+`lt_pei_type_pei` : Liste des types de PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au type de PEI|character(2)| |
+|valeur|Valeur de la liste énumérée relative au type de PEI|character varying(80)| |
+|affich|Ordre d'affichage de la liste énumérée relative au type de PEI|character(1)| |
+
+Particularité(s) à noter :
+* Domaine de valeur issu du format d'échange défini par l'AFIGEO
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|code | valeur | affich
+|:---|:---|:---|     
+|BI|Prise d'eau sous pression, notamment bouche d'incendie|2|
+|CI|Citerne aérienne ou enterrée|4|
+|NR|Non renseigné|5|
+|PA|Point d'aspiration aménagé (point de puisage)|3|
+|PI|Poteau d'incendie|1|
+
+
 `lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
@@ -102,7 +125,7 @@ Particularité(s) à noter :
 
 Valeurs possibles :
 
-|Code | Valeur |
+|code | valeur |
 |:---|:---|    
 |01|Manque bouchon|
 |02|Manque capot ou capot HS|
