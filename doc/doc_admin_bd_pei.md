@@ -4,7 +4,7 @@
 
 ## Principes
   
-* **généralités**
+### généralités
   
 Courant 2015, le SDIS a signifié l'arrêt de la prise en charge des contrôles techniques des Points d'Eau Incendie (PEI) au profit des collectivités gestionnaires. Dès lors, ces dernières sont tenues d'assurer un contrôle technique (conforme) de chaque PEI tous les 2 ans afin que ceux-ci soient pleinement intégrés à la Défense Extérieure Contre l'Incendie (DECI).
 
@@ -14,7 +14,7 @@ La conception de la base de données PEI a donc pour objectif, d'une part, de co
 
 La base de données ici développée a été conçue en parrallèle des démarches menées sous l'égide de l'AFIGEO et visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
  
-* **résumé fonctionnel** :
+### résumé fonctionnel
 
 A rédiger :
 
