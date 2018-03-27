@@ -161,9 +161,9 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au statut juridique du PEI|character(3)| |
+|code|Code de la liste énumérée relative au statut juridique du PEI|character(2)| |
 |valeur|Valeur de la liste énumérée relative au statut juridique du PEI|character varying(80)| |
-|code_open|Code pour les exports opendata de la liste énumérée relative au statut juridique du PEI|character varying(30)| |
+|code_open|Code pour les exports opendata de la liste énumérée relative au statut juridique du PEI|character varying(10)| |
 
 Particularité(s) à noter :
 * Domaine de valeur (code_open, valeur) issu du format d'échange défini par l'AFIGEO
@@ -181,7 +181,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative à l'état d'actualité du PEI|character(3)| |
+|code|Code de la liste énumérée relative à l'état d'actualité du PEI|character(2)| |
 |valeur|Valeur de la liste énumérée relative à l'état d'actualité du PEI|character varying(80)| |
 
 Valeurs possibles :
@@ -195,6 +195,30 @@ Valeurs possibles :
 
 ---
 
+`lt_pei_gestion` : Liste permettant de décrire le gestionnaire du PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au gestionnaire du PEI|character(2)| |
+|valeur|Valeur de la liste énumérée relative au gestionnaire du PEI|character varying(80)| |
+
+Valeurs possibles :
+
+|code | valeur | 
+|:---|:---|   
+|01|Etat|
+|02|Région|
+|03|Département|
+|04|Intercommunalité|
+|05|Commune|
+|06|Office HLM|
+|07|Privé|
+|99|Autre|
+|ZZ|Non concerné|
+|00|Non renseigné|
+
+---
+
 `lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
@@ -203,9 +227,7 @@ Valeurs possibles :
 |valeur|Valeur de la liste énumérée relative au type d'anomalie d'un PEI|character varying(80)| |
 
 Particularité(s) à noter :
-* Le fonctionnement du générateur d'application web permet la saisie de choix multiple par la concaténation des différents valeurs séparées par un ";". Il n'y a donc pas de nécessiter à gérer une cardinalité 1-n depuis la classe an_pei_ctr et donc pas de clé étrangère depuis cette dernière.
-* Une clé primaire existe sur le champ code 
-
+* Le fonctionnement du générateur d'application web permet la saisie de choix multiple par la concaténation des différents `code` séparées par un `;`. Il n'y a donc pas de nécessiter à gérer une cardinalité 1-n depuis la classe `an_pei_ctr` et donc pas de clé étrangère depuis cette dernière.
 
 Valeurs possibles :
 
