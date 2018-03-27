@@ -1,4 +1,4 @@
-![GeoCompiegnois](https://github.com/sigagglocompiegne/pei/tree/master/doc/img/Logo_bd-GeoCompiegnois.png =250x250)
+![GeoCompiegnois](img/Logo_bd-GeoCompiegnois.png)
 
 # Documentation technique de la base de données PEI
 
