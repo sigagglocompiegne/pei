@@ -92,12 +92,13 @@ Particularité(s) à noter :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code interne des types de bien|character(2)| |
-|valeur|Libellé des types de bien|character varying(80)| |
+|code|Code de la liste énumérée relative au type d'anomalie d'un PEI|character(2)| |
+|valeur|Valeur de la liste énumérée relative au type d'anomalie d'un PEI|character varying(80)| |
 
 Particularité(s) à noter :
 * fonctionnement générateur d'application permet la saisie de choix multiple par la concaténation des différents valeurs séparées par un ";". Il n'y a donc pas de gestion d'une cardinalité 1-n depuis la classe an_pei_ctr et pas de clé étrangère depuis cette dernière.
 * Une clé primaire existe sur le champ code 
+
 
 Valeurs possibles :
 
