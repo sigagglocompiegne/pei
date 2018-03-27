@@ -92,8 +92,8 @@ Particularité(s) à noter :
 
 ### Modèle conceptuel simplifié
 
-![mcd](../img/MCD.jpg)
+![mcd](/img/MCD.jpg)
 
 ### Schéma fonctionnel
 
-![schema_fonctionnel](../img/schema_fonctionnel.jpg)
+![schema_fonctionnel](/img/schema_fonctionnel.jpg)
