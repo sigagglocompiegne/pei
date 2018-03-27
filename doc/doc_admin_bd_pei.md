@@ -1,4 +1,4 @@
-![mcd](img/Logo_bd-GeoCompiegnois.png)
+![GeoCompiegnois](img/Logo_bd-GeoCompiegnois.png)
 
 # Documentation technique de la base de données PEI
 
@@ -10,7 +10,7 @@ Courant 2015, le SDIS a signifié l'arrêt de la prise en charge des contrôles 
 
 A cet effet, les collectivités se sont engagées dans des approches différentiées pour la gestion des contrôles, soit en régie propre, soit en sous traitance auprès de prestataires, généralement le concessionnaire en charge du réseau d'eau.
  
-La conception de la base de données PEI a donc pour objectif d'une part, de couvrir la logique d'un inventaire et d'une gestion patrimoniale des PEI, d'autre part, de permettre la gestion des contrôles techniques. Elle doit également permettre une gestion directe de l'information dans la base de données (au travers d'une application) ou une intégration de données issues de tiers (SDIS, ...).
+La conception de la base de données PEI a donc pour objectif, d'une part, de couvrir la logique d'un inventaire et d'une gestion patrimoniale des PEI, d'autre part, de permettre la gestion des contrôles techniques. Elle doit également permettre une gestion directe de l'information dans la base de données (au travers d'une application) ou une intégration de données issues de tiers (SDIS, ...).
 
 La base de données ici développée a été conçue en parrallèle des démarches menées sous l'égide de l'AFIGEO et visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
  
