@@ -29,6 +29,7 @@
 -- 2018-02-27 : FV / ajout domaine de valeur ouvert lt_pei_marque, lt_pei_raccord, lt_pei_delegat et quelques changements mineurs (libelle et ordre de champs), 
 -- 2018-02-28 : FV / correctifs sur les controles croisés et la remise à 0 de valeur sans logique selon le type de PEI, 
 -- 2018-03-01 : FV / correctifs sur les controles croisés
+-- 2018-03-27 : FV / correctifs mineurs des commentaires sur les tables
 
 -- GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 -- type PI/BI ---- param de mesures = debit, pression
@@ -750,9 +751,9 @@ ALTER TABLE m_defense_incendie.lt_pei_raccord
 GRANT ALL ON TABLE m_defense_incendie.lt_pei_raccord TO postgres;
 GRANT ALL ON TABLE m_defense_incendie.lt_pei_raccord TO groupe_sig WITH GRANT OPTION;
 COMMENT ON TABLE m_defense_incendie.lt_pei_raccord
-  IS 'Code permettant de décrire la raccord du PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_raccord.code IS 'Code de la liste énumérée relative à la raccord du PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_raccord.valeur IS 'Valeur de la liste énumérée relative à la raccord du PEI';
+  IS 'Code permettant de décrire le type de raccord du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_raccord.code IS 'Code de la liste énumérée relative au type de raccord du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_raccord.valeur IS 'Valeur de la liste énumérée relative au type de raccord du PEI';
 
 
 -- Sequence: m_defense_incendie.lt_pei_raccord_seq
