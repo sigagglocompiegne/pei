@@ -88,6 +88,36 @@ Particularité(s) à noter :
 ## Liste de valeurs
 
 
+`lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code interne des types de bien|character(2)| |
+|valeur|Libellé des types de bien|character varying(80)| |
+
+Particularité(s) à noter :
+* fonctionnement générateur d'application permet la saisie de choix multiple par la concaténation des différents valeurs séparées par un ";". Il n'y a donc pas de gestion d'une cardinalité 1-n depuis la classe an_pei_ctr et pas de clé étrangère depuis cette dernière.
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code | Valeur |
+|:---|:---|    
+|01|Manque bouchon|
+|02|Manque capot ou capot HS|
+|03|Manque de débit ou volume|
+|04|Manque de signalisation|
+|05|Problème d'accès|
+|06|Ouverture point d'eau difficile|
+|07|Fuite hydrant|
+|08|Manque butée sur la vis d'ouverture|
+|09|Purge HS|
+|10|Pas d'écoulement d'eau|
+|11|Végétation génante|
+|12|Gêne accès extérieur|
+|13|Equipement à remplacer|
+|14|Hors service|
+
 ---
 
 ## Schéma fonctionnel
