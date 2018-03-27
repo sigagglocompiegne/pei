@@ -345,7 +345,7 @@ Valeurs possibles :
 
 ### Modèle conceptuel simplifié
 
-![mcd](img/logo_ARC.jpg)
+![mcd](img/mcd.jpg)
 
 ### Schéma fonctionnel
 
