@@ -92,7 +92,7 @@ Particularité(s) à noter :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de PEI|character(2)| |
+|code|Code de la liste énumérée relative au type de PEI|character varying(2)| |
 |valeur|Valeur de la liste énumérée relative au type de PEI|character varying(80)| |
 |affich|Ordre d'affichage de la liste énumérée relative au type de PEI|character(1)| |
 
@@ -115,7 +115,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de PEI|character(3)| |
+|code|Code de la liste énumérée relative au type de PEI|character varying(3)| |
 |valeur|Valeur de la liste énumérée relative au type de PEI|character varying(80)| |
 
 Particularité(s) à noter :
@@ -137,7 +137,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de source du PEI|character(3)| |
+|code|Code de la liste énumérée relative au type de source du PEI|character varying(3)| |
 |valeur|Valeur de la liste énumérée relative au type de source du PEI|character varying(80)| |
 |code_open|Code pour les exports opendata de la liste énumérée relative au type de source du PEI|character varying(30)| |
 
@@ -161,7 +161,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au statut juridique du PEI|character(2)| |
+|code|Code de la liste énumérée relative au statut juridique du PEI|character varying(2)| |
 |valeur|Valeur de la liste énumérée relative au statut juridique du PEI|character varying(80)| |
 |code_open|Code pour les exports opendata de la liste énumérée relative au statut juridique du PEI|character varying(10)| |
 
@@ -181,7 +181,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative à l'état d'actualité du PEI|character(2)| |
+|code|Code de la liste énumérée relative à l'état d'actualité du PEI|character varying(2)| |
 |valeur|Valeur de la liste énumérée relative à l'état d'actualité du PEI|character varying(80)| |
 
 Valeurs possibles :
@@ -199,7 +199,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au gestionnaire du PEI|character(2)| |
+|code|Code de la liste énumérée relative au gestionnaire du PEI|character varying(2)| |
 |valeur|Valeur de la liste énumérée relative au gestionnaire du PEI|character varying(80)| |
 
 Valeurs possibles :
@@ -223,7 +223,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative à l'état d'un attribut boolean|character(1)| |
+|code|Code de la liste énumérée relative à l'état d'un attribut boolean|character varying(1)| |
 |valeur|Valeur de la liste énumérée relative à l'état d'un attribut boolean|character varying(80)| |
 |code_open|Code pour les exports opendata de la liste énumérée relative à l'état d'un attribut boolean|character varying(1)| |
 
@@ -240,11 +240,36 @@ Valeurs possibles :
 
 ---
 
+`lt_pei_cs_sdis` : Liste permettant de décrire le nom du centre de secours de 1er appel du SDIS en charge du PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au nom du CS SDIS en charge du PEI|character varying(5)| |
+|valeur|Valeur de la liste énumérée relative au nom du CS SDIS en charge du PEI|character varying(80)| |
+
+Particularité(s) à noter :
+* Information héritée de données issues de sources tierce mais difficile à maintenir car relevant de la gestion du SDIS lui même
+
+Valeurs possibles :
+
+|code | valeur |
+|:---|:---|  
+|00000|Non renseigné|
+|60159|CS de Compiègne|
+|60068|CS de Béthisy-Saint-Pierre|
+|60636|CS de Thourotte|
+|60667|CS de Verberie|
+|60025|CS d'Attichy|
+|60223|CS d'Estrées-Saint-Denis|
+|60509|CS de Pont-Sainte-Maxence|
+
+---
+
 `lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type d'anomalie d'un PEI|character(2)| |
+|code|Code de la liste énumérée relative au type d'anomalie d'un PEI|character varying(2)| |
 |valeur|Valeur de la liste énumérée relative au type d'anomalie d'un PEI|character varying(80)| |
 
 Particularité(s) à noter :
