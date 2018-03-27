@@ -1,4 +1,4 @@
-![GeoCompiegnois](img/Logo_bd-GeoCompiegnois.png | width=48)
+![GeoCompiegnois](img/Logo_bd-GeoCompiegnois.png =250x250)
 
 # Documentation technique de la base de données PEI
 
