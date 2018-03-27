@@ -269,6 +269,46 @@ Valeurs possibles :
 
 ---
 
+`lt_pei_marque` : Liste permettant de décrire la marque du PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative à la marque du PEI|character varying(2)|to_char(nextval('m_defense_incendie.lt_pei_marque_seq'::regclass), 'FM00'::text)|
+|valeur|Valeur de la liste énumérée relative à la marque du PEI|character varying(80)| |
+
+
+Particularité(s) à noter :
+* Domaine de valeur ouvert
+
+Valeurs possibles :
+
+|code | valeur |
+|:---|:---|  
+|00|Non renseigné|
+|01|...|
+
+---
+
+`lt_pei_raccord` : Liste permettant de décrire le type de raccord du PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au type de raccord du PEI|character varying(2)|to_char(nextval('m_defense_incendie.lt_pei_raccord_seq'::regclass), 'FM00'::text)|
+|valeur|Valeur de la liste énumérée relative au type de raccord du PEI|character varying(80)| |
+
+
+Particularité(s) à noter :
+* Domaine de valeur ouvert
+
+Valeurs possibles :
+
+|code | valeur |
+|:---|:---|  
+|00|Non renseigné|
+|01|...|
+
+---
+
 `lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
