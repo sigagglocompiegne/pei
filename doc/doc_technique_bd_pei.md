@@ -110,6 +110,7 @@ Valeurs possibles :
 |PA|Point d'aspiration aménagé (point de puisage)|3|
 |PI|Poteau d'incendie|1|
 
+---
 
 `lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
 
