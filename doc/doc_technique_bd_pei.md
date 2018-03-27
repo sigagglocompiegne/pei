@@ -92,7 +92,7 @@ Particularité(s) à noter :
 
 ### Modèle conceptuel simplifié
 
-![mcd](/img/MCD.jpg)
+![mcd](/img/logo_ARC.jpg)
 
 ### Schéma fonctionnel
 
