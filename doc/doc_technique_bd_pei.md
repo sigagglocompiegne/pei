@@ -219,6 +219,27 @@ Valeurs possibles :
 
 ---
 
+`lt_pei_etat_boolean` : Liste permettant de décrire l'état d'un attribut "booléen" pour un PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative à l'état d'un attribut boolean|character(1)| |
+|valeur|Valeur de la liste énumérée relative à l'état d'un attribut boolean|character varying(80)| |
+|code_open|Code pour les exports opendata de la liste énumérée relative à l'état d'un attribut boolean|character varying(1)| |
+
+Particularité(s) à noter :
+* Domaine de valeur (code_open, valeur) issu du format d'échange défini par l'AFIGEO
+
+Valeurs possibles :
+
+|code | valeur | code_open |
+|:---|:---|:---|   
+|0|Non|0|
+|f|Non|0|
+|t|Oui|1|
+
+---
+
 `lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
@@ -249,7 +270,6 @@ Valeurs possibles :
 |14|Hors service|
 
 ---
-
 ## Schéma fonctionnel
 
 ### Modèle conceptuel simplifié
