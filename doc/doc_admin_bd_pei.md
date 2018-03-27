@@ -14,7 +14,10 @@ La base de données ici développée a été conçue en parrallèle des démarch
  
 * **résumé fonctionnel** :
 
-Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
+A rédiger :
+`* Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
+* gestion différentiée
+* gestion des controleurs de saisie utilisateur (cas impossible, notamment sur la partie controle)`
 
 ## Classes d'objets
 
