@@ -112,6 +112,55 @@ Valeurs possibles :
 
 ---
 
+`lt_pei_diam_pei` : Liste permettant de décrire le diamètre intérieur du point d'eau incendie
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au type de PEI|character(3)| |
+|valeur|Valeur de la liste énumérée relative au type de PEI|character varying(80)| |
+
+Particularité(s) à noter :
+* Domaine de valeur issu du format d'échange défini par l'AFIGEO
+* Une clé primaire existe sur le champ code 
+
+
+Valeurs possibles :
+
+|code | valeur |
+|:---|:---|  
+|80|80|
+|100|100|
+|150|150|
+|NR|Non renseigné|
+
+---
+
+`lt_pei_source` : Liste permettant de décrire le type de source d'alimentation du PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au type de PEI|character(3)| |
+|valeur|Valeur de la liste énumérée relative au type de PEI|character varying(80)| |
+|code_open|Valeur de la liste énumérée relative au type de PEI|character varying(30)| |
+
+Particularité(s) à noter :
+* Domaine de valeur (code_open, valeur) issu du format d'échange défini par l'AFIGEO
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|code | valeur | code_open |
+|:---|:---|:---|   
+|CI|Citerne|citerne|
+|PE|Plan d'eau|plan_eau|
+|PU|Puit|puits|
+|CE|Cours d'eau|cours_eau|
+|AEP|Réseau AEP|reseau_aep|
+|IRR|Réseau d'irrigation|reseau_irrigation|
+
+
+---
+
 `lt_pei_anomalie` : Liste des anomalies possibles pour un PEI
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
