@@ -234,7 +234,7 @@ Valeurs possibles :
 
 |code | valeur | code_open |
 |:---|:---|:---|   
-|0|Non|0|
+|0|Non renseigné||
 |f|Non|0|
 |t|Oui|1|
 
