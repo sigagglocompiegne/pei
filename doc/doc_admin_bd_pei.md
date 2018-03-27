@@ -26,7 +26,7 @@ gestion des controleurs de saisie utilisateur (cas impossible, notamment sur la 
 
 L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defense_incendie, celles dérivées et applicatives dans le schéma x_apps, celles dérivées pour les exports opendata dans le schéma x_opendata.
 
-### classe d'objet géographique et patrimoniale :
+### Classe d'objet géographique et patrimoniale :
 
 `geo_pei` : table géographique des attributs patrimoniaux des points d'eau incendie.
 
@@ -63,7 +63,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
 |geom1|Géomètrie de la zone de defense incendie de l'objet PEI|USER-DEFINED| |
 
-### classe d'objet des contrôles :
+### Classe d'objet des contrôles :
 
 `an_pei_ctr` : table des attributs des contrôles techniques des points d'eau incendie.
 
