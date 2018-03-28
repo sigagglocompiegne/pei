@@ -12,11 +12,11 @@ A cet effet, les collectivités se sont engagées dans des approches différenti
  
 La conception de la base de données PEI a donc pour objectif, d'une part, de couvrir la logique d'un inventaire et d'une gestion patrimoniale des PEI, d'autre part, de permettre la gestion des contrôles techniques. Elle doit également permettre une gestion directe de l'information dans la base de données (au travers d'une application) ou une intégration de données issues de tiers (SDIS, ...).
 
-La base de données ici développée a été conçue en parrallèle des démarches menées sous l'égide de l'AFIGEO et visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
+La base de données ici développée a été conçue en parrallèle des démarches menées sous l'égide de l'AFIGEO visant à définir un format d'échange des PEI en opendata, démarche à laquelle l'Agglomération de la Région de Compiègne a contribuée.
  
 ### Résumé fonctionnel
 
-A rédiger :
+ToDo :
 
 `Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
 gestion différentiée
