@@ -6,6 +6,8 @@
   date        |  auteur              |  description
   28/03/2018  |  Florent VANHOUTTE   |  version initiale
   
+  Attention, hormis pour le domaine de valeur du référentiel géographique source, ce script ne contient que le modèle des données nécessaires à l'exécution du script métier init_bd_pei.sql
+  
 */
 
 -- Schema: r_objet
