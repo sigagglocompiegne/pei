@@ -32,39 +32,40 @@ ALTER TABLE r_objet.lt_src_geom
   OWNER TO postgres;
 GRANT ALL ON TABLE r_objet.lt_src_geom TO postgres;
 GRANT ALL ON TABLE r_objet.lt_src_geom TO groupe_sig WITH GRANT OPTION;
-GRANT SELECT ON TABLE r_objet.lt_src_geom TO groupe_eco;
-GRANT SELECT ON TABLE r_objet.lt_src_geom TO groupe_be;
-GRANT SELECT ON TABLE r_objet.lt_src_geom TO groupe_sig_stage WITH GRANT OPTION;
 COMMENT ON TABLE r_objet.lt_src_geom
   IS 'Code permettant de décrire le type de référentiel géométrique';
 COMMENT ON COLUMN r_objet.lt_src_geom.code IS 'Code de la liste énumérée relative au type de référentiel géométrique';
 COMMENT ON COLUMN r_objet.lt_src_geom.valeur IS 'Valeur de la liste énumérée relative au type de référentiel géométrique';
 
-INSERT INTO lt_src_geom VALUES ('10', 'Cadastre');
-INSERT INTO lt_src_geom VALUES ('11', 'PCI vecteur');
-INSERT INTO lt_src_geom VALUES ('12', 'BD Parcellaire');
-INSERT INTO lt_src_geom VALUES ('13', 'RPCU');
-INSERT INTO lt_src_geom VALUES ('20', 'Ortho-images');
-INSERT INTO lt_src_geom VALUES ('21', 'Orthophotoplan IGN');
-INSERT INTO lt_src_geom VALUES ('22', 'Orthophotoplan partenaire');
-INSERT INTO lt_src_geom VALUES ('23', 'Orthophotoplan local');
-INSERT INTO lt_src_geom VALUES ('30', 'Filaire voirie');
-INSERT INTO lt_src_geom VALUES ('31', 'Route BDTopo');
-INSERT INTO lt_src_geom VALUES ('32', 'Route OSM');
-INSERT INTO lt_src_geom VALUES ('40', 'Cartes');
-INSERT INTO lt_src_geom VALUES ('41', 'Scan25');
-INSERT INTO lt_src_geom VALUES ('50', 'Lever');
-INSERT INTO lt_src_geom VALUES ('51', 'Plan topographique');
-INSERT INTO lt_src_geom VALUES ('52', 'PCRS');
-INSERT INTO lt_src_geom VALUES ('53', 'Trace GPS');
-INSERT INTO lt_src_geom VALUES ('60', 'Geocodage');
-INSERT INTO lt_src_geom VALUES ('71', 'Plan masse vectoriel');
-INSERT INTO lt_src_geom VALUES ('72', 'Plan masse redessiné');
-INSERT INTO lt_src_geom VALUES ('80', 'Thématique');
-INSERT INTO lt_src_geom VALUES ('81', 'Document d''urbanisme');
-INSERT INTO lt_src_geom VALUES ('82', 'Occupation du Sol');
-INSERT INTO lt_src_geom VALUES ('83', 'Thèmes BDTopo');
-INSERT INTO lt_src_geom VALUES ('99', 'Autre');
-INSERT INTO lt_src_geom VALUES ('00', 'Non renseigné');
-INSERT INTO lt_src_geom VALUES ('70', 'Plan masse');
-INSERT INTO lt_src_geom VALUES ('61', 'Base Adresse Locale');
+INSERT INTO r_objet.lt_src_geom(
+            code, valeur)
+    VALUES
+    ('10', 'Cadastre'),
+    ('11', 'PCI vecteur'),
+    ('12', 'BD Parcellaire'),
+    ('13', 'RPCU'),
+    ('20', 'Ortho-images'),
+    ('21', 'Orthophotoplan IGN'),
+    ('22', 'Orthophotoplan partenaire'),
+    ('23', 'Orthophotoplan local'),
+    ('30', 'Filaire voirie'),
+    ('31', 'Route BDTopo'),
+    ('32', 'Route OSM'),
+    ('40', 'Cartes'),
+    ('41', 'Scan25'),
+    ('50', 'Lever'),
+    ('51', 'Plan topographique'),
+    ('52', 'PCRS'),
+    ('53', 'Trace GPS'),
+    ('60', 'Geocodage'),
+    ('61', 'Base Adresse Locale'),
+    ('70', 'Plan masse'),
+    ('71', 'Plan masse vectoriel'),
+    ('72', 'Plan masse redessiné'),
+    ('80', 'Thématique'),
+    ('81', 'Document d''urbanisme'),
+    ('82', 'Occupation du Sol'),
+    ('83', 'Thèmes BDTopo'),
+    ('99', 'Autre'),
+    ('00', 'Non renseigné');
+
