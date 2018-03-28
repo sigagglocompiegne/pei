@@ -40,7 +40,7 @@ La base de données PEI s'appuie sur des référentiels préexistants constituan
 
 L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defense_incendie, celles dérivées et applicatives dans le schéma x_apps, celles dérivées pour les exports opendata dans le schéma x_opendata.
 
-### Classe d'objet géographique et patrimoniale :
+### Classe d'objet géographique et patrimoniale
 
 `geo_pei` : table géographique des attributs patrimoniaux des PEI.
 
@@ -77,7 +77,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
 |geom1|Géomètrie de la zone de defense incendie de l'objet PEI|USER-DEFINED| |
 
-### Classe d'objet des mesures et contrôles :
+### Classe d'objet des mesures et contrôles
 
 `an_pei_ctr` : table des attributs des mesures et contrôles techniques des PEI.
 
@@ -101,9 +101,21 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |presta_ct|Prestataire du dernier contrôle|character varying(254)| |
 |date_co|Date de la dernière reconnaissance opérationnelle|date| |
 
-Particularité(s) à noter :
-
 ---
+
+### Log
+
+`log_pei` : table des log de la base PEI.
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|
+|type_ope|Type d'opération intervenue sur la base PEI|text| |
+|ope_sai|Utilisateur ayant effectuée l'opération sur la base PEI|character varying(254)| |
+|id_pei|Horodatage de l'opération sur la base PEI|bigint| |
+
+Particularité(s) à noter :
+* Table de log liée à la vue de gestion des données PEI
+
 
 ## Liste de valeurs
 
