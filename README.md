@@ -2,7 +2,7 @@
 
 # Point d'Eau Incendie
 
-Ensemble des éléments constituant la mise en ouvre d'une application WebSIG de gestion des contrôles de conformité pour l'assainissement collectif :
+Ensemble des éléments constituant la mise en ouvre d'une application websig de gestion patrimoniale et des contrôles techniques des Points d'Eau Incendie (PEI) :
 
 * script d'initialisation de la base de données
 * Fiche technique de la base de données
