@@ -250,5 +250,25 @@ CREATE INDEX geo_osm_epci_geom_idx
   (geom);
 
 
+-- View: r_osm.geo_v_osm_commune_apc
+
+-- DROP VIEW r_osm.geo_v_osm_commune_apc;
+
+CREATE OR REPLACE VIEW r_osm.geo_v_osm_commune_apc AS 
+ SELECT geo_osm_commune.commune_m,
+    geo_osm_commune.commune,
+    geo_vm_osm_epci.lib_epci,
+    geo_osm_commune.insee,
+    geo_osm_commune.gid,
+    st_multi(geo_osm_commune.geom)::geometry(MultiPolygon,2154) AS geom
+   FROM r_osm.geo_osm_commune,
+    r_osm.geo_vm_osm_epci
+  WHERE (geo_vm_osm_epci.cepci::text = '200067965'::text OR geo_vm_osm_epci.cepci::text = '246000897'::text OR geo_vm_osm_epci.cepci::text = '246000749'::text) AND st_intersects(st_centroid(geo_osm_commune.geom), geo_vm_osm_epci.geom);
+
+ALTER TABLE r_osm.geo_v_osm_commune_apc
+  OWNER TO postgres;
+GRANT ALL ON TABLE r_osm.geo_v_osm_commune_apc TO postgres;
+COMMENT ON VIEW r_osm.geo_v_osm_commune_apc
+  IS 'Limite communale des communes du Pays Compiégnois';
 
 
