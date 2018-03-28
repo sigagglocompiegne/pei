@@ -313,7 +313,7 @@ Valeurs possibles :
 |valeur|Valeur de la liste énumérée relative au nom du CS SDIS en charge du PEI|character varying(80)| |
 
 Particularité(s) à noter :
-* Information connue par héritage de données PEI issues de sources tierces et difficile à maintenir car relevant de la gestion propre du SDIS
+* Information connue par héritage de données PEI issues de sources tierces et difficile à maintenir car relevant de la gestion propre du SDIS (ex : présence de cas de découpage infra-communal dans la répartition de la prise en charge par les centres de secours)
 
 Valeurs possibles :
 
