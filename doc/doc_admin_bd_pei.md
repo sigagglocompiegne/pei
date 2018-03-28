@@ -22,6 +22,19 @@ ToDo :
 gestion différentiée
 gestion des controleurs de saisie utilisateur (cas impossible, notamment sur la partie controle)`
 
+## Dépendances
+
+La base de données s'appuie sur des référentielx préexistants constituant des dépendances nécessaires pour l'implémentation de la base PEI.
+
+|schéma | table | description |
+|:---|:---|:---|  
+|r_objet|lt_src_geom|domaine de valeur générique d'une table géographique|
+|r_administratif|an_geo|jointure insee commune<>siret epci|
+|r_osm|geo_osm_commune|  donnée de référence géographique du découpage communal OSM|
+|r_osm|geo_osm_epci|donnée de référence géographique du découpage epci OSM|  
+
+---
+
 ## Classes d'objets
 
 L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defense_incendie, celles dérivées et applicatives dans le schéma x_apps, celles dérivées pour les exports opendata dans le schéma x_opendata.
@@ -360,6 +373,8 @@ Valeurs possibles :
 |14|Hors service|
 
 ---
+
+
 ## Schéma fonctionnel
 
 ### Modèle conceptuel simplifié
