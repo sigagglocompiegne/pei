@@ -24,14 +24,14 @@ gestion des controleurs de saisie utilisateur (cas impossible, notamment sur la 
 
 ## Dépendances
 
-La base de données s'appuie sur des référentielx préexistants constituant des dépendances nécessaires pour l'implémentation de la base PEI.
+La base de données PEI s'appuie sur des référentiels préexistants constituant autant de dépendances nécessaires pour l'implémentation de la base PEI.
 
 |schéma | table | description |
 |:---|:---|:---|  
 |r_objet|lt_src_geom|domaine de valeur générique d'une table géographique|
-|r_administratif|an_geo|jointure insee commune<>siret epci|
-|r_osm|geo_osm_commune|  donnée de référence géographique du découpage communal OSM|
-|r_osm|geo_osm_epci|donnée de référence géographique du découpage epci OSM|  
+|r_administratif|an_geo|donnée de référence alphanumérique du découpage administratif utilisé pour la jointure insee commune<>siret epci|
+|r_osm|geo_osm_commune|donnée de référence géographique du découpage communal OSM|
+|r_osm|geo_osm_epci|donnée de référence géographique du découpage epci OSM|
 
 ---
 
