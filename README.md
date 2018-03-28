@@ -2,7 +2,7 @@
 
 # Point d'Eau Incendie
 
-Ensemble des éléments constituant la mise en ouvre d'une application websig de gestion patrimoniale et des contrôles techniques des Points d'Eau Incendie (PEI) :
+Ensemble des éléments constituant la mise en oeuvre d'une application websig de gestion patrimoniale et des contrôles techniques des Points d'Eau Incendie (PEI) :
 
 - [Script d'initialisation de la base de données](sql/init_bd_pei.sql)
 - [Script d'initialisation des dépendances de la base de données](sql/init_bd_pei_dependency.sql)
