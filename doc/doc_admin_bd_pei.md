@@ -28,7 +28,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 
 ### Classe d'objet géographique et patrimoniale :
 
-`geo_pei` : table géographique des attributs patrimoniaux des points d'eau incendie.
+`geo_pei` : table géographique des attributs patrimoniaux des PEI.
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
@@ -63,9 +63,9 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
 |geom1|Géomètrie de la zone de defense incendie de l'objet PEI|USER-DEFINED| |
 
-### Classe d'objet des contrôles :
+### Classe d'objet des mesures et contrôles :
 
-`an_pei_ctr` : table des attributs des contrôles techniques des points d'eau incendie.
+`an_pei_ctr` : table des attributs des mesures et contrôles techniques des PEI.
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
