@@ -1,4 +1,17 @@
 /*
+  
+  dépendances : voir script d'initialisation des dépendances init_bd_pei_dependencies.sql
+  
+  Liste des dépendances :
+  schéma               |  table               |  description
+  r_objet              |  lt_src_geom         |  domaine de valeur générique d'une table géographique
+  r_administratif      |  an_geo              |  jointure insee commune<>siret epci
+  r_osm                |  geo_osm_commune     |  donnée de référence géographique du découpage communal OSM
+  r_osm                |  geo_osm_epci        |  donnée de référence géographique du découpage epci OSM       
+
+*/
+
+/*
 
 #################################################################### SUIVI CODE SQL ####################################################################
 
