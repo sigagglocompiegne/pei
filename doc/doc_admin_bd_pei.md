@@ -31,7 +31,7 @@ La base de données PEI s'appuie sur des référentiels préexistants constituan
 |r_objet|lt_src_geom|domaine de valeur générique d'une table géographique|source du positionnement du PEI|
 |r_administratif|an_geo|donnée de référence alphanumérique du découpage administratif |jointure insee commune<>siret epci|
 |r_osm|geo_osm_commune|donnée de référence géographique du découpage communal OSM|nom de la commune|
-|r_osm|geo_v_osm_commune_apc|vue de la donnée geo_osm_commune restreinte sur le secteur du compiégnois|insee, controle de saisie interne à ce périmètre|
+|r_osm|geo_v_osm_commune_apc|vue de la donnée geo_osm_commune restreinte sur le secteur du compiégnois|insee + controle de saisie PEI à l'intérieur de ce périmètre|
 |r_osm|geo_osm_epci|donnée de référence géographique du découpage epci OSM|nom de l'EPCI|
 
 ---
