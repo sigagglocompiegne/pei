@@ -8,4 +8,4 @@ Ensemble des éléments constituant la mise en ouvre d'une application websig de
 - [Script d'initialisation des dépendances de la base de données](sql/init_bd_pei_dependency.sql)
 - [Documentation d'administration de la base de données](doc/doc_admin_bd_pei.md)
 - [Documentation d'administration de l'application](doc/doc_admin_app_pei.md)
-- [Documentation utilisateur](doc/doc_user_app_pei.md)
+- [Documentation utilisateur de l'application](doc/doc_user_app_pei.md)
