@@ -285,11 +285,11 @@ GRANT ALL ON TABLE m_defense_incendie.log_pei TO postgres;
 GRANT ALL ON TABLE m_defense_incendie.log_pei TO groupe_sig WITH GRANT OPTION;
 COMMENT ON TABLE m_defense_incendie.log_pei
   IS 'Table d''audit des opérations sur la base de données PEI';
-COMMENT ON COLUMN m_defense_incendie.log_pei.id_pei IS 'Identifiant unique de l''opération de base PEI';
+COMMENT ON COLUMN m_defense_incendie.log_pei.id_audit IS 'Identifiant unique de l''opération de base PEI';
 COMMENT ON COLUMN m_defense_incendie.log_pei.type_ope IS 'Type d''opération intervenue sur la base PEI';
 COMMENT ON COLUMN m_defense_incendie.log_pei.ope_sai IS 'Utilisateur ayant effectuée l''opération sur la base PEI';
 COMMENT ON COLUMN m_defense_incendie.log_pei.id_pei IS 'Identifiant du PEI concerné par l''opération sur la base PEI';
-COMMENT ON COLUMN m_defense_incendie.log_pei.id_pei IS 'Horodatage de l''opération sur la base PEI';
+COMMENT ON COLUMN m_defense_incendie.log_pei.date_maj IS 'Horodatage de l''opération sur la base PEI';
 
 -- Sequence: m_defense_incendie.log_pei_id_seq
 
@@ -341,7 +341,7 @@ COMMENT ON TABLE m_defense_incendie.lt_pei_type_pei
   IS 'Code permettant de décrire le type de point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.code IS 'Code de la liste énumérée relative au type de PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.valeur IS 'Valeur de la liste énumérée relative au type de PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.valeur IS 'Ordre d''affichage de la liste énumérée relative au type de PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.affich IS 'Ordre d''affichage de la liste énumérée relative au type de PEI';
 
 INSERT INTO m_defense_incendie.lt_pei_type_pei(
             code, valeur, affich)
