@@ -103,20 +103,6 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 
 ---
 
-### Log
-
-`log_pei` : table des log de la base PEI.
-
-|Nom attribut | Définition | Type  | Valeurs par défaut |
-|:---|:---|:---|:---|
-|type_ope|Type d'opération intervenue sur la base PEI|text| |
-|ope_sai|Utilisateur ayant effectuée l'opération sur la base PEI|character varying(254)| |
-|id_pei|Horodatage de l'opération sur la base PEI|bigint| |
-
-Particularité(s) à noter :
-* Table de log liée à la vue de gestion des données PEI
-
-
 ## Liste de valeurs
 
 
@@ -387,6 +373,22 @@ Valeurs possibles :
 
 ---
 
+## Log
+
+`log_pei` : table des log de la base PEI.
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|
+|id_audit|Identifiant unique de l'opération de base PEI|bigint|nextval('m_defense_incendie.log_pei_id_seq'::regclass)|
+|type_ope|Type d'opération intervenue sur la base PEI|text| |
+|ope_sai|Utilisateur ayant effectuée l'opération sur la base PEI|character varying(254)| |
+|id_pei|Identifiant du PEI concerné par l'opération sur la base PEI|bigint| |
+|date_maj|Horodatage de l'opération sur la base PEI|timestamp without time zone| |
+
+Particularité(s) à noter :
+* Table de log liée à la vue de gestion des données PEI
+
+---
 
 ## Schéma fonctionnel
 
