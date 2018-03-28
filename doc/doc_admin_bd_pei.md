@@ -26,12 +26,13 @@ gestion des controleurs de saisie utilisateur (cas impossible, notamment sur la 
 
 La base de données PEI s'appuie sur des référentiels préexistants constituant autant de dépendances nécessaires pour l'implémentation de la base PEI.
 
-|schéma | table | description |
-|:---|:---|:---|  
-|r_objet|lt_src_geom|domaine de valeur générique d'une table géographique|
-|r_administratif|an_geo|donnée de référence alphanumérique du découpage administratif utilisé pour la jointure insee commune<>siret epci|
-|r_osm|geo_osm_commune|donnée de référence géographique du découpage communal OSM|
-|r_osm|geo_osm_epci|donnée de référence géographique du découpage epci OSM|
+|schéma | table | description | usage |
+|:---|:---|:---|:---|   
+|r_objet|lt_src_geom|domaine de valeur générique d'une table géographique|source du positionnement du PEI|
+|r_administratif|an_geo|donnée de référence alphanumérique du découpage administratif |jointure insee commune<>siret epci|
+|r_osm|geo_osm_commune|donnée de référence géographique du découpage communal OSM|nom de la commune|
+|r_osm|geo_v_osm_commune_apc|vue de la donnée geo_osm_commune restreinte sur le secteur du compiégnois|insee, controle de saisie interne à ce périmètre|
+|r_osm|geo_osm_epci|donnée de référence géographique du découpage epci OSM|nom de l'EPCI|
 
 ---
 
