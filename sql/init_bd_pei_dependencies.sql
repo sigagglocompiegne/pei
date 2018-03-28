@@ -1,3 +1,13 @@
+/*
+  
+  objet : Script d'initialisation des dépendances au script init_bd_pei.sql
+  
+  Historique des versions :
+  date        |  auteur              |  description
+  28/03/2018  |  Florent VANHOUTTE   |  version initiale
+  
+*/
+
 -- Schema: r_objet
 
 -- DROP SCHEMA r_objet;
