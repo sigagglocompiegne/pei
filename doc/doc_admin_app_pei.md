@@ -2,13 +2,13 @@
 
 # Documentation technique de l'application PEI
 
-* Statut :
+* Statut
   - [x] à rédiger
   - [ ] relecture
   - [ ] finaliser
   - [ ] révision
   
-* Historique des versions :
+* Historique des versions
 
 |Date | Auteur | Description
 |:---|:---|:---|
