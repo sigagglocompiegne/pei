@@ -2,14 +2,15 @@
 
 # Documentation technique de l'application PEI
 
-  Statut :
+* Statut :
   - [x] à rédiger
   - [ ] relecture
   - [ ] finaliser
   - [ ] révision
   
-  Historique des versions :
-  date        |  auteur              |  description
-  29/03/2018  |  Florent VANHOUTTE   |  version initiale
+* Historique des versions :
+|Date | Auteur | Description
+|:---|:---|:---|
+| 29/03/2018 | Florent VANHOUTTE | version initiale |
 
 
