@@ -20,7 +20,7 @@
 
 -- etiquette
 
-    CASE WHEN {type_pei}=NR THEN NULL ELSEE {type_pei} END`
+    CASE WHEN {type_pei}=NR THEN NULL ELSEE {type_pei} END
 
 -- texte brut
 
