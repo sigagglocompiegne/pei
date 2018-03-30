@@ -19,20 +19,27 @@
 ### Champs calculés
 
 -- etiquette
-`CASE WHEN {type_pei}=NR THEN NULL ELSEE {type_pei} END`
+
+    CASE WHEN {type_pei}=NR THEN NULL ELSEE {type_pei} END`
+
 -- texte brut
 
 -- disponible_false
-`http://geo.compiegnois.fr/documents/metiers/deci/cc_nonconforme.png`
+
+    http://geo.compiegnois.fr/documents/metiers/deci/cc_nonconforme.png
+
 -- type image
 
 -- disponible_true
-`http://geo.compiegnois.fr/documents/metiers/deci/cc_conforme.png`
+
+    http://geo.compiegnois.fr/documents/metiers/deci/cc_conforme.png
+
 -- type image
 
 -- disponible_img
-`CASE WHEN {disponible} = 't' THEN {disponible_true} 
-WHEN {disponible} = 'f' THEN {disponible_false} END`
+
+    CASE WHEN {disponible} = 't' THEN {disponible_true} 
+    WHEN {disponible} = 'f' THEN {disponible_false} END
 
 
 -- style
