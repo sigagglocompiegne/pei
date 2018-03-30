@@ -39,7 +39,7 @@ WHEN {disponible} = 'f' THEN {disponible_false} END`
 
 -- V2 : par disponibilité
 
-`  CASE
+  CASE
   -- pei statut non renseigné
   WHEN {statut}='00' THEN 'Snr'
   -- pei statut privé
@@ -56,7 +56,7 @@ WHEN {disponible} = 'f' THEN {disponible_false} END`
   WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'fff'
   -- pei statut public existant et non conforme
   WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'ggg' 
-  END`
+  END
 
 -- V1 : détaillée par type_pei
 
