@@ -33,7 +33,7 @@
 -- disponible_img
 `CASE WHEN {disponible} = 't' THEN {disponible_true} 
 WHEN {disponible} = 'f' THEN {disponible_false} END`
--- type image
+
 
 -- style
 
@@ -60,44 +60,44 @@ WHEN {disponible} = 'f' THEN {disponible_false} END`
 
 -- V1 : détaillée par type_pei
 
-`CASE
--- PEI statut privé
-WHEN {type_pei}='PI' AND {statut}='02' THEN 'PI-blanc'
-WHEN {type_pei}='BI' AND {statut}='02' THEN 'BI-blanc'
-WHEN {type_pei}='CI' AND {statut}='02' THEN 'CI-blanc'
-WHEN {type_pei}='PA' AND {statut}='02' THEN 'PA-blanc'
-WHEN {type_pei}='NR' AND {statut}='02' THEN 'NR-blanc'
--- PEI statut non renseigné
-WHEN {type_pei}='PI' AND {statut}='00' THEN 'PI-gris'
-WHEN {type_pei}='BI' AND {statut}='00' THEN 'BI-gris'
-WHEN {type_pei}='CI' AND {statut}='00' THEN 'CI-gris'
-WHEN {type_pei}='PA' AND {statut}='00' THEN 'PA-gris'
-WHEN {type_pei}='NR' AND {statut}='00' THEN 'NR-gris'
--- PEI statut public projet ou supprimé
-WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'PI-gris'
-WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'BI-gris'
-WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'CI-gris'
-WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'PA-gris'
-WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'NR-gris'
--- PEI statut public existant et conforme
-WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'PI-vert'
-WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'BI-vert'
-WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'CI-vert'
-WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'PA-vert'
-WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'NR-vert'
--- PEI statut public existant et non conforme
-WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'PI-rouge'
-WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'BI-rouge'
-WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'CI-rouge'
-WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'PA-rouge'
-WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'NR-rouge'
--- PEI statut public existant et conformité non renseignée
-WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'PI-gris'
-WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'BI-gris'
-WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'CI-gris'
-WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'PA-gris'
-WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'NR-gris'
-END`
+    CASE
+    -- PEI statut privé
+    WHEN {type_pei}='PI' AND {statut}='02' THEN 'PI-blanc'
+    WHEN {type_pei}='BI' AND {statut}='02' THEN 'BI-blanc'
+    WHEN {type_pei}='CI' AND {statut}='02' THEN 'CI-blanc'
+    WHEN {type_pei}='PA' AND {statut}='02' THEN 'PA-blanc'
+    WHEN {type_pei}='NR' AND {statut}='02' THEN 'NR-blanc'
+    -- PEI statut non renseigné
+    WHEN {type_pei}='PI' AND {statut}='00' THEN 'PI-gris'
+    WHEN {type_pei}='BI' AND {statut}='00' THEN 'BI-gris'
+    WHEN {type_pei}='CI' AND {statut}='00' THEN 'CI-gris'
+    WHEN {type_pei}='PA' AND {statut}='00' THEN 'PA-gris'
+    WHEN {type_pei}='NR' AND {statut}='00' THEN 'NR-gris'
+    -- PEI statut public projet ou supprimé
+    WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'PI-gris'
+    WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'BI-gris'
+    WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'CI-gris'
+    WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'PA-gris'
+    WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei} IN ('00','01','03') THEN 'NR-gris'
+    -- PEI statut public existant et conforme
+    WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'PI-vert'
+    WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'BI-vert'
+    WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'CI-vert'
+    WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'PA-vert'
+    WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'NR-vert'
+    -- PEI statut public existant et non conforme
+    WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'PI-rouge'
+    WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'BI-rouge'
+    WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'CI-rouge'
+    WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'PA-rouge'
+    WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'NR-rouge'
+    -- PEI statut public existant et conformité non renseignée
+    WHEN {type_pei}='PI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'PI-gris'
+    WHEN {type_pei}='BI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'BI-gris'
+    WHEN {type_pei}='CI' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'CI-gris'
+    WHEN {type_pei}='PA' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'PA-gris'
+    WHEN {type_pei}='NR' AND {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'NR-gris'
+    END
 
 
 ## Fonctionnel
