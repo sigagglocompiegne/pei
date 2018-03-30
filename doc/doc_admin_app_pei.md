@@ -14,8 +14,9 @@
 |:---|:---|:---|
 |29/03/2018|Florent VANHOUTTE|version initiale|
 
+## Data
 
-## champ calculé
+### Champs calculés
 
 -- etiquette
 `CASE WHEN {type_pei}=NR THEN NULL ELSEE {type_pei} END`
@@ -56,3 +57,9 @@ WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'fff'
 -- pei statut public existant et non conforme
 WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'ggg' 
 END`
+
+## Fonctionnel
+
+## Cartothèque
+
+## Application
