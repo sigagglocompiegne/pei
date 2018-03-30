@@ -39,24 +39,24 @@ WHEN {disponible} = 'f' THEN {disponible_false} END`
 
 -- V2 : par disponibilité
 
-``CASE
--- pei statut non renseigné
-WHEN {statut}='00' THEN 'Snr'
--- pei statut privé
-WHEN {statut}='02' AND {etat_pei} IN ('00','01',02') THEN 'aaa'
--- pei statut privé
-WHEN {statut}='02' AND {etat_pei}='03' THEN 'bbb'
--- pei statut public et état projet ou non renseigné
-WHEN {statut}='01' AND {etat_pei} IN ('00','01') THEN 'ccc'
--- pei statut public supprimé
-WHEN {statut}='01' AND {etat_pei}='03' THEN 'ddd'
--- pei statut public existant et dispo non renseignée
-WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'eee'
--- pei statut public existant et conforme
-WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'fff'
--- pei statut public existant et non conforme
-WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'ggg' 
-END``
+`  CASE
+  -- pei statut non renseigné
+  WHEN {statut}='00' THEN 'Snr'
+  -- pei statut privé
+  WHEN {statut}='02' AND {etat_pei} IN ('00','01',02') THEN 'aaa'
+  -- pei statut privé
+  WHEN {statut}='02' AND {etat_pei}='03' THEN 'bbb'
+  -- pei statut public et état projet ou non renseigné
+  WHEN {statut}='01' AND {etat_pei} IN ('00','01') THEN 'ccc'
+  -- pei statut public supprimé
+  WHEN {statut}='01' AND {etat_pei}='03' THEN 'ddd'
+  -- pei statut public existant et dispo non renseignée
+  WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'eee'
+  -- pei statut public existant et conforme
+  WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'fff'
+  -- pei statut public existant et non conforme
+  WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'ggg' 
+  END`
 
 -- V1 : détaillée par type_pei
 
