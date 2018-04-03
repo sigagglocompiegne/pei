@@ -46,7 +46,8 @@
 2018-02-28 : FV / correctifs sur les controles croisés et la remise à 0 de valeur sans logique selon le type de PEI, 
 2018-03-01 : FV / correctifs sur les controles croisés
 2018-03-27 : FV / correctifs mineurs des commentaires sur les tables
-2018-03-29 : FV / 
+2018-04-03 : FV / evolutions importantes suite à reunion avec le service métier (saisie par le prestataire, validation par le service)
+2018-04-03 : FV / ajout classe contrat (id_contrat, id_presta, duree), ajout variable validation dans la classe an_pei_ctr, modif opendata en vue geo au lieu de alpha, modif classe valeur anomalie pour y intégrer les contraintes à lire par le trigger
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
