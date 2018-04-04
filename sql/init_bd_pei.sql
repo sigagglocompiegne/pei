@@ -1048,11 +1048,11 @@ COMMENT ON VIEW m_defense_incendie.geo_v_pei_ctr
 
 
 
--- View: x_opendata.xopendata_an_v_open_pei
+-- View: x_opendata.xopendata_geo_v_open_pei
 
--- DROP VIEW x_opendata.xopendata_an_v_open_pei;
+-- DROP VIEW x_opendata.xopendata_geo_v_open_pei;
 
-CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_open_pei AS 
+CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS 
  SELECT 
   g.insee,
   g.id_sdis,
@@ -1082,7 +1082,8 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_open_pei AS
   g.x_l93 as x,
   g.y_l93 as y,
   st_x(st_transform(g.geom,4326)) AS long,
-  st_y(st_transform(g.geom,4326)) AS lat
+  st_y(st_transform(g.geom,4326)) AS lat,
+  g.geom
 
    FROM m_defense_incendie.geo_pei g
    LEFT JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
@@ -1091,9 +1092,9 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_open_pei AS
    WHERE g.etat_pei = '02'
    ORDER BY g.insee, g.id_sdis;  
 
-ALTER TABLE x_opendata.xopendata_an_v_open_pei
+ALTER TABLE x_opendata.xopendata_geo_v_open_pei
   OWNER TO postgres;
-COMMENT ON VIEW x_opendata.xopendata_an_v_open_pei
+COMMENT ON VIEW x_opendata.xopendata_geo_v_open_pei
   IS 'Vue des PEI existants destinée aux échanges de données en opendata selon le format PEI AFIGEO';
 
 
