@@ -1074,7 +1074,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   CASE WHEN g.date_maj IS NULL THEN DATE(g.date_sai) ELSE DATE(g.date_maj) END AS date_maj,
   a.date_ct,  
   a.date_co,
-  CASE WHEN CAST(g."precision" AS INTEGER)/100 = 0 OR g."precision" IS NULL OR g."precision"=''  THEN NULL
+  CASE WHEN g."precision" = '000' OR g."precision" IS NULL OR g."precision"=''  THEN NULL
        WHEN CAST(g."precision" AS INTEGER)/100 <= 1 THEN '01'
        WHEN CAST(g."precision" AS INTEGER)/100 > 1 AND CAST(g."precision" AS REAL)/100 <= 5 THEN '05'
        WHEN CAST(g."precision" AS INTEGER)/100 > 5 AND CAST(g."precision" AS REAL)/100 <= 10 THEN '10'
