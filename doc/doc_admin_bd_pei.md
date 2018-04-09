@@ -174,6 +174,7 @@ Valeurs possibles :
 |AEP|Réseau AEP|reseau_aep|
 |IRR|Réseau d'irrigation|reseau_irrigation|
 |PIS|Piscine|piscine|
+|NR|Non renseigné||
 
 ---
 
