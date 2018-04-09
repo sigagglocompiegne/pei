@@ -47,7 +47,8 @@
 2018-03-01 : FV / correctifs sur les controles croisés
 2018-03-27 : FV / correctifs mineurs des commentaires sur les tables
 2018-04-03 : FV / evolutions importantes suite à reunion avec le service métier (saisie par le prestataire, validation par le service)
-2018-04-03 : FV / ajout classe contrat (id_contrat, id_presta, duree), ajout variable validation dans la classe an_pei_ctr, modif opendata en vue geo au lieu de alpha, modif classe valeur anomalie pour y intégrer les contraintes à lire par le trigger
+2018-04-03 : FV / modif opendata en vue geo au lieu de alpha, modif classe valeur anomalie pour y intégrer les contraintes à lire par le trigger
+2018-04-09 : FV / modifs classe objet suite à diffusion de la version définitive du modèle AFIGEO
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
@@ -57,6 +58,7 @@ type PA ---- source cour d'eau ---- pas de param de mesures
 
 ToDo
 
+ajout classe contrat (id_contrat, id_presta, duree), ajout variable validation dans la classe an_pei_ctr, 
 voir pour traiter les controles lors de l'insert
 pour domaine de valeur ouvert, voir pour soit faire trigger pour controle de la saisie ou alors gérer la case dans la valeur par défaut
 ajout attribut dynamique (vue) qui contient l'ancienneté du contrôle
@@ -99,6 +101,7 @@ CREATE TABLE m_defense_incendie.geo_pei
 (
   id_pei bigint NOT NULL, 
   id_sdis character varying(254),
+  ref_ter character varying(254), 
   insee character varying(5) NOT NULL, 
   type_pei character varying(2) NOT NULL,
   type_rd character varying(254),
@@ -121,7 +124,7 @@ CREATE TABLE m_defense_incendie.geo_pei
   y_l93 numeric(9,2) NOT NULL,
   src_geom character varying(2) NOT NULL DEFAULT '00' ::bpchar,
   src_date character varying(4) NOT NULL DEFAULT '0000' ::bpchar,
-  "precision" character varying(5) NOT NULL,
+  prec character varying(5) NOT NULL,
   ope_sai character varying(254),
   date_sai timestamp without time zone NOT NULL DEFAULT now(),  
   date_maj timestamp without time zone,
@@ -142,9 +145,10 @@ COMMENT ON TABLE m_defense_incendie.geo_pei
   IS 'Classe décrivant un point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.id_pei IS 'Identifiant unique du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.id_sdis IS 'Identifiant unique du PEI du SDIS';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.ref_ter IS 'Référence du PEI sur le terrain';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.insee IS 'Code INSEE';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.type_pei IS 'Type de PEI';
-COMMENT ON COLUMN m_defense_incendie.geo_pei.type_rd IS '***** ';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.type_rd IS 'Type de PEI selon la nomenclature du réglement départemental';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_pei IS 'Diamètre intérieur du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.raccord IS 'Descriptif des raccords de sortie du PEI (nombre et diamètres exprimés en mm)';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.marque IS 'Marque du fabriquant du PEI';
@@ -164,7 +168,7 @@ COMMENT ON COLUMN m_defense_incendie.geo_pei.x_l93 IS 'Coordonnée X en mètre';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.y_l93 IS 'Coordonnée Y en mètre';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.src_geom IS 'Référentiel de saisie';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.src_date IS 'Année du millésime du référentiel de saisie';
-COMMENT ON COLUMN m_defense_incendie.geo_pei."precision" IS 'Précision cartographique exprimée en cm';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.prec IS 'Précision cartographique exprimée en cm';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.ope_sai IS 'Opérateur de la dernière saisie en base de l''objet';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.date_sai IS 'Horodatage de l''intégration en base de l''objet';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.date_maj IS 'Horodatage de la mise à jour en base de l''objet';
@@ -423,7 +427,8 @@ INSERT INTO m_defense_incendie.lt_pei_source(
     ('PU','Puit','puits'),
     ('CE','Cours d''eau','cours_eau'),
     ('AEP','Réseau AEP','reseau_aep'),
-    ('IRR','Réseau d''irrigation','reseau_irrigation'),      
+    ('IRR','Réseau d''irrigation','reseau_irrigation'),
+    ('PIS','Piscine','piscine'),      
     ('NR','Non renseigné',NULL);
 
 
@@ -616,6 +621,9 @@ CREATE TABLE m_defense_incendie.lt_pei_anomalie
 (
   code character varying(2) NOT NULL,
   valeur character varying(80) NOT NULL,
+  csq_acces character varying(1) NOT NULL,
+  csq_sign character varying(1) NOT NULL,
+  csq_conf character varying(1) NOT NULL,  
   CONSTRAINT lt_pei_anomalie_pkey PRIMARY KEY (code)
 )
 WITH (
@@ -626,27 +634,31 @@ ALTER TABLE m_defense_incendie.lt_pei_anomalie
 GRANT ALL ON TABLE m_defense_incendie.lt_pei_anomalie TO postgres;
 GRANT ALL ON TABLE m_defense_incendie.lt_pei_anomalie TO groupe_sig WITH GRANT OPTION;
 COMMENT ON TABLE m_defense_incendie.lt_pei_anomalie
-  IS 'Liste des anomalies possibles pour un PEI';
+  IS 'Liste des anomalies possibles pour un PEI et de leurs incidences sur la conformité';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_anomalie.code IS 'Code de la liste énumérée relative au type d''anomalie d''un PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_anomalie.valeur IS 'Valeur de la liste énumérée relative au type d''anomalie d''un PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_anomalie.csq_acces IS 'Impact de l''anomalie sur l''état de l''accessibilité du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_anomalie.csq_sign IS 'Impact de l''anomalie sur l''état de la signalisation du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_anomalie.csq_conf IS 'Impact de l''anomalie sur l''état de la conformité technique du PEI';
 
 INSERT INTO m_defense_incendie.lt_pei_anomalie(
-            code, valeur)
+            code, valeur, csq_acces, csq_sign, csq_conf)
     VALUES
-    ('01','Manque bouchon'),
-    ('02','Manque capot ou capot HS'),
-    ('03','Manque de débit ou volume'),
-    ('04','Manque de signalisation'),
-    ('05','Problème d''accès'),
-    ('06','Ouverture point d''eau difficile'),
-    ('07','Fuite hydrant'),
-    ('08','Manque butée sur la vis d''ouverture'),
-    ('09','Purge HS'),
-    ('10','Pas d''écoulement d''eau'),
-    ('11','Végétation génante'),
-    ('12','Gêne accès extérieur'),
-    ('13','Equipement à remplacer'),   
-    ('14','Hors service');
+    ('01','Manque bouchon','0','0','0'),
+    ('02','Manque capot ou capot HS','0','0','0'),
+    ('03','Manque de débit ou volume','0','0','1'),
+    ('04','Manque de signalisation','0','1','0'),
+    ('05','Problème d''accès','1','0','1'),
+    ('06','Ouverture point d''eau difficile','0','0','0'),
+    ('07','Fuite hydrant','0','0','0'),
+    ('08','Manque butée sur la vis d''ouverture','0','0','0'),
+    ('09','Purge HS','0','0','0'),
+    ('10','Pas d''écoulement d''eau','0','0','1'),
+    ('11','Végétation génante','0','0','0'),
+    ('12','Gêne accès extérieur','1','0','0'),
+    ('13','Equipement à remplacer','0','0','0'),   
+    ('14','Hors service','0','0','1');
+
 
 
 -- ################################################################# Domaine valeur ouvert - marque  ###############################################
@@ -982,6 +994,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
  SELECT 
   g.id_pei,
   g.id_sdis,
+  g.ref_ter,
   e.lib_epci AS epci,
   g.insee,
   c.commune,
@@ -1026,7 +1039,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
   g.y_l93,
   g.src_geom,
   g.src_date,
-  g."precision",
+  g.prec,
   g.ope_sai,
   g.date_sai,  
   g.date_maj,
@@ -1057,6 +1070,8 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   g.insee,
   g.id_sdis,
   CAST(g.id_pei AS TEXT) AS id_gestion,
+  g.gestion,
+  g.ref_ter,
   CASE WHEN g.type_pei = 'NR' THEN NULL ELSE g.type_pei END,
   g.type_rd,
   CASE WHEN g.diam_pei = 'NR' THEN NULL ELSE g.diam_pei END,
@@ -1074,11 +1089,11 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   CASE WHEN g.date_maj IS NULL THEN DATE(g.date_sai) ELSE DATE(g.date_maj) END AS date_maj,
   a.date_ct,  
   a.date_co,
-  CASE WHEN g."precision" = '000' OR g."precision" IS NULL OR g."precision"=''  THEN NULL
-       WHEN CAST(g."precision" AS INTEGER)/100 <= 1 THEN '01'
-       WHEN CAST(g."precision" AS INTEGER)/100 > 1 AND CAST(g."precision" AS REAL)/100 <= 5 THEN '05'
-       WHEN CAST(g."precision" AS INTEGER)/100 > 5 AND CAST(g."precision" AS REAL)/100 <= 10 THEN '10'
-       WHEN CAST(g."precision" AS INTEGER)/100 > 10 THEN '99' END as "precision",      
+  CASE WHEN g.prec = '000' OR g.prec IS NULL OR g.prec=''  THEN NULL
+       WHEN CAST(g.prec AS INTEGER)/100 <= 1 THEN '01'
+       WHEN CAST(g.prec AS INTEGER)/100 > 1 AND CAST(g.prec AS REAL)/100 <= 5 THEN '05'
+       WHEN CAST(g.prec AS INTEGER)/100 > 5 AND CAST(g.prec AS REAL)/100 <= 10 THEN '10'
+       WHEN CAST(g.prec AS INTEGER)/100 > 10 THEN '99' END as prec,      
   g.x_l93 as x,
   g.y_l93 as y,
   st_x(st_transform(g.geom,4326)) AS long,
@@ -1150,9 +1165,10 @@ BEGIN
 IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, precision, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, ref_ter, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
+CASE WHEN NEW.ref_ter = '' THEN NULL ELSE NEW.ref_ter END,
 CASE WHEN NEW.insee IS NULL THEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom)) ELSE NEW.insee END,
 CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
 NEW.type_rd,
@@ -1175,7 +1191,7 @@ st_x(NEW.geom),
 st_y(NEW.geom),
 CASE WHEN NEW.src_geom IS NULL OR NEW.src_geom = '' THEN '00' ELSE NEW.src_geom END,
 CASE WHEN NEW.src_date IS NULL OR NEW.src_date = '' THEN '0000' ELSE NEW.src_date END,
-CASE WHEN NEW.precision IS NULL OR NEW.precision = '' THEN '000' ELSE NEW.precision END,
+CASE WHEN NEW.prec IS NULL OR NEW.prec = '' THEN '000' ELSE NEW.prec END,
 CASE WHEN NEW.ope_sai = '' THEN NULL ELSE NEW.ope_sai END,
 CASE WHEN NEW.date_sai IS NULL THEN now() ELSE now() END,
 NEW.date_maj,
@@ -1238,7 +1254,7 @@ x_l93=st_x(NEW.geom),
 y_l93=st_y(NEW.geom),
 src_geom=CASE WHEN NEW.src_geom IS NULL OR NEW.src_geom = '' THEN '00' ELSE NEW.src_geom END,
 src_date=CASE WHEN NEW.src_date IS NULL OR NEW.src_date = '' OR NEW.src_geom ='00' THEN '0000' ELSE NEW.src_date END,
-precision=CASE WHEN NEW.precision IS NULL OR NEW.precision = '' OR NEW.src_geom = '00' THEN '000' ELSE NEW.precision END,
+prec=CASE WHEN NEW.prec IS NULL OR NEW.prec = '' OR NEW.src_geom = '00' THEN '000' ELSE NEW.prec END,
 ope_sai=CASE WHEN NEW.ope_sai = '' THEN NULL ELSE NEW.ope_sai END,
 date_sai=OLD.date_sai,
 date_maj=now(),
@@ -1285,6 +1301,7 @@ m_defense_incendie.geo_pei
 SET
 id_pei=OLD.id_pei,
 id_sdis=OLD.id_sdis,
+ref_ter=OLD.ref_ter,
 insee=OLD.insee,
 type_pei=OLD.type_pei,
 type_rd=OLD.type_rd,
@@ -1307,7 +1324,7 @@ x_l93=OLD.x_l93,
 y_l93=OLD.y_l93,
 src_geom=OLD.src_geom,
 src_date=OLD.src_date,
-precision=OLD.precision,
+prec=OLD.prec,
 ope_sai=OLD.ope_sai,
 date_sai=OLD.date_sai,
 date_maj=now(),
