@@ -48,9 +48,10 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |:---|:---|:---|:---|  
 |id_pei|Identifiant unique du PEI|bigint|nextval('m_defense_incendie.geo_pei_id_seq'::regclass)|
 |id_sdis|Identifiant unique du PEI du SDIS|character varying(254)| |
+|ref_terr|Référence du PEI sur le terrain|character varying(254)| |
 |insee|Code INSEE|character varying(5)| |
 |type_pei|Type de PEI|character varying(2)| |
-|type_rd|***** |character varying(254)| |
+|type_rd|Type de PEI selon la nomenclature du réglement départemental|character varying(254)| |
 |diam_pei|Diamètre intérieur du PEI|character varying(3)| |
 |raccord|Descriptif des raccords de sortie du PEI (nombre et diamètres exprimés en mm)|character varying(2)| |
 |marque|Marque du fabriquant du PEI|character varying(2)| |
