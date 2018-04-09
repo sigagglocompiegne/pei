@@ -101,7 +101,7 @@ CREATE TABLE m_defense_incendie.geo_pei
 (
   id_pei bigint NOT NULL, 
   id_sdis character varying(254),
-  ref_ter character varying(254), 
+  ref_terr character varying(254), 
   insee character varying(5) NOT NULL, 
   type_pei character varying(2) NOT NULL,
   type_rd character varying(254),
@@ -145,7 +145,7 @@ COMMENT ON TABLE m_defense_incendie.geo_pei
   IS 'Classe décrivant un point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.id_pei IS 'Identifiant unique du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.id_sdis IS 'Identifiant unique du PEI du SDIS';
-COMMENT ON COLUMN m_defense_incendie.geo_pei.ref_ter IS 'Référence du PEI sur le terrain';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.ref_terr IS 'Référence du PEI sur le terrain';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.insee IS 'Code INSEE';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.type_pei IS 'Type de PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.type_rd IS 'Type de PEI selon la nomenclature du réglement départemental';
@@ -994,7 +994,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
  SELECT 
   g.id_pei,
   g.id_sdis,
-  g.ref_ter,
+  g.ref_terr,
   e.lib_epci AS epci,
   g.insee,
   c.commune,
@@ -1070,8 +1070,8 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   g.insee,
   g.id_sdis,
   CAST(g.id_pei AS TEXT) AS id_gestion,
-  g.gestion,
-  g.ref_ter,
+  lt_gest.valeur AS gestion,
+  g.ref_terr,
   CASE WHEN g.type_pei = 'NR' THEN NULL ELSE g.type_pei END,
   g.type_rd,
   CASE WHEN g.diam_pei = 'NR' THEN NULL ELSE g.diam_pei END,
@@ -1082,8 +1082,8 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   a.debit,
   g.volume,
   CASE 
-  WHEN a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02' THEN 't' -- cas ok pour la dispo (etat existant, conformité ok, controle < 2ans)
-  ELSE 'f'
+  WHEN a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02' THEN '1' -- cas ok pour la dispo (etat existant, conformité ok, controle < 2ans)
+  ELSE '0'
   END AS disponible,
   CURRENT_DATE AS date_dispo,
   CASE WHEN g.date_maj IS NULL THEN DATE(g.date_sai) ELSE DATE(g.date_maj) END AS date_maj,
@@ -1104,6 +1104,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
    LEFT JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
    LEFT JOIN m_defense_incendie.lt_pei_statut lt_stat ON lt_stat.code = g.statut
    LEFT JOIN m_defense_incendie.lt_pei_source lt_src ON lt_src.code = g.source
+   LEFT JOIN m_defense_incendie.lt_pei_gestion lt_gest ON lt_gest.code = g.gestion
    WHERE g.etat_pei = '02'
    ORDER BY g.insee, g.id_sdis;  
 
@@ -1165,10 +1166,10 @@ BEGIN
 IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, ref_ter, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
-CASE WHEN NEW.ref_ter = '' THEN NULL ELSE NEW.ref_ter END,
+CASE WHEN NEW.ref_terr = '' THEN NULL ELSE NEW.ref_terr END,
 CASE WHEN NEW.insee IS NULL THEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom)) ELSE NEW.insee END,
 CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
 NEW.type_rd,
@@ -1301,7 +1302,7 @@ m_defense_incendie.geo_pei
 SET
 id_pei=OLD.id_pei,
 id_sdis=OLD.id_sdis,
-ref_ter=OLD.ref_ter,
+ref_terr=OLD.ref_terr,
 insee=OLD.insee,
 type_pei=OLD.type_pei,
 type_rd=OLD.type_rd,
