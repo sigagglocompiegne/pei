@@ -109,6 +109,16 @@
 
 ## Fonctionnel
 
+service eau potable peut
+- consulter les données sur l'ARC
+- modifier les données du patrimoine PEI dont il a la charge
+- modifier les données PEI hors de son champ d'intervention dans le seul cas où il ajoute un PEI à son patrimoine de gestion, dans le cas inverse, aucune modification apportée n'est sauvegardée
+
+le(s) prestataire(s)
+- consulte uniquement les données PEI dont il a la charge au titre du contrat, ceci de manière permanente
+- modifie les données PEI dont il a la charge lorsque que le controle n'est pas validé par le service 
+
+
 ## Cartothèque
 
 ## Application
