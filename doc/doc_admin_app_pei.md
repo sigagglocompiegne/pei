@@ -121,10 +121,27 @@ le(s) prestataire(s)
 
 ## fonctionnel en bdd
 
+### service
+
+visualisation
+
+- données du patrimoine arc ou pas sur le territoire de l'arc
+- filtre au chargement des données = liste des INSEE sur les communes de l'ARCBA
+
+
+modification
+
 - cas 1 : ancien et nouveau patrimoine en gestion arc, maj classique des données
 - cas 2 : ancien patrimoine pas en gestion arc, nouveau oui = entrée dans le patrimoine de gestion arc
-- cas 3 : ancien patrimoine en gestio narc, nouveau non = sortie du patrimoine de gestion arc, maj uniquement sur le champ de gestionnaire (`gestion`)
+- cas 3 : ancien patrimoine en gestio narc, nouveau non = sortie du patrimoine de gestion arc, maj uniquement sur le champ de gestionnaire `gestion`
 
+### prestataire
+
+visualisation
+
+- données sur le territoire de l'arc uniquement sur le patrimoine en gestion pour le prestataire dans le cadre de son contrat
+- filtre au chargement des données = liste des INSEE sur les communes de l'ARCBA
+- filtre au chargement des données = liste des PEI avec la référence de contrat `id_contrat` 
 
 
 ## Cartothèque
