@@ -123,7 +123,7 @@ le(s) prestataire(s)
 
 - cas 1 : ancien et nouveau patrimoine en gestion arc, maj classique des données
 - cas 2 : ancien patrimoine pas en gestion arc, nouveau oui = entrée dans le patrimoine de gestion arc
-- cas 3 : ancien patrimoine en gestio narc, nouveau non = sortie du patrimoine de gestion arc, maj uniquement sur le champ de gestionnaire ('gestion')
+- cas 3 : ancien patrimoine en gestio narc, nouveau non = sortie du patrimoine de gestion arc, maj uniquement sur le champ de gestionnaire (`gestion`)
 
 
 
