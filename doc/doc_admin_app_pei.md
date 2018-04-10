@@ -148,7 +148,7 @@ visualisation
 modification
 
 - cas 1 : patrimoine non figé par le service eau potable arc, maj classique des données
-- cas 2 : patrimoine figé (`ct_valid = '1'`), maj impossible des données mais consultation possible
+- cas 2 : patrimoine figé (`verrou is TRUE`), maj impossible des données mais consultation possible
 
 
 ## Cartothèque
