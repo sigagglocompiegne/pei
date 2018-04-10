@@ -141,7 +141,12 @@ visualisation
 
 - données sur le territoire de l'arc uniquement sur le patrimoine en gestion pour le prestataire dans le cadre de son contrat
 - filtre au chargement des données = liste des INSEE sur les communes de l'ARCBA
-- filtre au chargement des données = liste des PEI avec la référence de contrat `id_contrat` 
+- filtre au chargement des données = liste des PEI avec la référence de contrat `id_contrat`
+
+modification
+
+- cas 1 : patrimoine non figé par le service eau potable arc, maj classique des données
+- cas 2 : patrimoine figé (`ct_valid = '1'`), maj impossible des données mais consultation possible
 
 
 ## Cartothèque
