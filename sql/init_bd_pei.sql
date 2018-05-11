@@ -6,8 +6,8 @@
   schéma          | table                 | description                                                   | usage
   r_objet         | lt_src_geom           | domaine de valeur générique d'une table géographique          | source du positionnement du PEI
   r_administratif | an_geo                | donnée de référence alphanumérique du découpage administratif | jointure insee commune<>siret epci
-  r_osm           | geo_osm_commune       | donnée de référence géographique du découpage communal OSM    | nom de la commune
   r_osm           | geo_v_osm_commune_apc | vue de la donnée geo_osm_commune restreinte sur le secteur du compiégnois| insee + controle de saisie PEI à l'intérieur de ce périmètre
+  --->   r_osm           | geo_osm_commune       | donnée de référence géographique du découpage communal OSM    | 
   r_osm           | geo_osm_epci          | donnée de référence géographique du découpage epci OSM        | nom de l'EPCI   
 
 */
@@ -49,6 +49,9 @@
 2018-04-03 : FV / evolutions importantes suite à reunion avec le service métier (saisie par le prestataire, validation par le service)
 2018-04-03 : FV / modif opendata en vue geo au lieu de alpha, modif classe valeur anomalie pour y intégrer les contraintes à lire par le trigger
 2018-04-09 : FV / modifs classe objet suite à diffusion de la version définitive du modèle AFIGEO
+2018-04-10 : FV / modifs pour gestion interne : ajout champs "id_contrat", "ct_valid" ; ajout domaine de valeur ouvert "lt_pei_id_contrat"
+2018-04-10 : FV / ajout vue applicative pour gestion différentiée des données entre celles entrant le patrimoine du service et les autres. Pour ces dernières, le trigger ne permet qu'un changement sur le gestionnaire du PEI (gestion) permettant de faire entrer le PEI dans le patrimoine du service
+
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
@@ -58,11 +61,10 @@ type PA ---- source cour d'eau ---- pas de param de mesures
 
 ToDo
 
-ajout classe contrat (id_contrat, id_presta, duree), ajout variable validation dans la classe an_pei_ctr, 
 voir pour traiter les controles lors de l'insert
 pour domaine de valeur ouvert, voir pour soit faire trigger pour controle de la saisie ou alors gérer la case dans la valeur par défaut
 ajout attribut dynamique (vue) qui contient l'ancienneté du contrôle
-voir pour faire des listes de domaine ouverte pour ope_ctr / prestataire_ctr / source données ...
+
 gérer les cas d'anomalies et de conformité impossible (fct trigger) (diff controle entre PI/BI et CI ou PA)
 voir pour générer une table des parcelles bâties (habitat) non couvertes par la DECI. partie éco à charge des entreprises
  
@@ -101,6 +103,7 @@ CREATE TABLE m_defense_incendie.geo_pei
 (
   id_pei bigint NOT NULL, 
   id_sdis character varying(254),
+  verrou boolean NOT NULL DEFAULT false,
   ref_terr character varying(254), 
   insee character varying(5) NOT NULL, 
   type_pei character varying(2) NOT NULL,
@@ -145,6 +148,7 @@ COMMENT ON TABLE m_defense_incendie.geo_pei
   IS 'Classe décrivant un point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.id_pei IS 'Identifiant unique du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.id_sdis IS 'Identifiant unique du PEI du SDIS';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.verrou IS 'Entitée figée en modification';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.ref_terr IS 'Référence du PEI sur le terrain';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.insee IS 'Code INSEE';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.type_pei IS 'Type de PEI';
@@ -222,6 +226,7 @@ CREATE TABLE m_defense_incendie.an_pei_ctr
 (
   id_pei bigint NOT NULL, 
   id_sdis character varying(254),
+  id_contrat character varying(254),
   press_stat real,
   press_dyn real,
   debit real,
@@ -235,7 +240,6 @@ CREATE TABLE m_defense_incendie.an_pei_ctr
   date_mes date,
   date_ct date,
   ope_ct character varying(254),
-  presta_ct character varying(254),
   date_co date
 )
 WITH (
@@ -249,6 +253,7 @@ COMMENT ON TABLE m_defense_incendie.an_pei_ctr
   IS 'Classe décrivant le contrôle d''un point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.id_pei IS 'Identifiant unique du PEI';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.id_sdis IS 'Identifiant unique du PEI du SDIS';
+COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.id_contrat IS 'Référence du contrat de prestation pour le contrôle technique du PEI';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.press_stat IS 'Pression statique en bar à un débit de 0 m3/h';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.press_dyn IS 'Pression dynamique résiduelle en bar à un débit de 60 m3/h';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.debit IS 'Valeur de débit mesuré exprimé en m3/h sous une pression de 1 bar';
@@ -262,7 +267,6 @@ COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.etat_conf IS 'Etat de la conform
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.date_mes IS 'Date de mise en service du PEI (correspond à la date du premier contrôle débit-pression effectué sur le terrain)';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.date_ct IS 'Date du dernier contrôle';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.ope_ct IS 'Opérateur du dernier contrôle';
-COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.presta_ct IS 'Prestataire du dernier contrôle';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.date_co IS 'Date de la dernière reconnaissance opérationnelle';                                                                                                   
 
 
@@ -322,6 +326,42 @@ ALTER TABLE m_defense_incendie.log_pei ALTER COLUMN id_audit SET DEFAULT nextval
 -- ###                                                                DOMAINES DE VALEURS                                                           ###
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
+
+
+-- ################################################################# Domaine valeur - type_pei  ###############################################
+
+-- Table: m_defense_incendie.lt_pei_type_pei
+
+-- DROP TABLE m_defense_incendie.lt_pei_type_pei;
+
+CREATE TABLE m_defense_incendie.lt_pei_type_pei
+(
+  code character varying(2) NOT NULL,
+  valeur character varying(80) NOT NULL,
+  affich character varying(1) NOT NULL,
+  CONSTRAINT lt_pei_type_pei_pkey PRIMARY KEY (code)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE m_defense_incendie.lt_pei_type_pei
+  OWNER TO postgres;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO postgres;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO groupe_sig WITH GRANT OPTION;
+COMMENT ON TABLE m_defense_incendie.lt_pei_type_pei
+  IS 'Code permettant de décrire le type de point d''eau incendie';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.code IS 'Code de la liste énumérée relative au type de PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.valeur IS 'Valeur de la liste énumérée relative au type de PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.affich IS 'Ordre d''affichage de la liste énumérée relative au type de PEI';
+
+INSERT INTO m_defense_incendie.lt_pei_type_pei(
+            code, valeur, affich)
+    VALUES
+    ('PI','Poteau d''incendie','1'),
+    ('BI','Prise d''eau sous pression, notamment bouche d''incendie','2'),
+    ('PA','Point d''aspiration aménagé (point de puisage)','3'),
+    ('CI','Citerne aérienne ou enterrée','4'),  
+    ('NR','Non renseigné','5');
 
 
 -- ################################################################# Domaine valeur - type_pei  ###############################################
@@ -577,7 +617,7 @@ INSERT INTO m_defense_incendie.lt_pei_cs_sdis(
     ('60509','CS de Pont-Sainte-Maxence');
 
 
--- ################################################################# Domaine valeur - pei_etat  ###############################################
+-- ################################################################# Domaine valeur - pei_etat_boolean  ###############################################
 
 -- Table: m_defense_incendie.lt_pei_etat_boolean
 
@@ -658,6 +698,57 @@ INSERT INTO m_defense_incendie.lt_pei_anomalie(
     ('12','Gêne accès extérieur','1','0','0'),
     ('13','Equipement à remplacer','0','0','0'),   
     ('14','Hors service','0','0','1');
+
+
+
+-- ################################################################# Domaine valeur ouvert - id_contrat  ###############################################
+
+-- Table: m_defense_incendie.lt_pei_id_contrat
+
+-- DROP TABLE m_defense_incendie.lt_pei_id_contrat;
+
+CREATE TABLE m_defense_incendie.lt_pei_id_contrat
+(
+  code character varying(2) NOT NULL,
+  valeur character varying(80) NOT NULL,
+  CONSTRAINT lt_pei_id_contrat_pkey PRIMARY KEY (code)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE m_defense_incendie.lt_pei_id_contrat
+  OWNER TO postgres;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_id_contrat TO postgres;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_id_contrat TO groupe_sig WITH GRANT OPTION;
+COMMENT ON TABLE m_defense_incendie.lt_pei_id_contrat
+  IS 'Code permettant de décrire le numéro de contrat pour l''entretien et de contrôle du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_id_contrat.code IS 'Code de la liste énumérée relative au numéro de contrat pour l''entretien et de contrôle du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_id_contrat.valeur IS 'Valeur de la liste énumérée relative au numéro de contrat pour l''entretien et de contrôle du PEI';
+
+
+
+-- Sequence: m_defense_incendie.lt_pei_id_contrat_seq
+
+-- DROP SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq;
+
+CREATE SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq
+  INCREMENT 1
+  MINVALUE 0
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+ALTER TABLE m_defense_incendie.lt_pei_id_contrat_seq
+  OWNER TO postgres;
+GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO postgres;
+GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO groupe_sig WITH GRANT OPTION;
+ALTER TABLE m_defense_incendie.lt_pei_id_contrat ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_id_contrat_seq'::regclass),'FM00');
+
+INSERT INTO m_defense_incendie.lt_pei_id_contrat(
+            code, valeur)
+    VALUES
+    ('00','Non renseigné'),
+    ('ZZ','Non concerné'),
+    (to_char(nextval('m_defense_incendie.lt_pei_id_contrat_seq'::regclass),'FM00'),'test_contrat_n1');
 
 
 
@@ -940,6 +1031,15 @@ ALTER TABLE m_defense_incendie.geo_pei
 -- ************ AN_PEI_CTR ************ 
 
 
+-- Foreign Key: m_defense_incendie.lt_pei_id_contrat_fkey
+
+-- ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_id_contrat_fkey;
+
+ALTER TABLE m_defense_incendie.an_pei_ctr
+  ADD CONSTRAINT lt_pei_id_contrat_fkey FOREIGN KEY (id_contrat)
+      REFERENCES m_defense_incendie.lt_pei_id_contrat (code) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
 -- Foreign Key: m_defense_incendie.lt_pei_etat_anom_fkey
 
 -- ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_etat_anom_fkey;
@@ -994,6 +1094,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
  SELECT 
   g.id_pei,
   g.id_sdis,
+  g.verrou,
   g.ref_terr,
   e.lib_epci AS epci,
   g.insee,
@@ -1007,6 +1108,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
   g.volume,
   g.diam_cana,
   g.etat_pei,
+  a.id_contrat,
   a.press_stat,
   a.press_dyn,
   a.debit,
@@ -1025,7 +1127,6 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
   a.date_mes,
   a.date_ct,
   a.ope_ct,
-  a.presta_ct,
   a.date_co,
   g.statut,
   g.gestion,
@@ -1048,7 +1149,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
 
    FROM m_defense_incendie.geo_pei g
    LEFT JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
-   LEFT JOIN r_osm.geo_osm_commune as c ON g.insee = c.insee
+   LEFT JOIN r_osm.geo_v_osm_commune_apc as c ON g.insee = c.insee
 -- jointure à 2 niveaux pour récupération du nom de l'EPCI
    LEFT JOIN r_administratif.an_geo as lk ON lk.insee = g.insee
    LEFT JOIN r_osm.geo_osm_epci as e ON e.cepci = lk.epci;
@@ -1058,6 +1159,83 @@ ALTER TABLE m_defense_incendie.geo_v_pei_ctr
   OWNER TO postgres;
 COMMENT ON VIEW m_defense_incendie.geo_v_pei_ctr
   IS 'Vue éditable destinée à la modification des données relatives aux PEI et aux contrôles';
+
+
+
+-- View: x_apps.xapps_geo_v_pei_ctr
+
+-- DROP VIEW x_apps.xapps_geo_v_pei_ctr;
+
+CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS 
+ SELECT 
+  g.id_pei,
+  g.id_sdis,
+  g.verrou,
+  g.ref_terr,
+  e.lib_epci AS epci,
+  g.insee,
+  c.commune,
+  g.type_pei,
+  g.type_rd,
+  g.diam_pei,
+  g.raccord,
+  g.marque,
+  g.source,
+  g.volume,
+  g.diam_cana,
+  g.etat_pei,
+  a.id_contrat,
+  a.press_stat,
+  a.press_dyn,
+  a.debit,
+  a.debit_max,
+  a.debit_r_ci,
+  a.etat_anom,
+  a.lt_anom,
+  a.etat_acces,
+  a.etat_sign,
+  a.etat_conf,
+  CASE 
+  WHEN a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02' THEN 't' -- cas ok pour la dispo (etat existant, conformité ok, controle < 2ans)
+  ELSE 'f'
+  END AS disponible,
+  CURRENT_DATE AS date_dispo,
+  a.date_mes,
+  a.date_ct,
+  a.ope_ct,
+  a.date_co,
+  g.statut,
+  g.gestion,
+  g.delegat,
+  g.cs_sdis,
+  g.position,
+  g.observ,
+  g.photo_url,
+  g.src_pei,
+  g.x_l93,
+  g.y_l93,
+  g.src_geom,
+  g.src_date,
+  g.prec,
+  g.ope_sai,
+  g.date_sai,  
+  g.date_maj,
+  g.geom,
+  g.geom1
+
+   FROM m_defense_incendie.geo_pei g
+   LEFT JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
+   LEFT JOIN r_osm.geo_v_osm_commune_apc as c ON g.insee = c.insee
+-- jointure à 2 niveaux pour récupération du nom de l'EPCI
+   LEFT JOIN r_administratif.an_geo as lk ON lk.insee = g.insee
+   LEFT JOIN r_osm.geo_osm_epci as e ON e.cepci = lk.epci;
+
+
+ALTER TABLE x_apps.xapps_geo_v_pei_ctr
+  OWNER TO postgres;
+COMMENT ON VIEW x_apps.xapps_geo_v_pei_ctr
+  IS 'Vue applicative destinée à la modification des données PEI sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
+
 
 
 
@@ -1144,7 +1322,7 @@ COMMENT ON VIEW m_defense_incendie.geo_v_pei_zonedefense
 -- ####################################################################################################################################################
 
 
--- #################################################################### FONCTION TRIGGER - GEO_PEI ###################################################
+-- #################################################################### FONCTION TRIGGER - GEO_V_PEI_CTR ###################################################
 
 -- Function: m_defense_incendie.ft_geo_v_pei_ctr()
 
@@ -1166,9 +1344,10 @@ BEGIN
 IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
+NEW.verrou,
 CASE WHEN NEW.ref_terr = '' THEN NULL ELSE NEW.ref_terr END,
 CASE WHEN NEW.insee IS NULL THEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom)) ELSE NEW.insee END,
 CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
@@ -1199,9 +1378,10 @@ NEW.date_maj,
 NEW.geom,
 ST_Buffer(NEW.geom, 200);
 
-INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, presta_ct, date_co)
+INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_co)
 SELECT v_id_pei,
 NEW.id_sdis,
+NEW.id_contrat,
 NEW.press_stat,
 NEW.press_dyn,
 NEW.debit,
@@ -1215,7 +1395,6 @@ CASE WHEN NEW.etat_conf IS NULL THEN '0' ELSE NEW.etat_conf END,
 NEW.date_mes,
 CASE WHEN NEW.date_ct > CURRENT_DATE THEN NULL ELSE NEW.date_ct END,
 NEW.ope_ct,
-NEW.presta_ct,
 NEW.date_co;
 RETURN NEW;
 
@@ -1232,6 +1411,7 @@ m_defense_incendie.geo_pei
 SET
 id_pei=OLD.id_pei,
 id_sdis=CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
+verrou=NEW.verrou,
 -- refus de mise à jour si le point est déplacé dans une autre commune
 insee=CASE WHEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom))=OLD.insee THEN OLD.insee ELSE NULL END,
 type_pei=CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
@@ -1268,6 +1448,7 @@ m_defense_incendie.an_pei_ctr
 SET
 id_pei=NEW.id_pei,
 id_sdis=NEW.id_sdis,
+id_contrat=NEW.id_contrat,
 press_stat=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.press_stat END,
 press_dyn=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.press_dyn END,
 debit=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.debit END,
@@ -1281,17 +1462,13 @@ etat_sign=CASE WHEN v_lt_anom LIKE '%04%' THEN 'f' ELSE NEW.etat_sign END,
 etat_conf=CASE WHEN NEW.type_pei IN ('PI','BI') AND (NEW.debit < 60 OR NEW.press_dyn < 1 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f' 
                WHEN NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci < 60) OR NEW.volume < 60 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f' 
                WHEN NEW.type_pei = 'PA' AND NEW.source = 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f'
-               WHEN NEW.type_pei = 'PA' AND NEW.source != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f' ELSE 't' END,
+               WHEN NEW.type_pei = 'PA' AND NEW.source != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f'
+               WHEN v_gestion = 'IN' AND NEW.type_pei = 'NR' THEN 'f' ELSE 't' END,
 date_mes=NEW.date_mes,
 date_ct=CASE WHEN NEW.date_ct > CURRENT_DATE THEN NULL ELSE NEW.date_ct END,
 ope_ct=NEW.ope_ct,
-presta_ct=NEW.presta_ct,
 date_co=NEW.date_co
 WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
-RETURN NEW;
-
-
-
 RETURN NEW;
 
 
@@ -1302,6 +1479,7 @@ m_defense_incendie.geo_pei
 SET
 id_pei=OLD.id_pei,
 id_sdis=OLD.id_sdis,
+verrou=OLD.verrou,
 ref_terr=OLD.ref_terr,
 insee=OLD.insee,
 type_pei=OLD.type_pei,
@@ -1338,6 +1516,7 @@ m_defense_incendie.an_pei_ctr
 SET
 id_pei=OLD.id_pei,
 id_sdis=OLD.id_sdis,
+id_contrat=NEW.id_contrat,
 press_stat=OLD.press_stat,
 press_dyn=OLD.press_dyn,
 debit=OLD.debit,
@@ -1351,7 +1530,6 @@ etat_conf=OLD.etat_conf,
 date_mes=OLD.date_mes,
 date_ct=OLD.date_ct,
 ope_ct=OLD.ope_ct,
-presta_ct=OLD.presta_ct,
 date_co=OLD.date_co
 WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 RETURN NEW;
@@ -1381,7 +1559,545 @@ CREATE TRIGGER t_t1_geo_v_pei_ctr
 
 
 
--- #################################################################### FONCTION TRIGGER - log_pei ###################################################
+-- #################################################################### FONCTION TRIGGER - XAPPS_GEO_V_PEI_CTR ###################################################
+
+/*
+
+cette fonction a pour but de traiter des différents cas de gestion des données PEI pour le service eau potable mutualisé de l'ARC et de la ville de Compiègne
+Le service est gestionnaire d'un patrimoine PEI correspondant à une partie des entités de la base PEI, ce patrimoine étant lui même décomposé en plusieurs contrats pour de l'entretien et des controles auprès de sociétés prestataires
+La fonction trigger doit donc refleter la capacité du service a faire entrée ou sortir de son patrimoine des PEI, et agir sur celui-ci en verouillant ou non la saisie pour lui même et les sous-traitants
+
+1- insert
+ras, l'insertion doit être possible
+
+2- update
+
+2a- patrimoine arc
+	2a1- avant et après oui
+		2a1a- verrou avant oui et après oui => maj non
+		2a1b- verrou avant non et après non => maj oui
+		2a1c- verrou avant non et après oui => maj oui
+		2a1d- verrou avant oui et après non => maj oui
+	2a2- avant non (de fait verrou non) mais après oui = entrée de patrimoine pei => maj oui
+
+2b- patrimoine non arc
+	2b1- avant et après non arc => maj non
+	2b2- avant oui arc mais après non arc = sortie du patrimoine pei => maj ok avec des cas particuliers pour id_contrat='ZZ', verrou IS FALSE  
+
+3-delete
+
+3a- patrimoine arc
+	3a1- > update avec etat_pei à "supprimé"
+	3a2- > 
+
+3b- patrimoine non arc = interdiction > ni delete ni update
+
+
+*/
+
+-- Function: x_apps.ft_xapps_geo_v_pei_ctr()
+
+-- DROP FUNCTION x_apps.ft_xapps_geo_v_pei_ctr();
+
+CREATE OR REPLACE FUNCTION x_apps.ft_xapps_geo_v_pei_ctr()
+  RETURNS trigger AS
+$BODY$
+
+DECLARE v_id_pei integer;
+--déclaration variable pour stocker la liste des anomalies
+DECLARE v_lt_anom character varying(80);
+--déclaration variable pour stocker le résultat sur la conformité de l'accès
+DECLARE v_etat_acces character varying(1);
+--variable qui stocke l'état du verrou du PEI
+DECLARE v_verrou boolean;
+--variable qui stocke l'état d'appartenance du PEI au patrimoine en gestion du service mutualisé de l'eau potable
+DECLARE v_gestion character varying(3);
+
+BEGIN
+
+
+-- INSERT
+IF (TG_OP = 'INSERT') THEN
+
+v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
+
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+
+SELECT v_id_pei,
+
+CASE WHEN NEW.id_sdis = ''
+THEN NULL
+ELSE NEW.id_sdis
+END,
+
+false,
+
+CASE WHEN NEW.ref_terr = '' THEN NULL
+ELSE NEW.ref_terr
+END,
+
+CASE WHEN NEW.insee IS NULL THEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom))
+ELSE NEW.insee
+END,
+
+CASE WHEN NEW.type_pei IS NULL THEN 'NR'
+ELSE NEW.type_pei
+END,
+
+NEW.type_rd,
+
+CASE WHEN NEW.diam_pei IS NULL THEN 'NR' ELSE NEW.diam_pei END,
+CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
+CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
+CASE WHEN NEW.source IS NULL THEN 'NR' ELSE NEW.source END,
+NEW.volume,
+NEW.diam_cana,
+CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
+CASE WHEN NEW.statut IS NULL THEN '00' ELSE NEW.statut END,
+CASE WHEN NEW.gestion IS NULL THEN '00' ELSE NEW.gestion END,
+CASE WHEN NEW.delegat IS NULL THEN '00' ELSE NEW.delegat END,
+CASE WHEN NEW.cs_sdis IS NULL THEN '00000' ELSE NEW.cs_sdis END,
+CASE WHEN NEW.position = '' THEN NULL ELSE LOWER(NEW.position) END,
+CASE WHEN NEW.observ = '' THEN NULL ELSE LOWER(NEW.observ) END,
+CASE WHEN NEW.photo_url = '' THEN NULL ELSE NEW.photo_url END,
+CASE WHEN NEW.src_pei = '' THEN NULL ELSE NEW.src_pei END,
+st_x(NEW.geom),
+st_y(NEW.geom),
+CASE WHEN NEW.src_geom IS NULL OR NEW.src_geom = '' THEN '00' ELSE NEW.src_geom END,
+CASE WHEN NEW.src_date IS NULL OR NEW.src_date = '' THEN '0000' ELSE NEW.src_date END,
+CASE WHEN NEW.prec IS NULL OR NEW.prec = '' THEN '000' ELSE NEW.prec END,
+CASE WHEN NEW.ope_sai = '' THEN NULL ELSE NEW.ope_sai END,
+CASE WHEN NEW.date_sai IS NULL THEN now() ELSE now() END,
+NEW.date_maj,
+NEW.geom,
+ST_Buffer(NEW.geom, 200);
+
+INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_co)
+SELECT v_id_pei,
+NEW.id_sdis,
+NEW.id_contrat,
+NEW.press_stat,
+NEW.press_dyn,
+NEW.debit,
+NEW.debit_max,
+NEW.debit_r_ci,
+CASE WHEN NEW.etat_anom IS NULL THEN '0' ELSE NEW.etat_anom END,
+CASE WHEN NEW.lt_anom = '' THEN NULL ELSE NEW.lt_anom END,
+CASE WHEN NEW.etat_acces IS NULL THEN '0' ELSE NEW.etat_acces END,
+CASE WHEN NEW.etat_sign IS NULL THEN '0' ELSE NEW.etat_sign END,
+CASE WHEN NEW.etat_conf IS NULL THEN '0' ELSE NEW.etat_conf END,
+NEW.date_mes,
+CASE WHEN NEW.date_ct > CURRENT_DATE THEN NULL ELSE NEW.date_ct END,
+NEW.ope_ct,
+NEW.date_co;
+
+RETURN NEW;
+
+
+-- UPDATE
+
+/* 
+MODIFICATIONS AUTORISEES < cas d'un PEI appartenant au patrimoine du service ou entrant dans celui-ci et non verrouillé
+*/
+ELSIF (TG_OP = 'UPDATE') THEN
+
+
+v_verrou := CASE WHEN OLD.verrou IS TRUE AND NEW.verrou IS TRUE THEN TRUE ELSE FALSE END;
+
+v_gestion := CASE WHEN NEW.gestion = '04' OR (NEW.gestion ='05' AND NEW.insee ='60159') THEN 'IN' ELSE 'OUT' END;
+
+--déclaration variable pour stocker la liste des anomalies
+v_lt_anom := CASE WHEN NEW.etat_anom = 't' THEN NULL ELSE NEW.lt_anom END;
+-- déclaration variable pour stocker le résultat sur la conformité de l'accès
+v_etat_acces := CASE WHEN v_lt_anom LIKE '%05%' THEN 'f' ELSE NEW.etat_acces END;
+
+UPDATE
+
+m_defense_incendie.geo_pei
+
+SET
+
+id_pei=		OLD.id_pei,
+
+id_sdis=	CASE WHEN NEW.id_sdis = '' THEN NULL
+		ELSE NEW.id_sdis
+		END,
+
+-- en cas de sortie du patrimoine géré par le service alors par défaut il n'y a pas de verrou
+verrou=		CASE WHEN v_gestion = 'OUT' THEN false
+		ELSE NEW.verrou
+		END,
+		
+ref_terr=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.ref_terr
+		WHEN v_gestion = 'IN' AND NEW.ref_terr = '' THEN NULL
+		ELSE NEW.ref_terr
+		END,
+
+-- refus de mise à jour si le point est déplacé dans une autre commune
+insee=		CASE WHEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom))=OLD.insee THEN OLD.insee ELSE NULL END,
+
+type_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.type_pei
+		WHEN v_gestion = 'IN' AND NEW.type_pei IS NULL THEN 'NR'
+		ELSE NEW.type_pei
+		END,
+
+type_rd=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.type_rd
+		WHEN v_gestion = 'IN' AND NEW.type_rd = '' THEN NULL
+		ELSE NEW.type_rd
+		END,
+		
+diam_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.diam_pei
+		WHEN v_gestion = 'IN' AND NEW.diam_pei IS NULL THEN '00'
+		ELSE NEW.diam_pei
+		END,
+		
+raccord=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.raccord
+		WHEN v_gestion = 'IN' AND NEW.raccord IS NULL THEN '00'
+		ELSE NEW.raccord
+		END,
+		
+marque=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.marque
+		WHEN v_gestion = 'IN' AND NEW.marque IS NULL THEN '00'
+		ELSE NEW.marque
+		END,
+		
+source=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.source
+		WHEN v_gestion = 'IN' AND NEW.source IS NULL THEN '00'
+		ELSE NEW.source
+		END,
+		
+volume=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.volume
+		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE')) THEN NULL
+		ELSE NEW.volume
+		END,
+		
+diam_cana=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.diam_cana
+		WHEN v_gestion = 'IN' THEN NEW.diam_cana
+		END,
+		
+etat_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_pei
+		WHEN v_gestion = 'IN' AND NEW.etat_pei IS NULL THEN '00'
+		ELSE NEW.etat_pei
+		END,
+		
+statut=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.statut
+		WHEN v_gestion = 'IN' AND NEW.statut IS NULL THEN '00'
+		ELSE NEW.statut
+		END,
+
+-- le gestionnaire est modifiable par le service afin de pouvoir faire entrer ou sortir du patrimoine PEI de sa gestion. la modification reste néanmoins interdite en cas de verrou maintenu lors de la mise à jour.		
+gestion=	CASE WHEN v_verrou IS TRUE THEN OLD.gestion
+		WHEN NEW.gestion IS NULL THEN '00'
+		ELSE NEW.gestion
+		END,
+
+delegat=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.statut
+		WHEN v_gestion = 'IN' AND NEW.delegat IS NULL THEN '00'
+		ELSE NEW.delegat
+		END,
+		
+cs_sdis=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.cs_sdis
+		WHEN v_gestion = 'IN' AND NEW.cs_sdis IS NULL THEN '00000'
+		ELSE NEW.cs_sdis
+		END,
+		
+position=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.position
+		WHEN v_gestion = 'IN' AND NEW.position = '' THEN NULL
+		ELSE LOWER(NEW.position)
+		END,
+
+
+observ=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.observ
+		WHEN v_gestion = 'IN' AND NEW.observ = '' THEN NULL
+		ELSE LOWER(NEW.observ)
+		END,
+		
+photo_url=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.photo_url
+		WHEN v_gestion = 'IN' AND NEW.photo_url = '' THEN NULL
+		ELSE NEW.photo_url
+		END,
+		
+src_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.src_pei
+		WHEN v_gestion = 'IN' AND NEW.src_pei = '' THEN NULL
+		ELSE NEW.src_pei
+		END,
+		
+x_l93=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.x_l93
+		WHEN v_gestion = 'IN' THEN st_x(NEW.geom)
+		END,
+
+y_l93=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.y_l93
+		WHEN v_gestion = 'IN' THEN st_y(NEW.geom)
+		END,
+
+src_geom=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.src_geom
+		WHEN v_gestion = 'IN' AND (NEW.src_geom IS NULL OR NEW.src_geom = '') THEN '00'
+		ELSE NEW.src_geom
+		END,
+		
+src_date=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.src_date
+		WHEN v_gestion = 'IN' AND (NEW.src_date IS NULL OR NEW.src_date = '' OR NEW.src_geom ='00') THEN '0000'
+		ELSE NEW.src_date
+		END,
+		
+prec=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.prec
+		WHEN v_gestion = 'IN' AND (NEW.prec IS NULL OR NEW.prec = '' OR NEW.src_geom = '00') THEN '000'
+		ELSE NEW.prec
+		END,
+		
+ope_sai=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.ope_sai
+		WHEN v_gestion = 'IN' AND NEW.ope_sai = '' THEN NULL
+		ELSE NEW.ope_sai
+		END,
+		
+date_sai=	OLD.date_sai,
+
+date_maj=	now(),
+
+geom=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.geom
+		WHEN v_gestion = 'IN' THEN NEW.geom
+		END,
+		
+geom1=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.geom1
+		WHEN v_gestion = 'IN' THEN ST_Buffer(NEW.geom, 200)
+		END
+		
+WHERE m_defense_incendie.geo_pei.id_pei = OLD.id_pei;
+
+UPDATE
+
+m_defense_incendie.an_pei_ctr
+
+SET
+
+id_pei=		NEW.id_pei,
+
+id_sdis=	NEW.id_sdis,
+
+-- en cas de sortie du patrimoine, le contrat est mis par défaut à non concerné (id_contrat = 'ZZ') afin de ne pas laisser la capacité au prestataire d'intervenir si oubli
+id_contrat=	CASE WHEN v_gestion = 'OUT' THEN 'ZZ'
+		WHEN v_verrou IS TRUE THEN OLD.id_contrat
+		WHEN v_gestion = 'IN' THEN NEW.id_contrat
+		END,
+ 
+press_stat=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.press_stat
+		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL 
+		ELSE NEW.press_stat
+		END,
+
+press_dyn=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.press_dyn 
+		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL
+		ELSE NEW.press_dyn
+		END,
+
+debit=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit
+		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL
+		ELSE NEW.debit
+		END,
+
+debit_max=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_max
+		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL
+		ELSE NEW.debit_max
+		END,
+
+debit_r_ci=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_r_ci
+		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE')) THEN NULL
+		ELSE NEW.debit_r_ci
+		END,
+
+etat_anom=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_anom
+		WHEN v_gestion = 'IN' AND NEW.etat_anom IS NULL THEN '0'
+		ELSE NEW.etat_anom
+		END,
+
+lt_anom=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.lt_anom
+		WHEN v_gestion = 'IN' AND (NEW.lt_anom = '' OR NEW.etat_anom IN ('0','t')) THEN NULL
+		ELSE NEW.lt_anom
+		END,
+
+etat_acces=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_acces
+		WHEN v_gestion = 'IN' AND NEW.etat_anom = 't' THEN 't'
+		ELSE v_etat_acces
+		END,
+
+etat_sign=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_sign
+		WHEN v_gestion = 'IN' AND v_lt_anom LIKE '%04%' THEN 'f'
+		ELSE NEW.etat_sign
+		END,
+
+--etat_conf, les pts de controle sont différents selon le type de PEI
+/*
+etat_conf=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_conf
+		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') AND (NEW.debit < 60 OR NEW.press_dyn < 1 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f' 
+		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci < 60) OR NEW.volume < 60 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f' 
+		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source = 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f'
+		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f'
+		WHEN v_gestion = 'IN' AND NEW.type_pei = 'NR' THEN 'f'
+		ELSE 't'
+		END,
+*/
+etat_conf=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_conf
+		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') AND (NEW.debit > 60 OR NEW.press_dyn > 1 OR v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't' 
+		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci > 60) OR NEW.volume > 120 OR v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't' 
+		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source = 'CE' AND (v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't'
+		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source != 'CE' AND (v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't'
+		ELSE 'f'
+		END,
+               
+date_mes=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_mes
+		WHEN v_gestion = 'IN' THEN NEW.date_mes
+		END,
+
+date_ct=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_ct
+		WHEN v_gestion = 'IN' AND NEW.date_ct > CURRENT_DATE THEN NULL
+		ELSE NEW.date_ct
+		END,
+
+ope_ct=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.ope_ct
+		WHEN v_gestion = 'IN' THEN NEW.ope_ct
+		END,
+
+date_co=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_co
+		WHEN v_gestion = 'IN' THEN NEW.date_co
+		END
+
+WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
+
+RETURN NEW;
+
+
+-- DELETE
+
+
+ELSIF (TG_OP = 'DELETE') THEN
+
+
+v_verrou := CASE WHEN OLD.verrou IS TRUE THEN TRUE ELSE FALSE END;
+
+v_gestion := CASE WHEN OLD.gestion = '04' OR (OLD.gestion ='05' AND OLD.insee ='60159') THEN 'IN' ELSE 'OUT' END;
+
+
+UPDATE
+
+m_defense_incendie.geo_pei
+
+SET
+
+id_pei=		OLD.id_pei,
+
+id_sdis=	OLD.id_sdis,
+
+verrou=		OLD.verrou,
+
+ref_terr=	OLD.ref_terr,
+
+insee=		OLD.insee,
+
+type_pei=	OLD.type_pei,
+
+type_rd=	OLD.type_rd,
+
+diam_pei=	OLD.diam_pei,
+
+raccord=	OLD.raccord,
+
+marque=		OLD.marque,
+
+source=		OLD.source,
+
+volume=		OLD.volume,
+
+diam_cana=	OLD.diam_cana,
+
+-- dans le cas où la suppression s'applique sur un patrimoine PEI non verouillé et géré par le service, alors l'état du PEI est modifié et passe à "supprimer", dans le cas inverse (verrou ou gestion OUT), alors rien n'est modifié
+etat_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_pei
+		ELSE '03'
+		END,
+
+statut=		OLD.statut,
+
+gestion=	OLD.gestion,
+
+delegat=	OLD.delegat,
+
+cs_sdis=	OLD.cs_sdis,
+
+position=	OLD.position,
+
+observ=		OLD.observ,
+
+photo_url=	OLD.photo_url,
+
+src_pei=	OLD.src_pei,
+
+x_l93=		OLD.x_l93,
+
+y_l93=		OLD.y_l93,
+
+src_geom=	OLD.src_geom,
+
+src_date=	OLD.src_date,
+
+prec=		OLD.prec,
+
+ope_sai=	OLD.ope_sai,
+
+date_sai=	OLD.date_sai,
+
+-- dans le cas où la suppression s'applique sur un patrimoine PEI non verouillé et géré par le service, alors la date de mise à jour du PEI est modifié, dans le cas inverse (verrou ou gestion OUT), non
+date_maj=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_maj
+		ELSE now()
+		END,
+
+geom=		OLD.geom,
+
+geom1=		OLD.geom1
+
+WHERE m_defense_incendie.geo_pei.id_pei = OLD.id_pei;
+
+UPDATE
+
+m_defense_incendie.an_pei_ctr
+
+SET
+
+id_pei=		OLD.id_pei,
+id_sdis=	OLD.id_sdis,
+id_contrat=	OLD.id_contrat,
+press_stat=	OLD.press_stat,
+press_dyn=	OLD.press_dyn,
+debit=		OLD.debit,
+debit_max=	OLD.debit_max,
+debit_r_ci=	OLD.debit_r_ci,
+etat_anom=	OLD.etat_anom,
+lt_anom=	OLD.lt_anom,
+etat_acces=	OLD.etat_acces,
+etat_sign=	OLD.etat_sign,
+etat_conf=	OLD.etat_conf,
+date_mes=	OLD.date_mes,
+date_ct=	OLD.date_ct,
+ope_ct=		OLD.ope_ct,
+date_co=	OLD.date_co
+
+WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
+
+RETURN NEW;
+
+
+END IF;
+
+END;
+
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION x_apps.ft_xapps_geo_v_pei_ctr()
+  OWNER TO postgres;
+COMMENT ON FUNCTION x_apps.ft_xapps_geo_v_pei_ctr() IS 'Fonction trigger de mise à jour de la vue applicative destinée à la modification des données relatives aux PEI et aux contrôles sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
+
+
+
+-- #################################################################### FONCTION TRIGGER - LOG_PEI ###################################################
 
 -- Function: m_defense_incendie.ft_log_pei()
 
@@ -1458,6 +2174,17 @@ CREATE TRIGGER t_t2_log_pei
   ON m_defense_incendie.geo_v_pei_ctr
   FOR EACH ROW
   EXECUTE PROCEDURE m_defense_incendie.ft_log_pei();
+  
+  
+-- Trigger: x_apps.t_log_pei on x_apps.xapps_geo_v_pei_ctr
+
+-- DROP TRIGGER x_apps.t_log_pei ON x_apps.xapps_geo_v_pei_ctr;
+
+CREATE TRIGGER t_t2_log_pei
+  INSTEAD OF INSERT OR UPDATE OR DELETE
+  ON x_apps.xapps_geo_v_pei_ctr
+  FOR EACH ROW
+  EXECUTE PROCEDURE m_defense_incendie.ft_log_pei();  
  
 
 
