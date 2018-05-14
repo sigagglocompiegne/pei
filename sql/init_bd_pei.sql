@@ -50,7 +50,7 @@
 2018-04-03 : FV / modif opendata en vue geo au lieu de alpha, modif classe valeur anomalie pour y intégrer les contraintes à lire par le trigger
 2018-04-09 : FV / modifs classe objet suite à diffusion de la version définitive du modèle AFIGEO
 2018-04-10 : FV / modifs pour gestion interne : ajout champs "id_contrat", "ct_valid" ; ajout domaine de valeur ouvert "lt_pei_id_contrat"
-2018-04-10 : FV / ajout vue applicative pour gestion différentiée des données entre celles entrant le patrimoine du service et les autres. Pour ces dernières, le trigger ne permet qu'un changement sur le gestionnaire du PEI (gestion) permettant de faire entrer le PEI dans le patrimoine du service
+2018-04-10 : FV / ajout vue applicative pour gestion des données. Cette gestion est différentiée entre celles entrant le patrimoine du service et les autres. Pour ces dernières, le trigger ne permet qu'un changement sur le gestionnaire du PEI (gestion) permettant de faire entrer le PEI dans le patrimoine du service
 
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
