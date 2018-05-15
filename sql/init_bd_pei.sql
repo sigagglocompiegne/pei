@@ -364,41 +364,6 @@ INSERT INTO m_defense_incendie.lt_pei_type_pei(
     ('NR','Non renseigné','5');
 
 
--- ################################################################# Domaine valeur - type_pei  ###############################################
-
--- Table: m_defense_incendie.lt_pei_type_pei
-
--- DROP TABLE m_defense_incendie.lt_pei_type_pei;
-
-CREATE TABLE m_defense_incendie.lt_pei_type_pei
-(
-  code character varying(2) NOT NULL,
-  valeur character varying(80) NOT NULL,
-  affich character varying(1) NOT NULL,
-  CONSTRAINT lt_pei_type_pei_pkey PRIMARY KEY (code)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE m_defense_incendie.lt_pei_type_pei
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO groupe_sig WITH GRANT OPTION;
-COMMENT ON TABLE m_defense_incendie.lt_pei_type_pei
-  IS 'Code permettant de décrire le type de point d''eau incendie';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.code IS 'Code de la liste énumérée relative au type de PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.valeur IS 'Valeur de la liste énumérée relative au type de PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.affich IS 'Ordre d''affichage de la liste énumérée relative au type de PEI';
-
-INSERT INTO m_defense_incendie.lt_pei_type_pei(
-            code, valeur, affich)
-    VALUES
-    ('PI','Poteau d''incendie','1'),
-    ('BI','Prise d''eau sous pression, notamment bouche d''incendie','2'),
-    ('PA','Point d''aspiration aménagé (point de puisage)','3'),
-    ('CI','Citerne aérienne ou enterrée','4'),  
-    ('NR','Non renseigné','5');
-
 
 -- ################################################################# Domaine valeur - diam_pei  ###############################################
 
@@ -2101,6 +2066,21 @@ COMMENT ON FUNCTION x_apps.ft_xapps_geo_v_pei_ctr() IS 'Fonction trigger de mise
 
 
 
+-- Trigger: t_t1_xapps_geo_v_pei_ctr on x_apps.xapps_geo_v_pei_ctr
+
+-- DROP TRIGGER t_t1_xapps_geo_v_pei_ctr ON x_apps.xapps_geo_v_pei_ctr;
+
+CREATE TRIGGER t_t1_xapps_geo_v_pei_ctr
+  INSTEAD OF INSERT OR UPDATE OR DELETE
+  ON x_apps.xapps_geo_v_pei_ctr
+  FOR EACH ROW
+  EXECUTE PROCEDURE x_apps.ft_xapps_geo_v_pei_ctr();
+
+
+
+
+
+
 -- #################################################################### FONCTION TRIGGER - LOG_PEI ###################################################
 
 -- Function: m_defense_incendie.ft_log_pei()
@@ -2180,9 +2160,9 @@ CREATE TRIGGER t_t2_log_pei
   EXECUTE PROCEDURE m_defense_incendie.ft_log_pei();
   
   
--- Trigger: x_apps.t_log_pei on x_apps.xapps_geo_v_pei_ctr
+-- Trigger: x_apps.t_t2_log_pei on x_apps.xapps_geo_v_pei_ctr
 
--- DROP TRIGGER x_apps.t_log_pei ON x_apps.xapps_geo_v_pei_ctr;
+-- DROP TRIGGER x_apps.t_t2_log_pei ON x_apps.xapps_geo_v_pei_ctr;
 
 CREATE TRIGGER t_t2_log_pei
   INSTEAD OF INSERT OR UPDATE OR DELETE
