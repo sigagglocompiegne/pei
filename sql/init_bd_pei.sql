@@ -51,7 +51,7 @@
 2018-04-09 : FV / modifs classe objet suite à diffusion de la version définitive du modèle AFIGEO
 2018-04-10 : FV / modifs pour gestion interne : ajout champs "id_contrat", "ct_valid" ; ajout domaine de valeur ouvert "lt_pei_id_contrat"
 2018-04-10 : FV / ajout vue applicative pour gestion des données. Cette gestion est différentiée entre celles entrant le patrimoine du service et les autres. Pour ces dernières, le trigger ne permet qu'un changement sur le gestionnaire du PEI (gestion) permettant de faire entrer le PEI dans le patrimoine du service
-
+2015-05-15 : FV / correctif bug maj id_sdis malgré le verrou
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
@@ -1719,7 +1719,8 @@ SET
 
 id_pei=		OLD.id_pei,
 
-id_sdis=	CASE WHEN NEW.id_sdis = '' THEN NULL
+id_sdis= CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.id_sdis
+    WHEN v_gestion = 'IN' AND NEW.id_sdis = '' THEN NULL
 		ELSE NEW.id_sdis
 		END,
 
@@ -1872,7 +1873,10 @@ SET
 
 id_pei=		NEW.id_pei,
 
-id_sdis=	NEW.id_sdis,
+id_sdis= CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.id_sdis
+    WHEN v_gestion = 'IN' AND NEW.id_sdis = '' THEN NULL
+		ELSE NEW.id_sdis
+		END,
 
 -- en cas de sortie du patrimoine, le contrat est mis par défaut à non concerné (id_contrat = 'ZZ') afin de ne pas laisser la capacité au prestataire d'intervenir si oubli
 id_contrat=	CASE WHEN v_gestion = 'OUT' THEN 'ZZ'
