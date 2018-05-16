@@ -1279,6 +1279,27 @@ COMMENT ON VIEW m_defense_incendie.geo_v_pei_zonedefense
   IS 'Vue des zones indicatives de défense incendie publique';
 
 
+-- View: x_apps.xapps_geo_v_pei_zonedefense
+
+-- DROP VIEW x_apps.xapps_geo_v_pei_zonedefense;
+
+CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_zonedefense AS 
+ SELECT 
+  g.id_pei,
+  g.insee,
+  g.gestion,
+  a.id_contrat,
+  g.geom1
+
+   FROM m_defense_incendie.geo_pei g
+   LEFT JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
+   WHERE g.statut='01' AND a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02';
+
+ALTER TABLE x_apps.xapps_geo_v_pei_zonedefense
+  OWNER TO postgres;
+COMMENT ON VIEW x_apps.xapps_geo_v_pei_zonedefense
+  IS 'Vue applicative des zones indicatives de défense incendie publique';
+
 
 
 -- ####################################################################################################################################################
