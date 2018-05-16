@@ -52,6 +52,7 @@
 2018-04-10 : FV / modifs pour gestion interne : ajout champs "id_contrat", "ct_valid" ; ajout domaine de valeur ouvert "lt_pei_id_contrat"
 2018-04-10 : FV / ajout vue applicative pour gestion des données. Cette gestion est différentiée entre celles entrant le patrimoine du service et les autres. Pour ces dernières, le trigger ne permet qu'un changement sur le gestionnaire du PEI (gestion) permettant de faire entrer le PEI dans le patrimoine du service
 2015-05-15 : FV / correctif bug maj id_sdis malgré le verrou
+2015-05-16 : FV / correctif sur les controles croisés des mesures/contrôles pour déterminer la conformité technique du PEI
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
@@ -1559,7 +1560,6 @@ ras, l'insertion doit être possible
 
 
 */
-
 -- Function: x_apps.ft_xapps_geo_v_pei_ctr()
 
 -- DROP FUNCTION x_apps.ft_xapps_geo_v_pei_ctr();
@@ -1568,9 +1568,10 @@ CREATE OR REPLACE FUNCTION x_apps.ft_xapps_geo_v_pei_ctr()
   RETURNS trigger AS
 $BODY$
 
+--déclaration variable pour la séquence de l'id de la base
 DECLARE v_id_pei integer;
 --déclaration variable pour stocker la liste des anomalies
-DECLARE v_lt_anom character varying(80);
+DECLARE v_lt_anom character varying(254);
 --déclaration variable pour stocker le résultat sur la conformité de l'accès
 DECLARE v_etat_acces character varying(1);
 --variable qui stocke l'état du verrou du PEI
@@ -1581,7 +1582,8 @@ DECLARE v_gestion character varying(3);
 BEGIN
 
 
--- INSERT
+-- ############ INSERT ###########
+
 IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
@@ -1639,8 +1641,8 @@ ST_Buffer(NEW.geom, 200);
 
 INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_co)
 SELECT v_id_pei,
-NEW.id_sdis,
-NEW.id_contrat,
+CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
+CASE WHEN NEW.id_contrat IS NULL THEN '00' ELSE NEW.id_contrat END,
 NEW.press_stat,
 NEW.press_dyn,
 NEW.debit,
@@ -1659,22 +1661,25 @@ NEW.date_co;
 RETURN NEW;
 
 
--- UPDATE
+-- ############ UPDATE ############
 
-/* 
-MODIFICATIONS AUTORISEES < cas d'un PEI appartenant au patrimoine du service ou entrant dans celui-ci et non verrouillé
-*/
+
+-- MODIFICATIONS AUTORISEES < cas d'un PEI appartenant au patrimoine du service ou entrant dans celui-ci et non verrouillé
+
 ELSIF (TG_OP = 'UPDATE') THEN
 
-
+-- si il y a un verrou avant (OLD) et après (NEW), alors il y a un état de verrou permanent empechant les modifications, sinon les modif sont autorisées puisqu'au moins à un moment, il n'y avait pas de verrou 
 v_verrou := CASE WHEN OLD.verrou IS TRUE AND NEW.verrou IS TRUE THEN TRUE ELSE FALSE END;
 
+-- si le PEI a une gestion intercommunale (04) ou une gestion communale (05) sur Compiègne, alors le PEI rentre dans le patrimoine de gestion du service 
 v_gestion := CASE WHEN NEW.gestion = '04' OR (NEW.gestion ='05' AND NEW.insee ='60159') THEN 'IN' ELSE 'OUT' END;
 
---déclaration variable pour stocker la liste des anomalies
-v_lt_anom := CASE WHEN NEW.etat_anom = 't' THEN NULL ELSE NEW.lt_anom END;
--- déclaration variable pour stocker le résultat sur la conformité de l'accès
+-- si absence d'anomalie est vraie alors la liste des anomalies est "null"
+v_lt_anom := CASE WHEN NEW.etat_anom IN ('t','0') THEN NULL ELSE NEW.lt_anom END;
+
+-- si la liste des anomalies fait état d'un problème d'accessibilité (05), alors l'accessibilité du PEI est non conforme
 v_etat_acces := CASE WHEN v_lt_anom LIKE '%05%' THEN 'f' ELSE NEW.etat_acces END;
+
 
 UPDATE
 
@@ -1731,7 +1736,8 @@ source=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.source
 		WHEN v_gestion = 'IN' AND NEW.source IS NULL THEN '00'
 		ELSE NEW.source
 		END,
-		
+
+-- volume devient "null" si jamais le type de PEI est PI, BI ou PA pour un cours d'eau (car illimité dans ce cas)		
 volume=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.volume
 		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE')) THEN NULL
 		ELSE NEW.volume
@@ -1771,7 +1777,6 @@ position=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.position
 		WHEN v_gestion = 'IN' AND NEW.position = '' THEN NULL
 		ELSE LOWER(NEW.position)
 		END,
-
 
 observ=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.observ
 		WHEN v_gestion = 'IN' AND NEW.observ = '' THEN NULL
@@ -1848,27 +1853,32 @@ id_contrat=	CASE WHEN v_gestion = 'OUT' THEN 'ZZ'
 		WHEN v_verrou IS TRUE THEN OLD.id_contrat
 		WHEN v_gestion = 'IN' THEN NEW.id_contrat
 		END,
- 
+
+-- press_stat devient "null" si jamais le type de PEI est CI ou PA	 
 press_stat=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.press_stat
 		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL 
 		ELSE NEW.press_stat
 		END,
 
+-- press_dyn devient "null" si jamais le type de PEI est CI ou PA
 press_dyn=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.press_dyn 
 		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL
 		ELSE NEW.press_dyn
 		END,
 
+-- debit devient "null" si jamais le type de PEI est CI ou PA
 debit=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit
 		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL
 		ELSE NEW.debit
 		END,
 
+-- debit_max devient "null" si jamais le type de PEI est CI ou PA
 debit_max=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_max
 		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('CI','PA') THEN NULL
 		ELSE NEW.debit_max
 		END,
 
+-- debit_r_ci devient "null" si jamais le type de PEI est PI, BI ou PA pour un cours d'eau (car illimité dans ce cas)
 debit_r_ci=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_r_ci
 		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE')) THEN NULL
 		ELSE NEW.debit_r_ci
@@ -1879,10 +1889,7 @@ etat_anom=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_anom
 		ELSE NEW.etat_anom
 		END,
 
-lt_anom=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.lt_anom
-		WHEN v_gestion = 'IN' AND (NEW.lt_anom = '' OR NEW.etat_anom IN ('0','t')) THEN NULL
-		ELSE NEW.lt_anom
-		END,
+lt_anom=	v_lt_anom,
 
 etat_acces=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_acces
 		WHEN v_gestion = 'IN' AND NEW.etat_anom = 't' THEN 't'
@@ -1894,24 +1901,20 @@ etat_sign=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_sign
 		ELSE NEW.etat_sign
 		END,
 
---etat_conf, les pts de controle sont différents selon le type de PEI
-/*
+-- ######## contrôle des mesures et anomalies pour la conformité technique ########
+
+-- etat_conf, les pts de controle sont différents selon le type de PEI
 etat_conf=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_conf
-		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') AND (NEW.debit < 60 OR NEW.press_dyn < 1 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f' 
-		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci < 60) OR NEW.volume < 60 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f' 
-		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source = 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f'
-		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f')) THEN 'f'
-		WHEN v_gestion = 'IN' AND NEW.type_pei = 'NR' THEN 'f'
-		ELSE 't'
-		END,
-*/
-etat_conf=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_conf
-		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') AND (NEW.debit > 60 OR NEW.press_dyn > 1 OR v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't' 
-		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci > 60) OR NEW.volume > 120 OR v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't' 
-		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source = 'CE' AND (v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't'
-		WHEN v_gestion = 'IN' AND (NEW.type_pei = 'PA' AND NEW.source != 'CE' AND (v_lt_anom NOT LIKE '%14%' OR v_lt_anom NOT LIKE '%03%' OR v_lt_anom NOT LIKE '%10%' OR v_etat_acces = 't')) THEN 't'
+		-- pour un type PI ou BI, CT ok dans le cas où : débit > 60 m3/h ou pression dynamique > 1 bar et certains types d'anomalies ne sont pas présentes
+		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('PI','BI') AND (NEW.debit >= 60 OR NEW.press_dyn >= 1) AND (v_lt_anom ='' OR v_lt_anom IS NULL OR (v_lt_anom NOT LIKE '%03%' AND v_lt_anom NOT LIKE '%05%' AND v_lt_anom NOT LIKE '%10%' AND v_lt_anom NOT LIKE '%14%') ) THEN 't' 
+		-- pour un type CI ok dans le cas où : volume > 120 m" ou si volume est entre 60 et 120 avec un débit de remplissage de 60 m3/h et certains types d'anomalies ne sont pas présentes
+		WHEN v_gestion = 'IN' AND NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci > 60) OR NEW.volume > 120) AND (v_lt_anom ='' OR v_lt_anom IS NULL OR (v_lt_anom NOT LIKE '%03%' AND v_lt_anom NOT LIKE '%05%' AND v_lt_anom NOT LIKE '%10%' AND v_lt_anom NOT LIKE '%14%') ) THEN 't' 
+		-- pour un type PA ok dans le cas où : certains types d'anomalies ne sont pas présentes
+		WHEN v_gestion = 'IN' AND NEW.type_pei = 'PA' AND (v_lt_anom ='' OR v_lt_anom IS NULL OR (v_lt_anom NOT LIKE '%03%' AND v_lt_anom NOT LIKE '%05%' AND v_lt_anom NOT LIKE '%10%' AND v_lt_anom NOT LIKE '%14%') ) THEN 't'
+		-- autre cas correspondent à une NON conformité technique 		
 		ELSE 'f'
 		END,
+		
                
 date_mes=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_mes
 		WHEN v_gestion = 'IN' THEN NEW.date_mes
@@ -1935,7 +1938,7 @@ WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 RETURN NEW;
 
 
--- DELETE
+-- ############ DELETE ############
 
 
 ELSIF (TG_OP = 'DELETE') THEN
@@ -2063,7 +2066,6 @@ $BODY$
 ALTER FUNCTION x_apps.ft_xapps_geo_v_pei_ctr()
   OWNER TO postgres;
 COMMENT ON FUNCTION x_apps.ft_xapps_geo_v_pei_ctr() IS 'Fonction trigger de mise à jour de la vue applicative destinée à la modification des données relatives aux PEI et aux contrôles sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
-
 
 
 -- Trigger: t_t1_xapps_geo_v_pei_ctr on x_apps.xapps_geo_v_pei_ctr
