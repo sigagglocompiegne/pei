@@ -112,7 +112,7 @@ CREATE TABLE m_defense_incendie.geo_pei
   diam_pei character varying(3),
   raccord character varying(2),
   marque character varying(2),
-  source character varying(3),
+  source_pei character varying(3),
   volume integer,
   diam_cana integer,
   etat_pei character varying(2),
@@ -120,7 +120,7 @@ CREATE TABLE m_defense_incendie.geo_pei
   gestion character varying(2),
   delegat character varying(2),
   cs_sdis character varying(5),
-  position character varying(254),
+  situation character varying(254),
   observ character varying(254),
   photo_url character varying(254),
   src_pei character varying(254),
@@ -157,7 +157,7 @@ COMMENT ON COLUMN m_defense_incendie.geo_pei.type_rd IS 'Type de PEI selon la no
 COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_pei IS 'Diamètre intérieur du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.raccord IS 'Descriptif des raccords de sortie du PEI (nombre et diamètres exprimés en mm)';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.marque IS 'Marque du fabriquant du PEI';
-COMMENT ON COLUMN m_defense_incendie.geo_pei.source IS 'Source du point d''eau';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.source_pei IS 'Source du point d''eau';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.volume IS 'Capacité volumique utile de la source d''eau en m3/h. Si la source est inépuisable (cour d''eau ou plan d''eau pérenne), l''information est nulle';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_cana IS 'Diamètre de la canalisation exprimé en mm pour les PI et BI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.etat_pei IS 'Etat d''actualité du PEI';
@@ -165,7 +165,7 @@ COMMENT ON COLUMN m_defense_incendie.geo_pei.statut IS 'Statut juridique';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.gestion IS 'Gestionnaire du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.delegat IS 'Délégataire du réseau pour les PI et BI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.cs_sdis IS 'Code INSEE du centre de secours du SDIS en charge du volet opérationnel';
-COMMENT ON COLUMN m_defense_incendie.geo_pei.position IS 'Adresse ou information permettant de faciliter la localisation du PEI sur le terrain';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.situation IS 'Adresse ou information permettant de faciliter la localisation du PEI sur le terrain';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.observ IS 'Observations';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.photo_url IS 'Lien vers une photo du PEI';                                                                                                 
 COMMENT ON COLUMN m_defense_incendie.geo_pei.src_pei IS 'Organisme source de l''information PEI';
@@ -399,33 +399,33 @@ INSERT INTO m_defense_incendie.lt_pei_diam_pei(
     ('NR','Non renseigné');
     
 
--- ################################################################# Domaine valeur - source  ###############################################
+-- ################################################################# Domaine valeur - source_pei  ###############################################
 
--- Table: m_defense_incendie.lt_pei_source
+-- Table: m_defense_incendie.lt_pei_source_pei
 
--- DROP TABLE m_defense_incendie.lt_pei_source;
+-- DROP TABLE m_defense_incendie.lt_pei_source_pei;
 
-CREATE TABLE m_defense_incendie.lt_pei_source
+CREATE TABLE m_defense_incendie.lt_pei_source_pei
 (
   code character varying(3) NOT NULL,
   valeur character varying(80) NOT NULL,
   code_open character varying(30),
-  CONSTRAINT lt_pei_source_pkey PRIMARY KEY (code)
+  CONSTRAINT lt_pei_source_pei_pkey PRIMARY KEY (code)
 )
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_source
+ALTER TABLE m_defense_incendie.lt_pei_source_pei
   OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_source TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_source TO groupe_sig WITH GRANT OPTION;
-COMMENT ON TABLE m_defense_incendie.lt_pei_source
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_source_pei TO postgres;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_source_pei TO groupe_sig WITH GRANT OPTION;
+COMMENT ON TABLE m_defense_incendie.lt_pei_source_pei
   IS 'Code permettant de décrire le type de source d''alimentation du PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_source.code IS 'Code de la liste énumérée relative au type de source d''alimentation du PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_source.valeur IS 'Valeur de la liste énumérée relative au type de source d''alimentation du PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_source.code_open IS 'Code pour les exports opendata de la liste énumérée relative au type de source d''alimentation du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_source_pei.code IS 'Code de la liste énumérée relative au type de source d''alimentation du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_source_pei.valeur IS 'Valeur de la liste énumérée relative au type de source d''alimentation du PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_source_pei.code_open IS 'Code pour les exports opendata de la liste énumérée relative au type de source d''alimentation du PEI';
 
-INSERT INTO m_defense_incendie.lt_pei_source(
+INSERT INTO m_defense_incendie.lt_pei_source_pei(
             code, valeur, code_open)
     VALUES
     ('CI','Citerne','citerne'),
@@ -908,13 +908,13 @@ ALTER TABLE m_defense_incendie.geo_pei
       ON UPDATE NO ACTION ON DELETE NO ACTION;
       
       
--- Foreign Key: m_defense_incendie.lt_pei_source_fkey
+-- Foreign Key: m_defense_incendie.lt_pei_source_pei_fkey
 
--- ALTER TABLE m_defense_incendie.geo_pei DROP CONSTRAINT lt_pei_source_fkey;
+-- ALTER TABLE m_defense_incendie.geo_pei DROP CONSTRAINT lt_pei_source_pei_fkey;
 
 ALTER TABLE m_defense_incendie.geo_pei
-  ADD CONSTRAINT lt_pei_source_fkey FOREIGN KEY (source)
-      REFERENCES m_defense_incendie.lt_pei_source (code) MATCH SIMPLE
+  ADD CONSTRAINT lt_pei_source_pei_fkey FOREIGN KEY (source_pei)
+      REFERENCES m_defense_incendie.lt_pei_source_pei (code) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 
@@ -1070,7 +1070,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
   g.diam_pei,
   g.raccord,
   g.marque,
-  g.source,
+  g.source_pei,
   g.volume,
   g.diam_cana,
   g.etat_pei,
@@ -1098,7 +1098,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
   g.gestion,
   g.delegat,
   g.cs_sdis,
-  g.position,
+  g.situation,
   g.observ,
   g.photo_url,
   g.src_pei,
@@ -1146,7 +1146,7 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
   g.diam_pei,
   g.raccord,
   g.marque,
-  g.source,
+  g.source_pei,
   g.volume,
   g.diam_cana,
   g.etat_pei,
@@ -1174,7 +1174,7 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
   g.gestion,
   g.delegat,
   g.cs_sdis,
-  g.position,
+  g.situation,
   g.observ,
   g.photo_url,
   g.src_pei,
@@ -1219,10 +1219,12 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   CASE WHEN g.type_pei = 'NR' THEN NULL ELSE g.type_pei END,
   g.type_rd,
   CASE WHEN g.diam_pei = 'NR' THEN NULL ELSE g.diam_pei END,
-  lt_src.code_open AS source,
+  CASE WHEN g.diam_cana = 0 THEN NULL ELSE g.diam_cana END,
+  lt_src.code_open AS source_pei,
   lt_stat.code_open AS statut,
-  g.position,
-  a.press_stat AS pression,
+  g.situation,
+  a.press_dyn,
+  a.press_stat,
   a.debit,
   g.volume,
   CASE 
@@ -1230,6 +1232,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   ELSE '0'
   END AS disponible,
   CURRENT_DATE AS date_dispo,
+  a.date_mes,
   CASE WHEN g.date_maj IS NULL THEN DATE(g.date_sai) ELSE DATE(g.date_maj) END AS date_maj,
   a.date_ct,  
   a.date_co,
@@ -1247,7 +1250,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
    FROM m_defense_incendie.geo_pei g
    LEFT JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
    LEFT JOIN m_defense_incendie.lt_pei_statut lt_stat ON lt_stat.code = g.statut
-   LEFT JOIN m_defense_incendie.lt_pei_source lt_src ON lt_src.code = g.source
+   LEFT JOIN m_defense_incendie.lt_pei_source_pei lt_src ON lt_src.code = g.source_pei
    LEFT JOIN m_defense_incendie.lt_pei_gestion lt_gest ON lt_gest.code = g.gestion
    WHERE g.etat_pei = '02'
    ORDER BY g.insee, g.id_sdis;  
@@ -1331,7 +1334,7 @@ BEGIN
 IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
 NEW.verrou,
@@ -1342,7 +1345,7 @@ NEW.type_rd,
 CASE WHEN NEW.diam_pei IS NULL THEN 'NR' ELSE NEW.diam_pei END,
 CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
-CASE WHEN NEW.source IS NULL THEN 'NR' ELSE NEW.source END,
+CASE WHEN NEW.source_pei IS NULL THEN 'NR' ELSE NEW.source_pei END,
 NEW.volume,
 NEW.diam_cana,
 CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
@@ -1350,7 +1353,7 @@ CASE WHEN NEW.statut IS NULL THEN '00' ELSE NEW.statut END,
 CASE WHEN NEW.gestion IS NULL THEN '00' ELSE NEW.gestion END,
 CASE WHEN NEW.delegat IS NULL THEN '00' ELSE NEW.delegat END,
 CASE WHEN NEW.cs_sdis IS NULL THEN '00000' ELSE NEW.cs_sdis END,
-CASE WHEN NEW.position = '' THEN NULL ELSE LOWER(NEW.position) END,
+CASE WHEN NEW.situation = '' THEN NULL ELSE LOWER(NEW.situation) END,
 CASE WHEN NEW.observ = '' THEN NULL ELSE LOWER(NEW.observ) END,
 CASE WHEN NEW.photo_url = '' THEN NULL ELSE NEW.photo_url END,
 CASE WHEN NEW.src_pei = '' THEN NULL ELSE NEW.src_pei END,
@@ -1406,15 +1409,15 @@ type_rd=NEW.type_rd,
 diam_pei=CASE WHEN NEW.diam_pei IS NULL THEN '00' ELSE NEW.diam_pei END,
 raccord=CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 marque=CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
-source=CASE WHEN NEW.source IS NULL THEN '00' ELSE NEW.source END,
-volume=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE') THEN NULL ELSE NEW.volume END,
+source_pei=CASE WHEN NEW.source_pei IS NULL THEN '00' ELSE NEW.source_pei END,
+volume=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE') THEN NULL ELSE NEW.volume END,
 diam_cana=NEW.diam_cana,
 etat_pei=CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
 statut=CASE WHEN NEW.statut IS NULL THEN '00' ELSE NEW.statut END,
 gestion=CASE WHEN NEW.gestion IS NULL THEN '00' ELSE NEW.gestion END,
 delegat=CASE WHEN NEW.delegat IS NULL THEN '00' ELSE NEW.delegat END,
 cs_sdis=CASE WHEN NEW.cs_sdis IS NULL THEN '00000' ELSE NEW.cs_sdis END,
-position=CASE WHEN NEW.position = '' THEN NULL ELSE LOWER(NEW.position) END,
+situation=CASE WHEN NEW.situation = '' THEN NULL ELSE LOWER(NEW.situation) END,
 observ=CASE WHEN NEW.observ = '' THEN NULL ELSE LOWER(NEW.observ) END,
 photo_url=CASE WHEN NEW.photo_url = '' THEN NULL ELSE NEW.photo_url END,
 src_pei=CASE WHEN NEW.src_pei = '' THEN NULL ELSE NEW.src_pei END,
@@ -1440,7 +1443,7 @@ press_stat=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.press_stat E
 press_dyn=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.press_dyn END,
 debit=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.debit END,
 debit_max=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.debit_max END,
-debit_r_ci=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE') THEN NULL ELSE NEW.debit_r_ci END,
+debit_r_ci=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE') THEN NULL ELSE NEW.debit_r_ci END,
 etat_anom=CASE WHEN NEW.etat_anom IS NULL THEN '0' ELSE NEW.etat_anom END,
 lt_anom=CASE WHEN NEW.lt_anom = '' OR NEW.etat_anom IN ('0','t') THEN NULL ELSE NEW.lt_anom END,
 etat_acces=CASE WHEN NEW.etat_anom = 't' THEN 't' ELSE v_etat_acces END,
@@ -1448,8 +1451,8 @@ etat_sign=CASE WHEN v_lt_anom LIKE '%04%' THEN 'f' ELSE NEW.etat_sign END,
 --etat_conf, les pts de controle sont différents selon le type de PEI
 etat_conf=CASE WHEN NEW.type_pei IN ('PI','BI') AND (NEW.debit < 60 OR NEW.press_dyn < 1 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f' 
                WHEN NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci < 60) OR NEW.volume < 60 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f' 
-               WHEN NEW.type_pei = 'PA' AND NEW.source = 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f'
-               WHEN NEW.type_pei = 'PA' AND NEW.source != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f'
+               WHEN NEW.type_pei = 'PA' AND NEW.source_pei = 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f'
+               WHEN NEW.type_pei = 'PA' AND NEW.source_pei != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f'
                WHEN v_gestion = 'IN' AND NEW.type_pei = 'NR' THEN 'f' ELSE 't' END,
 date_mes=NEW.date_mes,
 date_ct=CASE WHEN NEW.date_ct > CURRENT_DATE THEN NULL ELSE NEW.date_ct END,
@@ -1474,7 +1477,7 @@ type_rd=OLD.type_rd,
 diam_pei=OLD.diam_pei,
 raccord=OLD.raccord,
 marque=OLD.marque,
-source=OLD.source,
+source_pei=OLD.source_pei,
 volume=OLD.volume,
 diam_cana=OLD.diam_cana,
 etat_pei='03',
@@ -1482,7 +1485,7 @@ statut=OLD.statut,
 gestion=OLD.gestion,
 delegat=OLD.delegat,
 cs_sdis=OLD.cs_sdis,
-position=OLD.position,
+situation=OLD.situation,
 observ=OLD.observ,
 photo_url=OLD.photo_url,
 src_pei=OLD.src_pei,
@@ -1609,7 +1612,7 @@ IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
 
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, position, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 
 SELECT v_id_pei,
 
@@ -1637,7 +1640,7 @@ NEW.type_rd,
 CASE WHEN NEW.diam_pei IS NULL THEN 'NR' ELSE NEW.diam_pei END,
 CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
-CASE WHEN NEW.source IS NULL THEN 'NR' ELSE NEW.source END,
+CASE WHEN NEW.source_pei IS NULL THEN 'NR' ELSE NEW.source_pei END,
 NEW.volume,
 NEW.diam_cana,
 CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
@@ -1645,7 +1648,7 @@ CASE WHEN NEW.statut IS NULL THEN '00' ELSE NEW.statut END,
 CASE WHEN NEW.gestion IS NULL THEN '00' ELSE NEW.gestion END,
 CASE WHEN NEW.delegat IS NULL THEN '00' ELSE NEW.delegat END,
 CASE WHEN NEW.cs_sdis IS NULL THEN '00000' ELSE NEW.cs_sdis END,
-CASE WHEN NEW.position = '' THEN NULL ELSE LOWER(NEW.position) END,
+CASE WHEN NEW.situation = '' THEN NULL ELSE LOWER(NEW.situation) END,
 CASE WHEN NEW.observ = '' THEN NULL ELSE LOWER(NEW.observ) END,
 CASE WHEN NEW.photo_url = '' THEN NULL ELSE NEW.photo_url END,
 CASE WHEN NEW.src_pei = '' THEN NULL ELSE NEW.src_pei END,
@@ -1753,14 +1756,14 @@ marque=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.marque
 		ELSE NEW.marque
 		END,
 		
-source=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.source
-		WHEN v_gestion = 'IN' AND NEW.source IS NULL THEN '00'
-		ELSE NEW.source
+source_pei=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.source_pei
+		WHEN v_gestion = 'IN' AND NEW.source_pei IS NULL THEN '00'
+		ELSE NEW.source_pei
 		END,
 
 -- volume devient "null" si jamais le type de PEI est PI, BI ou PA pour un cours d'eau (car illimité dans ce cas)		
 volume=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.volume
-		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE')) THEN NULL
+		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE')) THEN NULL
 		ELSE NEW.volume
 		END,
 		
@@ -1794,9 +1797,9 @@ cs_sdis=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.cs_sdis
 		ELSE NEW.cs_sdis
 		END,
 		
-position=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.position
-		WHEN v_gestion = 'IN' AND NEW.position = '' THEN NULL
-		ELSE LOWER(NEW.position)
+situation=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.situation
+		WHEN v_gestion = 'IN' AND NEW.situation = '' THEN NULL
+		ELSE LOWER(NEW.situation)
 		END,
 
 observ=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.observ
@@ -1901,7 +1904,7 @@ debit_max=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_max
 
 -- debit_r_ci devient "null" si jamais le type de PEI est PI, BI ou PA pour un cours d'eau (car illimité dans ce cas)
 debit_r_ci=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_r_ci
-		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source = 'CE')) THEN NULL
+		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE')) THEN NULL
 		ELSE NEW.debit_r_ci
 		END,
 
@@ -1996,7 +1999,7 @@ raccord=	OLD.raccord,
 
 marque=		OLD.marque,
 
-source=		OLD.source,
+source_pei=		OLD.source_pei,
 
 volume=		OLD.volume,
 
@@ -2015,7 +2018,7 @@ delegat=	OLD.delegat,
 
 cs_sdis=	OLD.cs_sdis,
 
-position=	OLD.position,
+situation=	OLD.situation,
 
 observ=		OLD.observ,
 
