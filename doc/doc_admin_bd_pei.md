@@ -55,7 +55,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |diam_pei|Diamètre intérieur du PEI|character varying(3)| |
 |raccord|Descriptif des raccords de sortie du PEI (nombre et diamètres exprimés en mm)|character varying(2)| |
 |marque|Marque du fabriquant du PEI|character varying(2)| |
-|source|Source du point d'eau|character varying(3)| |
+|source_pei|Source du point d'eau|character varying(3)| |
 |volume|Capacité volumique utile de la source d'eau en m3/h. Si la source est inépuisable (cour d'eau ou plan d'eau pérenne), l'information est nulle|integer| |
 |diam_cana|Diamètre de la canalisation exprimé en mm pour les PI et BI|integer| |
 |etat_pei|Etat d'actualité du PEI|character varying(2)| |
