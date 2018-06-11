@@ -152,7 +152,7 @@ Valeurs possibles :
 
 ---
 
-`lt_pei_source` : Liste permettant de décrire le type de source d'alimentation du PEI
+`lt_pei_source_pei` : Liste permettant de décrire le type de source d'alimentation du PEI
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
