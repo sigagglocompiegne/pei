@@ -46,8 +46,8 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
-|id_pei|Identifiant unique du PEI|bigint|nextval('m_defense_incendie.geo_pei_id_seq'::regclass)|
-|id_sdis|Identifiant unique du PEI du SDIS|character varying(254)| |
+|id_pei|Identifiant interne unique du PEI|bigint|nextval('m_defense_incendie.geo_pei_id_seq'::regclass)|
+|id_sdis|Identifiant interne unique du PEI du SDIS|character varying(254)| |
 |ref_terr|Référence du PEI sur le terrain|character varying(254)| |
 |insee|Code INSEE|character varying(5)| |
 |type_pei|Type de PEI|character varying(2)| |
@@ -60,7 +60,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |diam_cana|Diamètre de la canalisation exprimé en mm pour les PI et BI|integer| |
 |etat_pei|Etat d'actualité du PEI|character varying(2)| |
 |statut|Statut juridique|character varying(2)| |
-|gestion|Gestionnaire du PEI|character varying(2)| |
+|nom_gest|Nom du gestionnaire responsable de distribution|character varying(2)| |
 |delegat|Délégataire du réseau pour les PI et BI|character varying(2)| |
 |cs_sdis|Code INSEE du centre de secours du SDIS en charge du volet opérationnel|character varying(5)| |
 |Situation|Adresse ou information permettant de faciliter la localisation du PEI sur le terrain|character varying(254)| |
