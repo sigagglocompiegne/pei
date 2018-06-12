@@ -51,8 +51,10 @@
 2018-04-09 : FV / modifs classe objet suite à diffusion de la version définitive du modèle AFIGEO
 2018-04-10 : FV / modifs pour gestion interne : ajout champs "id_contrat", "ct_valid" ; ajout domaine de valeur ouvert "lt_pei_id_contrat"
 2018-04-10 : FV / ajout vue applicative pour gestion des données. Cette gestion est différentiée entre celles entrant le patrimoine du service et les autres. Pour ces dernières, le trigger ne permet qu'un changement sur le gestionnaire du PEI (gestion) permettant de faire entrer le PEI dans le patrimoine du service
-2015-05-15 : FV / correctif bug maj id_sdis malgré le verrou
-2015-05-17 : FV / correctif sur les controles croisés des mesures/contrôles pour déterminer la conformité technique du PEI
+2018-05-15 : FV / correctif bug maj id_sdis malgré le verrou
+2018-05-17 : FV / correctif sur les controles croisés des mesures/contrôles pour déterminer la conformité technique du PEI
+2018-06-12 : FV / implémentation des évolutions du modèle suite à réunion AFIGEO du 11/06/2018
+
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
