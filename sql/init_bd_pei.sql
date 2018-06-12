@@ -52,7 +52,7 @@
 2018-04-10 : FV / modifs pour gestion interne : ajout champs "id_contrat", "ct_valid" ; ajout domaine de valeur ouvert "lt_pei_id_contrat"
 2018-04-10 : FV / ajout vue applicative pour gestion des données. Cette gestion est différentiée entre celles entrant le patrimoine du service et les autres. Pour ces dernières, le trigger ne permet qu'un changement sur le gestionnaire du PEI (gestion) permettant de faire entrer le PEI dans le patrimoine du service
 2015-05-15 : FV / correctif bug maj id_sdis malgré le verrou
-2015-05-16 : FV / correctif sur les controles croisés des mesures/contrôles pour déterminer la conformité technique du PEI
+2015-05-17 : FV / correctif sur les controles croisés des mesures/contrôles pour déterminer la conformité technique du PEI
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
@@ -109,7 +109,7 @@ CREATE TABLE m_defense_incendie.geo_pei
   insee character varying(5) NOT NULL, 
   type_pei character varying(2) NOT NULL,
   type_rd character varying(254),
-  diam_pei character varying(3),
+  diam_pei integer,
   raccord character varying(2),
   marque character varying(2),
   source_pei character varying(3),
@@ -117,7 +117,8 @@ CREATE TABLE m_defense_incendie.geo_pei
   diam_cana integer,
   etat_pei character varying(2),
   statut character varying(2),
-  gestion character varying(2),
+  nom_etab character varying(254),
+  gestion character varying(2), 
   delegat character varying(2),
   cs_sdis character varying(5),
   situation character varying(254),
@@ -154,7 +155,7 @@ COMMENT ON COLUMN m_defense_incendie.geo_pei.ref_terr IS 'Référence du PEI sur
 COMMENT ON COLUMN m_defense_incendie.geo_pei.insee IS 'Code INSEE';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.type_pei IS 'Type de PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.type_rd IS 'Type de PEI selon la nomenclature du réglement départemental';
-COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_pei IS 'Diamètre intérieur du PEI';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_pei IS 'Diamètre intérieur du PEI (PI et BI)';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.raccord IS 'Descriptif des raccords de sortie du PEI (nombre et diamètres exprimés en mm)';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.marque IS 'Marque du fabriquant du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.source_pei IS 'Source du point d''eau';
@@ -162,6 +163,7 @@ COMMENT ON COLUMN m_defense_incendie.geo_pei.volume IS 'Capacité volumique util
 COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_cana IS 'Diamètre de la canalisation exprimé en mm pour les PI et BI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.etat_pei IS 'Etat d''actualité du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.statut IS 'Statut juridique';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.nom_etab IS 'Dans le cas d''un PEI de statut privé, nom de l''établissement propriétaire';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.gestion IS 'Gestionnaire du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.delegat IS 'Délégataire du réseau pour les PI et BI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.cs_sdis IS 'Code INSEE du centre de secours du SDIS en charge du volet opérationnel';
@@ -374,7 +376,7 @@ INSERT INTO m_defense_incendie.lt_pei_type_pei(
 
 CREATE TABLE m_defense_incendie.lt_pei_diam_pei
 (
-  code character varying(3) NOT NULL,
+  code integer NOT NULL,
   valeur character varying(80) NOT NULL,
   CONSTRAINT lt_pei_diam_pei_pkey PRIMARY KEY (code)
 )
@@ -386,7 +388,7 @@ ALTER TABLE m_defense_incendie.lt_pei_diam_pei
 GRANT ALL ON TABLE m_defense_incendie.lt_pei_diam_pei TO postgres;
 GRANT ALL ON TABLE m_defense_incendie.lt_pei_diam_pei TO groupe_sig WITH GRANT OPTION;
 COMMENT ON TABLE m_defense_incendie.lt_pei_diam_pei
-  IS 'Code permettant de décrire le diamètre intérieur du point d''eau incendie';
+  IS 'Code permettant de décrire le diamètre intérieur du point d''eau incendie (poteau ou bouche)';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_diam_pei.code IS 'Code de la liste énumérée relative au diamètre intérieur du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_diam_pei.valeur IS 'Valeur de la liste énumérée relative au diamètre intérieur du PEI';
 
@@ -396,7 +398,7 @@ INSERT INTO m_defense_incendie.lt_pei_diam_pei(
     ('80','80'),
     ('100','100'),
     ('150','150'),  
-    ('NR','Non renseigné');
+    ('0','Non renseigné');
     
 
 -- ################################################################# Domaine valeur - source_pei  ###############################################
@@ -1095,6 +1097,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
   a.ope_ct,
   a.date_co,
   g.statut,
+  g.nom_etab,
   g.gestion,
   g.delegat,
   g.cs_sdis,
@@ -1171,6 +1174,7 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
   a.ope_ct,
   a.date_co,
   g.statut,
+  g.nom_etab,
   g.gestion,
   g.delegat,
   g.cs_sdis,
@@ -1214,14 +1218,15 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
   g.insee,
   g.id_sdis,
   CAST(g.id_pei AS TEXT) AS id_gestion,
-  lt_gest.valeur AS gestion,
+  lt_gest.valeur AS nom_gest,
   g.ref_terr,
   CASE WHEN g.type_pei = 'NR' THEN NULL ELSE g.type_pei END,
   g.type_rd,
-  CASE WHEN g.diam_pei = 'NR' THEN NULL ELSE g.diam_pei END,
+  CASE WHEN g.diam_pei = 0 THEN NULL ELSE g.diam_pei END,
   CASE WHEN g.diam_cana = 0 THEN NULL ELSE g.diam_cana END,
   lt_src.code_open AS source_pei,
   lt_stat.code_open AS statut,
+  g.nom_etab,
   g.situation,
   a.press_dyn,
   a.press_stat,
@@ -1334,7 +1339,7 @@ BEGIN
 IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, nom_etab, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
 NEW.verrou,
@@ -1342,7 +1347,7 @@ CASE WHEN NEW.ref_terr = '' THEN NULL ELSE NEW.ref_terr END,
 CASE WHEN NEW.insee IS NULL THEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom)) ELSE NEW.insee END,
 CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
 NEW.type_rd,
-CASE WHEN NEW.diam_pei IS NULL THEN 'NR' ELSE NEW.diam_pei END,
+CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
 CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
 CASE WHEN NEW.source_pei IS NULL THEN 'NR' ELSE NEW.source_pei END,
@@ -1350,6 +1355,7 @@ NEW.volume,
 NEW.diam_cana,
 CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
 CASE WHEN NEW.statut IS NULL THEN '00' ELSE NEW.statut END,
+CASE WHEN NEW.nom_etab = '' THEN NULL ELSE LOWER(NEW.nom_etab) END,
 CASE WHEN NEW.gestion IS NULL THEN '00' ELSE NEW.gestion END,
 CASE WHEN NEW.delegat IS NULL THEN '00' ELSE NEW.delegat END,
 CASE WHEN NEW.cs_sdis IS NULL THEN '00000' ELSE NEW.cs_sdis END,
@@ -1406,7 +1412,7 @@ verrou=NEW.verrou,
 insee=CASE WHEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom))=OLD.insee THEN OLD.insee ELSE NULL END,
 type_pei=CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
 type_rd=NEW.type_rd,
-diam_pei=CASE WHEN NEW.diam_pei IS NULL THEN '00' ELSE NEW.diam_pei END,
+diam_pei=CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
 raccord=CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 marque=CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
 source_pei=CASE WHEN NEW.source_pei IS NULL THEN '00' ELSE NEW.source_pei END,
@@ -1414,6 +1420,7 @@ volume=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.sou
 diam_cana=NEW.diam_cana,
 etat_pei=CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
 statut=CASE WHEN NEW.statut IS NULL THEN '00' ELSE NEW.statut END,
+nom_etab=CASE WHEN NEW.nom_etab = '' THEN NULL ELSE LOWER(NEW.nom_etab) END,
 gestion=CASE WHEN NEW.gestion IS NULL THEN '00' ELSE NEW.gestion END,
 delegat=CASE WHEN NEW.delegat IS NULL THEN '00' ELSE NEW.delegat END,
 cs_sdis=CASE WHEN NEW.cs_sdis IS NULL THEN '00000' ELSE NEW.cs_sdis END,
@@ -1482,6 +1489,7 @@ volume=OLD.volume,
 diam_cana=OLD.diam_cana,
 etat_pei='03',
 statut=OLD.statut,
+nom_etab=OLD.nom_etab,
 gestion=OLD.gestion,
 delegat=OLD.delegat,
 cs_sdis=OLD.cs_sdis,
@@ -1612,7 +1620,7 @@ IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
 
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, nom_etab, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 
 SELECT v_id_pei,
 
@@ -1637,7 +1645,7 @@ END,
 
 NEW.type_rd,
 
-CASE WHEN NEW.diam_pei IS NULL THEN 'NR' ELSE NEW.diam_pei END,
+CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
 CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
 CASE WHEN NEW.source_pei IS NULL THEN 'NR' ELSE NEW.source_pei END,
@@ -1645,6 +1653,7 @@ NEW.volume,
 NEW.diam_cana,
 CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
 CASE WHEN NEW.statut IS NULL THEN '00' ELSE NEW.statut END,
+CASE WHEN NEW.nom_etab = '' THEN NULL ELSE LOWER(NEW.nom_etab) END,
 CASE WHEN NEW.gestion IS NULL THEN '00' ELSE NEW.gestion END,
 CASE WHEN NEW.delegat IS NULL THEN '00' ELSE NEW.delegat END,
 CASE WHEN NEW.cs_sdis IS NULL THEN '00000' ELSE NEW.cs_sdis END,
@@ -1742,7 +1751,7 @@ type_rd=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.type_rd
 		END,
 		
 diam_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.diam_pei
-		WHEN v_gestion = 'IN' AND NEW.diam_pei IS NULL THEN '00'
+		WHEN v_gestion = 'IN' AND NEW.diam_pei IS NULL THEN 0
 		ELSE NEW.diam_pei
 		END,
 		
@@ -1780,6 +1789,11 @@ statut=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.statut
 		WHEN v_gestion = 'IN' AND NEW.statut IS NULL THEN '00'
 		ELSE NEW.statut
 		END,
+		
+nom_etab= CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.nom_etab
+    WHEN v_gestion = 'IN' AND NEW.nom_etab = '' THEN NULL
+    ELSE LOWER(NEW.nom_etab)
+    END,		
 
 -- le gestionnaire est modifiable par le service afin de pouvoir faire entrer ou sortir du patrimoine PEI de sa gestion. la modification reste néanmoins interdite en cas de verrou maintenu lors de la mise à jour.		
 gestion=	CASE WHEN v_verrou IS TRUE THEN OLD.gestion
@@ -2011,6 +2025,8 @@ etat_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_pei
 		END,
 
 statut=		OLD.statut,
+
+nom_etab= OLD.nom_etab,
 
 gestion=	OLD.gestion,
 
