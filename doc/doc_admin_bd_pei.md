@@ -60,6 +60,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |diam_cana|Diamètre de la canalisation exprimé en mm pour les PI et BI|integer| |
 |etat_pei|Etat d'actualité du PEI|character varying(2)| |
 |statut|Statut juridique|character varying(2)| |
+|nom_etab|Nom de l'établissement propriétaire dans le cas d'un statut privé|character varying(254)| |
 |nom_gest|Nom du gestionnaire responsable de distribution|character varying(2)| |
 |delegat|Délégataire du réseau pour les PI et BI|character varying(2)| |
 |cs_sdis|Code INSEE du centre de secours du SDIS en charge du volet opérationnel|character varying(5)| |
@@ -134,7 +135,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de PEI|character varying(3)| |
+|code|Code de la liste énumérée relative au type de PEI|integer| |
 |valeur|Valeur de la liste énumérée relative au type de PEI|character varying(80)| |
 
 Particularité(s) à noter :
@@ -148,7 +149,7 @@ Valeurs possibles :
 |80|80|
 |100|100|
 |150|150|
-|NR|Non renseigné|
+|0|Non renseigné|
 
 ---
 
