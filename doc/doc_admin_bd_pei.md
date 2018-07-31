@@ -26,7 +26,7 @@ Dans le détail :
 
 #### Les droits
 
-#####	Le service eau potable peut :
+#####	Le service eau potable ARC/ville peut :
 
 *	Voir, consulter et rechercher les informations des PEI sur les communes de l’ARC
 *	Peut modifier les données non verrouillées sur les PEI de son patrimoine ( = PEI de gestion « intercommunale » + PEI de gestion communale sur Compiègne)
@@ -35,7 +35,7 @@ Dans le détail :
 *	Peut créer un nouveau PEI
 *	Peut affecter un ou plusieurs PEI à un contrat de prestation
 
-#####	Un prestataire assurant les mesures et contrôle des PEI du service
+#####	Un prestataire assurant les mesures et contrôle des PEI du patrimoine ARC ou ville peut :
 
 *	Voir les PEI qui sont affectés à son contrat 
 *	Ne voit pas les autres PEI
@@ -48,8 +48,8 @@ Dans le détail :
 
 ###	Alimentation de la base de données
 
-*	Sur votre patrimoine, les données qui priment sont celles que vous modifiées via l’application (les entités PEI dans la base de données sont dites « maitre »)
-*	Hors de votre patrimoine de PEI, les données du SDIS sont intégrées ponctuellement et manuellement par le service SIG (les entités PEI dans la base de données sont dites « esclave »)
+*	Sur le patrimoine PEI ARC/ville, les données qui priment sont celles qui sont modifiées via l’application (les entités PEI dans la base de données sont dites « maitre »)
+*	Hors du patrimoine de PEI ARC/ville, les données du SDIS sont intégrées ponctuellement et manuellement par le service SIG (les entités PEI dans la base de données sont dites « esclave »)
 
 ###	Les contrôles de saisie
 
@@ -60,11 +60,6 @@ De nombreux point de contrôles de la saisie des utilisateurs sont vérifiés. S
 *	Selon la conformité technique et l’ancienneté du contrôle, la disponibilité pour le défense incendie publique est déduite automatiquement.
 
 Toutes ces règles de vérification sont implémentées informatiquement pour éviter les erreurs de saisie (incohérences).
-
-
-ToDo :
-
-
 
 ## Dépendances
 
