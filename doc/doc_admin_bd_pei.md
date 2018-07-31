@@ -16,6 +16,47 @@ La base de données ici développée a été conçue en parrallèle de la démar
  
 ### Résumé fonctionnel
 
+Pour rappel des grands principes :
+
+#### Les droits
+
+#####	Le service eau potable peut :
+
+*	Voir, consulter et rechercher les informations des PEI sur les communes de l’ARC
+*	Peut modifier les données non verrouillées sur les PEI de son patrimoine ( = PEI de gestion « intercommunale » + PEI de gestion communale sur Compiègne)
+*	Peut s’affecter des PEI à son patrimoine sur les communes de l’ARC (en faisant passer la gestion du PEI « commune » hors Compiègne à « intercommunale »)
+*	Peut verrouiller ou non la mise à jour des données d’un ou plusieurs PEI
+*	Peut créer un nouveau PEI
+*	Peut affecter un ou plusieurs PEI à un contrat de prestation
+
+#####	Un prestataire assurant les mesures et contrôle des PEI du service
+
+*	Voir les PEI qui sont affectés à son contrat 
+*	Ne voit pas les autres PEI
+*	Ne peut pas ajouter de nouveau PEI
+*	Peut modifier les informations d’un PEI seulement si le PEI est bien déverrouillé par le service (sauf les références locale et sdis des PEI)
+
+#####	Un autre service ou commune du pays compiégnois peut :
+
+*	Voir, consulter et rechercher les informations d’un PEI sans pouvoir les modifier
+
+###	Alimentation de la base de données
+
+*	Sur votre patrimoine, les données qui priment sont celles que vous modifiées via l’application (les entités PEI dans la base de données sont dites « maitre »)
+*	Hors de votre patrimoine de PEI, les données du SDIS sont intégrées ponctuellement et manuellement par le service SIG (les entités PEI dans la base de données sont dites « esclave »)
+
+###	Les contrôles de saisie
+
+De nombreux point de contrôles de la saisie des utilisateurs sont vérifiés. Sans tous les listés, il convient néanmoins de rappeler que :
+
+*	Selon le type de PEI (poteau / bouche ou citerne ou point d’aspiration), les mesures sont différentes
+*	Selon les mesures (grandeurs physiques contrôlées) et les anomalies, la conformité de l’accès, de la signalétique et du contrôle technique peuvent être déterminés
+*	Selon la conformité technique et l’ancienneté du contrôle, la disponibilité pour le défense incendie publique est déduite automatiquement.
+
+Toutes ces règles de vérification sont implémentées informatiquement pour éviter les erreurs de saisie (incohérences).
+Il convient de vraiment bien vérifier toutes ces règles par des saisies totalement fantaisistes et totalement cohérente
+
+
 ToDo :
 
 `Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
