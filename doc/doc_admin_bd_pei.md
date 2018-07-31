@@ -18,6 +18,12 @@ La base de données ici développée a été conçue en parrallèle de la démar
 
 Pour rappel des grands principes :
 
+* Choix du service de conserver uniquement le dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base si souhait d'une évolution de cet ordre
+* gestion différentiée entre un patrimoine de données hérité du SDIS, un autre sur lequel on agit en tant que gestionnaire
+* implémentation de controleurs de saisie utilisateur permettant de ne pas conserver les saisies incohérentes
+
+Dans le détail :
+
 #### Les droits
 
 #####	Le service eau potable peut :
@@ -47,21 +53,18 @@ Pour rappel des grands principes :
 
 ###	Les contrôles de saisie
 
-De nombreux point de contrôles de la saisie des utilisateurs sont vérifiés. Sans tous les listés, il convient néanmoins de rappeler que :
+De nombreux point de contrôles de la saisie des utilisateurs sont vérifiés. Sans tous les lister, il convient néanmoins de rappeler que :
 
 *	Selon le type de PEI (poteau / bouche ou citerne ou point d’aspiration), les mesures sont différentes
-*	Selon les mesures (grandeurs physiques contrôlées) et les anomalies, la conformité de l’accès, de la signalétique et du contrôle technique peuvent être déterminés
+*	Selon les mesures (grandeurs physiques contrôlées) et les anomalies, les conformités d’accès, de signalétique et du contrôle technique peuvent être déterminées
 *	Selon la conformité technique et l’ancienneté du contrôle, la disponibilité pour le défense incendie publique est déduite automatiquement.
 
 Toutes ces règles de vérification sont implémentées informatiquement pour éviter les erreurs de saisie (incohérences).
-Il convient de vraiment bien vérifier toutes ces règles par des saisies totalement fantaisistes et totalement cohérente
 
 
 ToDo :
 
-`Choix du service de conservation de l'unique dernier contrôle technique du PEI mais maintient d'une séparation en 2 classes d'objet dans la base
-gestion différentiée
-gestion des controleurs de saisie utilisateur (cas impossible, notamment sur la partie controle)`
+
 
 ## Dépendances
 
