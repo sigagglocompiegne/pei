@@ -54,7 +54,7 @@
 2018-05-15 : FV / correctif bug maj id_sdis malgré le verrou
 2018-05-17 : FV / correctif sur les controles croisés des mesures/contrôles pour déterminer la conformité technique du PEI
 2018-06-12 : FV / implémentation des évolutions du modèle suite à réunion AFIGEO du 11/06/2018
-
+2018-08-07 : GB / Intégrationn des nouveaux rôles de connexion et des privilèges associés
 
 GRILLE DES PARAMETRES DE MESURES (ET DE CONTROLE POUR LA CONFORMITE) EN FONCTION DU TYPE DE PEI
 type PI/BI ---- param de mesures = debit, pression
@@ -80,10 +80,19 @@ voir pour générer une table des parcelles bâties (habitat) non couvertes par 
 -- DROP SCHEMA m_defense_incendie;
 
 CREATE SCHEMA m_defense_incendie
-  AUTHORIZATION postgres;
+  AUTHORIZATION sig_create;
 
-GRANT ALL ON SCHEMA r_objet TO postgres;
-GRANT ALL ON SCHEMA r_objet TO groupe_sig WITH GRANT OPTION;
+GRANT USAGE ON SCHEMA m_defense_incendie TO edit_sig;
+GRANT ALL ON SCHEMA m_defense_incendie TO sig_create;
+GRANT ALL ON SCHEMA m_defense_incendie TO create_sig;
+GRANT USAGE ON SCHEMA m_defense_incendie TO read_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA m_defense_incendie
+GRANT ALL ON TABLES TO create_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA m_defense_incendie
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO edit_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA m_defense_incendie
+GRANT SELECT ON TABLES TO read_sig;
+
 COMMENT ON SCHEMA m_defense_incendie
   IS 'Données géographiques métiers sur le thème de la défense incendie';
  
@@ -145,9 +154,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.geo_pei
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.geo_pei TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.geo_pei TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.geo_pei TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.geo_pei TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.geo_pei TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.geo_pei
   IS 'Classe décrivant un point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.id_pei IS 'Identifiant unique du PEI';
@@ -213,9 +224,10 @@ CREATE SEQUENCE m_defense_incendie.geo_pei_id_seq
   START 1
   CACHE 1;
 ALTER TABLE m_defense_incendie.geo_pei_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.geo_pei_id_seq TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.geo_pei_id_seq TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE m_defense_incendie.geo_pei_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.geo_pei_id_seq TO public;
+
 ALTER TABLE m_defense_incendie.geo_pei ALTER COLUMN id_pei SET DEFAULT nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
 
 
@@ -251,9 +263,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.an_pei_ctr
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.an_pei_ctr TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.an_pei_ctr TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.an_pei_ctr TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.an_pei_ctr TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.an_pei_ctr TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.an_pei_ctr
   IS 'Classe décrivant le contrôle d''un point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.id_pei IS 'Identifiant unique du PEI';
@@ -296,9 +310,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.log_pei
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.log_pei TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.log_pei TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.log_pei TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.log_pei TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.log_pei TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.log_pei
   IS 'Table d''audit des opérations sur la base de données PEI';
 COMMENT ON COLUMN m_defense_incendie.log_pei.id_audit IS 'Identifiant unique de l''opération de base PEI';
@@ -318,9 +334,9 @@ CREATE SEQUENCE m_defense_incendie.log_pei_id_seq
   START 1
   CACHE 1;
 ALTER TABLE m_defense_incendie.log_pei_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.log_pei_id_seq TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.log_pei_id_seq TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE m_defense_incendie.log_pei_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.log_pei_id_seq TO public;
 ALTER TABLE m_defense_incendie.log_pei ALTER COLUMN id_audit SET DEFAULT nextval('m_defense_incendie.log_pei_id_seq'::regclass);
 
 
@@ -350,9 +366,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_type_pei
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_type_pei TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_type_pei TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_type_pei
   IS 'Code permettant de décrire le type de point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_type_pei.code IS 'Code de la liste énumérée relative au type de PEI';
@@ -386,9 +404,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_diam_pei
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_diam_pei TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_diam_pei TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_diam_pei TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_diam_pei TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_diam_pei TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_diam_pei
   IS 'Code permettant de décrire le diamètre intérieur du point d''eau incendie (poteau ou bouche)';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_diam_pei.code IS 'Code de la liste énumérée relative au diamètre intérieur du PEI';
@@ -420,9 +440,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_source_pei
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_source_pei TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_source_pei TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_source_pei TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_source_pei TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_source_pei TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_source_pei
   IS 'Code permettant de décrire le type de source d''alimentation du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_source_pei.code IS 'Code de la liste énumérée relative au type de source d''alimentation du PEI';
@@ -460,9 +482,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_statut
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_statut TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_statut TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_statut TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_statut TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_statut TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_statut
   IS 'Code permettant de décrire le statut juridique du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_statut.code IS 'Code de la liste énumérée relative au statut juridique du PEI';
@@ -494,9 +518,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_gestion
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_gestion TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_gestion TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_gestion TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_gestion TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_gestion TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_gestion
   IS 'Code permettant de décrire le gestionnaire du point d''eau incendie';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_gestion.code IS 'Code de la liste énumérée relative au gestionnaire du PEI';
@@ -533,9 +559,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_etat_pei
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_pei TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_pei TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_etat_pei TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_etat_pei TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_pei TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_etat_pei
   IS 'Code permettant de décrire l''état d''actualité du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_etat_pei.code IS 'Code de la liste énumérée relative au etat_pei juridique du PEI';
@@ -566,9 +594,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_cs_sdis
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_cs_sdis TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_cs_sdis TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_cs_sdis TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_cs_sdis TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_cs_sdis TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_cs_sdis
   IS 'Code permettant de décrire le nom du centre de secours de 1er appel du SDIS en charge du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_cs_sdis.code IS 'Code de la liste énumérée relative au nom du CS SDIS en charge du PEI';
@@ -604,9 +634,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_etat_boolean
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_boolean TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_boolean TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_etat_boolean TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_etat_boolean TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_boolean TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_etat_boolean
   IS 'Code permettant de décrire l''état d''un attribut boolean';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_etat_boolean.code IS 'Code de la liste énumérée relative à l''état d''un attribut boolean';
@@ -640,9 +672,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_anomalie
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_anomalie TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_anomalie TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_anomalie TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_anomalie TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_anomalie TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_anomalie
   IS 'Liste des anomalies possibles pour un PEI et de leurs incidences sur la conformité';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_anomalie.code IS 'Code de la liste énumérée relative au type d''anomalie d''un PEI';
@@ -687,9 +721,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_id_contrat
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_id_contrat TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_id_contrat TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_id_contrat TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_id_contrat TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_id_contrat TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_id_contrat
   IS 'Code permettant de décrire le numéro de contrat pour l''entretien et de contrôle du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_id_contrat.code IS 'Code de la liste énumérée relative au numéro de contrat pour l''entretien et de contrôle du PEI';
@@ -708,9 +744,10 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq
   START 1
   CACHE 1;
 ALTER TABLE m_defense_incendie.lt_pei_id_contrat_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO public;
+
 ALTER TABLE m_defense_incendie.lt_pei_id_contrat ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_id_contrat_seq'::regclass),'FM00');
 
 INSERT INTO m_defense_incendie.lt_pei_id_contrat(
@@ -738,9 +775,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_marque
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_marque TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_marque TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_marque TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_marque TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_marque TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_marque
   IS 'Code permettant de décrire la marque du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_marque.code IS 'Code de la liste énumérée relative à la marque du PEI';
@@ -759,9 +798,11 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_marque_seq
   START 1
   CACHE 1;
 ALTER TABLE m_defense_incendie.lt_pei_marque_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_marque_seq TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_marque_seq TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_marque_seq TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_marque_seq TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_marque_seq TO create_sig;
+
 ALTER TABLE m_defense_incendie.lt_pei_marque ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_marque_seq'::regclass),'FM00');
 
 INSERT INTO m_defense_incendie.lt_pei_marque(
@@ -787,9 +828,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_delegat
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_delegat TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_delegat TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_delegat TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_delegat TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_delegat TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_delegat
   IS 'Code permettant de décrire le délégataire du réseaux surlequel est lié un PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_delegat.code IS 'Code de la liste énumérée relative au délégataire du réseaux surlequel est lié un PEI';
@@ -807,9 +850,9 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_delegat_seq
   START 1
   CACHE 1;
 ALTER TABLE m_defense_incendie.lt_pei_delegat_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_delegat_seq TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_delegat_seq TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_delegat_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_delegat_seq TO public;
 ALTER TABLE m_defense_incendie.lt_pei_delegat ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_delegat_seq'::regclass),'FM00');
 
 INSERT INTO m_defense_incendie.lt_pei_delegat(
@@ -837,9 +880,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_defense_incendie.lt_pei_raccord
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_raccord TO postgres;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_raccord TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.lt_pei_raccord TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_raccord TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.lt_pei_raccord TO create_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_raccord
   IS 'Code permettant de décrire le type de raccord du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_raccord.code IS 'Code de la liste énumérée relative au type de raccord du PEI';
@@ -857,9 +902,10 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_raccord_seq
   START 1
   CACHE 1;
 ALTER TABLE m_defense_incendie.lt_pei_raccord_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO postgres;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO public;
+
 ALTER TABLE m_defense_incendie.lt_pei_raccord ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_raccord_seq'::regclass),'FM00');
 
 INSERT INTO m_defense_incendie.lt_pei_raccord(
@@ -1127,7 +1173,11 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
 
 
 ALTER TABLE m_defense_incendie.geo_v_pei_ctr
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.geo_v_pei_ctr TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.geo_v_pei_ctr TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.geo_v_pei_ctr TO create_sig;					   
+	
 COMMENT ON VIEW m_defense_incendie.geo_v_pei_ctr
   IS 'Vue éditable destinée à la modification des données relatives aux PEI et aux contrôles';
 
@@ -1204,7 +1254,11 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
 
 
 ALTER TABLE x_apps.xapps_geo_v_pei_ctr
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.xapps_geo_v_pei_ctr TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.xapps_geo_v_pei_ctr TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.xapps_geo_v_pei_ctr TO create_sig;
+
 COMMENT ON VIEW x_apps.xapps_geo_v_pei_ctr
   IS 'Vue applicative destinée à la modification des données PEI sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
 
@@ -1301,7 +1355,11 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_zonedefense AS
    WHERE g.statut='01' AND a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02';
 
 ALTER TABLE m_defense_incendie.geo_v_pei_zonedefense
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.geo_v_pei_zonedefense TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.geo_v_pei_zonedefense TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.geo_v_pei_zonedefense TO create_sig;
+								       
 COMMENT ON VIEW m_defense_incendie.geo_v_pei_zonedefense
   IS 'Vue des zones indicatives de défense incendie publique';
 
@@ -1323,7 +1381,11 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_zonedefense AS
    WHERE g.statut='01' AND a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02';
 
 ALTER TABLE x_apps.xapps_geo_v_pei_zonedefense
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT SELECT ON TABLE m_defense_incendie.xapps_geo_v_pei_zonedefense TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.xapps_geo_v_pei_zonedefense TO edit_sig;
+GRANT ALL ON TABLE m_defense_incendie.xapps_geo_v_pei_zonedefense TO create_sig;
+								       
 COMMENT ON VIEW x_apps.xapps_geo_v_pei_zonedefense
   IS 'Vue applicative des zones indicatives de défense incendie publique';
 
@@ -1558,7 +1620,12 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION m_defense_incendie.ft_geo_v_pei_ctr()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_geo_v_pei_ctr() TO public;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_geo_v_pei_ctr() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_geo_v_pei_ctr() TO create_sig;
+
+												    
 COMMENT ON FUNCTION  m_defense_incendie.ft_geo_v_pei_ctr() IS 'Fonction trigger pour mise à jour de la vue de gestion des points d''eau incendie et contrôles';
 
 
@@ -2123,7 +2190,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION x_apps.ft_xapps_geo_v_pei_ctr()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_xapps_geo_v_pei_ctr() TO public;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_xapps_geo_v_pei_ctr() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_xapps_geo_v_pei_ctr() TO create_sig;
+									   
 COMMENT ON FUNCTION x_apps.ft_xapps_geo_v_pei_ctr() IS 'Fonction trigger de mise à jour de la vue applicative destinée à la modification des données relatives aux PEI et aux contrôles sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
 
 
@@ -2206,7 +2277,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION m_defense_incendie.ft_log_pei()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_log_pei() TO public;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_log_pei() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_defense_incendie.ft_log_pei() TO create_sig;
+									   
 COMMENT ON FUNCTION m_defense_incendie.ft_log_pei() IS 'audit';
 
 
