@@ -115,8 +115,8 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |ope_sai|Opérateur de la dernière saisie en base de l'objet|character varying(254)| |
 |date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
-|geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
-|geom1|Géomètrie de la zone de defense incendie de l'objet PEI|USER-DEFINED| |
+|geom|Géomètrie ponctuelle de l'objet|geometry(Point,2154)| |
+|geom1|Géomètrie de la zone de defense incendie de l'objet PEI|geometry(Polygon,2154)| |
 
 ### Classe d'objet des mesures et contrôles
 
