@@ -111,7 +111,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |y_l93|Coordonnée Y en mètre|numeric| |
 |src_geom|Référentiel de saisie|character varying(2)|'00'::bpchar|
 |src_date|Année du millésime du référentiel de saisie|character varying(4)|'0000'::bpchar|
-|precision|Précision cartographique exprimée en cm|character varying(5)| |
+|prec|Précision cartographique exprimée en cm|character varying(5)| |
 |ope_sai|Opérateur de la dernière saisie en base de l'objet|character varying(254)| |
 |date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
