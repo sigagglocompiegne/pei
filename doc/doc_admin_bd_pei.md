@@ -100,7 +100,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |etat_pei|Etat d'actualité du PEI|character varying(2)| |
 |statut|Statut juridique|character varying(2)| |
 |nom_etab|Nom de l'établissement propriétaire dans le cas d'un statut privé|character varying(254)| |
-|nom_gest|Nom du gestionnaire responsable de distribution|character varying(2)| |
+|gestion|Gestionnaire du PEI|character varying(2)| |
 |delegat|Délégataire du réseau pour les PI et BI|character varying(2)| |
 |cs_sdis|Code INSEE du centre de secours du SDIS en charge du volet opérationnel|character varying(5)| |
 |situation|Adresse ou information permettant de faciliter la localisation du PEI sur le terrain|character varying(254)| |
