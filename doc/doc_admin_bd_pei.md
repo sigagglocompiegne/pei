@@ -236,6 +236,7 @@ Valeurs possibles :
 |:---|:---|:---|   
 |01|Public|public|
 |02|Privé|prive|
+|00|Non renseigné|
 
 ---
 
