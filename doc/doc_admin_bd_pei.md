@@ -189,7 +189,7 @@ Valeurs possibles :
 |80|80|
 |100|100|
 |150|150|
-|0|Non renseigné|
+|NR|Non renseigné|
 
 ---
 
@@ -295,8 +295,8 @@ Valeurs possibles :
 |code | valeur |
 |:---|:---|  
 |00|Non renseigné|
-|01|...|
-
+|01|Bayard|
+|02|...|
 ---
 
 `lt_pei_raccord` : Liste permettant de décrire le type de raccord du PEI
@@ -315,7 +315,13 @@ Valeurs possibles :
 |code | valeur |
 |:---|:---|  
 |00|Non renseigné|
-|01|...|
+|01|1x100|
+|02|1x65|
+|03|1x100 - 2x65|
+|04|2x100 - 1x65|
+|05|3x100|
+|06|1x65 - 2x40|
+|07|...|
 
 ---
 
@@ -358,8 +364,10 @@ Valeurs possibles :
 |code | valeur |
 |:---|:---|  
 |00|Non renseigné|
-|01|...|
-
+|01|Suez|
+|02|Saur|
+|03|Veolia|
+|04|...|
 ---
 
 `lt_pei_cs_sdis` : Liste permettant de décrire le nom du centre de secours de 1er appel du SDIS en charge du PEI
