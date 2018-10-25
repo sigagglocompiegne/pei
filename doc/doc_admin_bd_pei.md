@@ -189,7 +189,7 @@ Valeurs possibles :
 |80|80|
 |100|100|
 |150|150|
-|NR|Non renseigné|
+|0|Non renseigné|
 
 ---
 
