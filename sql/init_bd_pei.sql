@@ -228,7 +228,7 @@ INSERT INTO m_defense_incendie.lt_pei_diam_pei(
     ('80','80'),
     ('100','100'),
     ('150','150'),  
-    ('NR','Non renseigné');
+    ('0','Non renseigné');
     
 
 -- ################################################################# Domaine valeur - source  ###############################################
@@ -2191,3 +2191,6 @@ CREATE TRIGGER t_t2_log_pei
   FOR EACH ROW
   EXECUTE PROCEDURE m_defense_incendie.ft_log_pei();  
  
+
+
+
