@@ -905,7 +905,7 @@ CREATE TABLE m_defense_incendie.an_pei_ctr
   date_mes date,
   date_ct date,
   ope_ct character varying(254),
-  date_co date
+  date_ro date
 )
 WITH (
   OIDS=FALSE
@@ -934,7 +934,7 @@ COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.etat_conf IS 'Etat de la conform
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.date_mes IS 'Date de mise en service du PEI (correspond à la date du premier contrôle débit-pression effectué sur le terrain)';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.date_ct IS 'Date du dernier contrôle';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.ope_ct IS 'Opérateur du dernier contrôle';
-COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.date_co IS 'Date de la dernière reconnaissance opérationnelle';                                                                                                   
+COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.date_ro IS 'Date de la dernière reconnaissance opérationnelle';                                                                                                   
 
 
 
@@ -1207,7 +1207,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
   a.date_mes,
   a.date_ct,
   a.ope_ct,
-  a.date_co,
+  a.date_ro,
   g.statut,
   g.nom_etab,
   g.gestion,
@@ -1288,7 +1288,7 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
   a.date_mes,
   a.date_ct,
   a.ope_ct,
-  a.date_co,
+  a.date_ro,
   g.statut,
   g.nom_etab,
   g.gestion,
@@ -1374,7 +1374,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS
             ELSE date(g.date_maj)
         END AS date_maj,
     a.date_ct,
-    a.date_co,
+    a.date_ro,
         CASE
             WHEN g.prec::text = '000'::text OR g.prec IS NULL OR g.prec::text = ''::text THEN NULL::text
             WHEN (g.prec::integer / 100) <= 1 THEN '01'::text
@@ -1520,7 +1520,7 @@ NEW.date_maj,
 NEW.geom,
 ST_Buffer(NEW.geom, 200);
 
-INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_co)
+INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_ro)
 SELECT v_id_pei,
 NEW.id_sdis,
 NEW.id_contrat,
@@ -1537,7 +1537,7 @@ CASE WHEN NEW.etat_conf IS NULL THEN '0' ELSE NEW.etat_conf END,
 NEW.date_mes,
 CASE WHEN NEW.date_ct > CURRENT_DATE THEN NULL ELSE NEW.date_ct END,
 NEW.ope_ct,
-NEW.date_co;
+NEW.date_ro;
 RETURN NEW;
 
 -- UPDATE
@@ -1610,7 +1610,7 @@ etat_conf=CASE WHEN NEW.type_pei IN ('PI','BI') AND (NEW.debit < 60 OR NEW.press
 date_mes=NEW.date_mes,
 date_ct=CASE WHEN NEW.date_ct > CURRENT_DATE THEN NULL ELSE NEW.date_ct END,
 ope_ct=NEW.ope_ct,
-date_co=NEW.date_co
+date_ro=NEW.date_ro
 WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 RETURN NEW;
 
@@ -1674,7 +1674,7 @@ etat_conf=OLD.etat_conf,
 date_mes=OLD.date_mes,
 date_ct=OLD.date_ct,
 ope_ct=OLD.ope_ct,
-date_co=OLD.date_co
+date_ro=OLD.date_ro
 WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 RETURN NEW;
 
@@ -1813,7 +1813,7 @@ NEW.date_maj,
 NEW.geom,
 ST_Buffer(NEW.geom, 200);
 
-INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_co)
+INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_ro)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
 CASE WHEN NEW.id_contrat IS NULL THEN '00' ELSE NEW.id_contrat END,
@@ -1830,7 +1830,7 @@ CASE WHEN NEW.etat_conf IS NULL THEN '0' ELSE NEW.etat_conf END,
 NEW.date_mes,
 CASE WHEN NEW.date_ct > CURRENT_DATE THEN NULL ELSE NEW.date_ct END,
 NEW.ope_ct,
-NEW.date_co;
+NEW.date_ro;
 
 RETURN NEW;
 
@@ -2108,8 +2108,8 @@ ope_ct=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.ope_ct
 		WHEN v_gestion = 'IN' THEN NEW.ope_ct
 		END,
 
-date_co=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_co
-		WHEN v_gestion = 'IN' THEN NEW.date_co
+date_ro=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_ro
+		WHEN v_gestion = 'IN' THEN NEW.date_ro
 		END
 
 WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
@@ -2230,7 +2230,7 @@ etat_conf=	OLD.etat_conf,
 date_mes=	OLD.date_mes,
 date_ct=	OLD.date_ct,
 ope_ct=		OLD.ope_ct,
-date_co=	OLD.date_co
+date_ro=	OLD.date_ro
 
 WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 
