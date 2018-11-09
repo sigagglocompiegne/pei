@@ -53,7 +53,7 @@
 2018-06-12 : FV / implémentation des évolutions du modèle suite à réunion AFIGEO du 11/06/2018
 2018-08-07 : GB / Intégrationn des nouveaux rôles de connexion et des privilèges associés
 2018-11-05 : FV / Améliorations diverses et réorganisation du séquensage du code sql
-2018-11-09 : GB / Modification des vues xapps_geo_v_pei_ctr et geo_v_pei_ctr pour optimisation (modification des jointures et suppression du champ geom1 (ne sert à rien ici)
+2018-11-09 : GB / Modification des vues xapps_geo_v_pei_ctr et geo_v_pei_ctr pour optimisation (modification des jointures, suppression du champ geom1 (ne sert à rien ici) et modification du trigger dans la mise à jour de geom1
 
 Généralités sur le domaine métier PEI
 
@@ -1996,7 +1996,7 @@ geom=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.geom
 		WHEN v_gestion = 'IN' THEN NEW.geom
 		END,
 		
-geom1=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.geom1
+geom1=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN ST_Buffer(OLD.geom, 200)
 		WHEN v_gestion = 'IN' THEN ST_Buffer(NEW.geom, 200)
 		END
 		
