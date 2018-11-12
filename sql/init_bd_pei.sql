@@ -1257,7 +1257,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
     g.date_maj,
     g.geom
    FROM m_defense_incendie.geo_pei g
-     NATURAL JOIN m_defense_incendie.an_pei_ctr a 
+     JOIN m_defense_incendie.an_pei_ctr a ON g.id_pei = a.id_pei
      INNER JOIN r_administratif.an_geo lk ON lk.insee::text = g.insee::text;
 
 ALTER TABLE m_defense_incendie.geo_v_pei_ctr
@@ -1332,7 +1332,7 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
     g.geom
 
    FROM m_defense_incendie.geo_pei g
-     NATURAL JOIN m_defense_incendie.an_pei_ctr a 
+     JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
      INNER JOIN r_administratif.an_geo lk ON lk.insee::text = g.insee::text;
 
 
