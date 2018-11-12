@@ -54,6 +54,7 @@
 2018-08-07 : GB / Intégrationn des nouveaux rôles de connexion et des privilèges associés
 2018-11-05 : FV / Améliorations diverses et réorganisation du séquensage du code sql
 2018-11-09 : GB / Modification des vues xapps_geo_v_pei_ctr et geo_v_pei_ctr pour optimisation (modification des jointures, suppression du champ geom1 (ne sert à rien ici) et modification du trigger dans la mise à jour de geom1
+2018-11-10 : GB / Intégration de la gestion des messages d'erreurs retournée à GEO (création d'une table d'erreur et intégration de contrôles dans le trigger de la vue applicative)
 
 Généralités sur le domaine métier PEI
 
@@ -989,7 +990,36 @@ GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.log_pei_id_seq TO public;
 ALTER TABLE m_defense_incendie.log_pei ALTER COLUMN id_audit SET DEFAULT nextval('m_defense_incendie.log_pei_id_seq'::regclass);
 
 
+-- #################################################################### ERREUR MESSAGE PEI ####################################################  
+  
 
+-- Table: x_apps.xapps_geo_v_pei_ctr_erreur
+
+-- DROP TABLE x_apps.xapps_geo_v_pei_ctr_erreur;
+
+CREATE TABLE x_apps.xapps_geo_v_pei_ctr_erreur
+(
+  gid integer NOT NULL, -- Identifiant unique
+  id_pei integer, -- Identifiant du PEI
+  erreur character varying(500), -- Message
+  horodatage timestamp without time zone, -- Date (avec heure) de génération du message (ce champ permet de filtrer l'affichage < x seconds dans GEo)
+  CONSTRAINT xapps_geo_v_pei_ctr_erreur_pkey PRIMARY KEY (gid)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE x_apps.xapps_geo_v_pei_ctr_erreur
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_v_pei_ctr_erreur TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_v_pei_ctr_erreur TO create_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_pei_ctr_erreur TO edit_sig;
+GRANT SELECT ON TABLE x_apps.xapps_geo_v_pei_ctr_erreur TO read_sig;
+COMMENT ON TABLE x_apps.xapps_geo_v_pei_ctr_erreur
+  IS 'Table gérant les messages d''erreurs de sécurité remontés dans GEO suite à des enregistrements de contrôle PEI';
+COMMENT ON COLUMN x_apps.xapps_geo_v_pei_ctr_erreur.gid IS 'Identifiant unique';
+COMMENT ON COLUMN x_apps.xapps_geo_v_pei_ctr_erreur.id_pei IS 'Identifiant du PEI';
+COMMENT ON COLUMN x_apps.xapps_geo_v_pei_ctr_erreur.erreur IS 'Message';
+COMMENT ON COLUMN x_apps.xapps_geo_v_pei_ctr_erreur.horodatage IS 'Date (avec heure) de génération du message (ce champ permet de filtrer l''affichage < x seconds dans GEo)';
 
     
 
@@ -1843,6 +1873,40 @@ v_lt_anom := CASE WHEN NEW.etat_anom IN ('t','0') THEN NULL ELSE NEW.lt_anom END
 v_etat_acces := CASE WHEN v_lt_anom LIKE '%05%' THEN 'f' ELSE NEW.etat_acces END;
 
 
+-- si le contrôle est validé (donc vérouillé) aucune modification possible, remonté d'un message d'erreur
+IF v_verrou is true THEN
+
+-- gestion d'écriture d'un message d'erreur dans une table qui remonte dans GEO avec un horodatage pour gére le temps d'affichage (de remonter du message)
+DELETE FROM x_apps.xapps_geo_v_pei_ctr_erreur WHERE id_pei = old.id_pei;
+INSERT INTO x_apps.xapps_geo_v_pei_ctr_erreur VALUES
+(
+nextval('x_apps.xapps_geo_v_pei_ctr_erreur_gid_seq'::regclass),
+old.id_pei,
+'Vous ne pouvez pas modifier un contrôle validé.<br> Modifications non prises en compte.',
+now()
+);
+
+
+-- si non on peut poursuivre
+ELSE
+
+-- on ne peut pas modifier un contrôle en dehors de Compiègne et Zone de gestion ARC si celui-ci n'est pas de compétence ARC
+IF v_gestion = 'OUT' THEN
+
+-- gestion d'écriture d'un message d'erreur dans une table qui remonte dans GEO avec un horodatage pour gére le temps d'affichage (de remonter du message)
+DELETE FROM x_apps.xapps_geo_v_pei_ctr_erreur WHERE id_pei = old.id_pei;
+INSERT INTO x_apps.xapps_geo_v_pei_ctr_erreur VALUES
+(
+nextval('x_apps.xapps_geo_v_pei_ctr_erreur_gid_seq'::regclass),
+old.id_pei,
+'Vous ne pouvez pas modifier un PEI en dehors des zones de gestion ARC et ville de Compiègne.<br> Modifications non prises en compte.',
+now()
+);
+
+
+-- si non on peut poursuivre
+ELSE
+
 UPDATE
 
 m_defense_incendie.geo_pei
@@ -2102,6 +2166,9 @@ date_ro=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_ro
 
 WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 
+END IF;
+END IF;
+									   
 RETURN NEW;
 
 
@@ -2115,6 +2182,38 @@ v_verrou := CASE WHEN OLD.verrou IS TRUE THEN TRUE ELSE FALSE END;
 
 v_gestion := CASE WHEN OLD.gestion = '04' OR (OLD.gestion ='05' AND OLD.insee ='60159') THEN 'IN' ELSE 'OUT' END;
 
+-- si le contrôle est validé (donc vérouillé) aucune modification possible, remonté d'un message d'erreur
+IF v_verrou is true THEN
+
+-- gestion d'écriture d'un message d'erreur dans une table qui remonte dans GEO avec un horodatage pour gére le temps d'affichage (de remonter du message)
+DELETE FROM x_apps.xapps_geo_v_pei_ctr_erreur WHERE id_pei = old.id_pei;
+INSERT INTO x_apps.xapps_geo_v_pei_ctr_erreur VALUES
+(
+nextval('x_apps.xapps_geo_v_pei_ctr_erreur_gid_seq'::regclass),
+old.id_pei,
+'Vous ne pouvez pas modifier un dossier validé.<br> Modifications non prises en compte.',
+now()
+);
+
+-- si non on peut poursuivre et modifier les informations
+ELSE
+
+-- on ne peut pas modifier un contrôle en dehors de Compiègne et Zone de gestion ARC
+IF v_gestion = 'OUT' THEN
+
+-- gestion d'écriture d'un message d'erreur dans une table qui remonte dans GEO avec un horodatage pour gére le temps d'affichage (de remonter du message)
+DELETE FROM x_apps.xapps_geo_v_pei_ctr_erreur WHERE id_pei = old.id_pei;
+INSERT INTO x_apps.xapps_geo_v_pei_ctr_erreur VALUES
+(
+nextval('x_apps.xapps_geo_v_pei_ctr_erreur_gid_seq'::regclass),
+old.id_pei,
+'Vous ne pouvez pas modifier un PEI en dehors des zones de gestion ARC et ville de Compiègne.<br> Modifications non prises en compte.',
+now()
+);
+
+
+-- si non on peut poursuivre
+ELSE
 
 UPDATE
 
@@ -2225,6 +2324,8 @@ WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 RETURN NEW;
 
 
+END IF;
+END IF;
 END IF;
 
 END;
