@@ -2,7 +2,7 @@
 
 # Documentation utilisateur de l'application PEI
 
-**Pour les utilisateurs ** :
+**Pour les utilisateurs** :
 - [Rechercher un point d'eau incendie](http://geo.compiegnois.fr/documents/cms/fiche_aide/pei_guideutil2_rechercher_controle.pdf)
 - [Imprimer la fiche d'un point d'eau incendie](http://geo.compiegnois.fr/documents/cms/fiche_aide/pei_guideutil2_imprimer_controle.pdf)
 
