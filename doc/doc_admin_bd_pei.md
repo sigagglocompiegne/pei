@@ -59,6 +59,8 @@ Dans le détail :
 
 De nombreux point de contrôles de la saisie des utilisateurs sont vérifiés. Sans tous les lister, il convient néanmoins de rappeler que :
 
+* Un PEI validé ne peut pas être modifiés (sauf si celui est dévérouillé)
+* Un PEI non inclus dans le patrimoine de données ne peut pas être modifié
 *	Selon le type de PEI (poteau / bouche ou citerne ou point d’aspiration), les mesures sont différentes
 *	Selon les mesures (grandeurs physiques contrôlées) et les anomalies, les conformités d’accès, de signalétique et du contrôle technique peuvent être déterminées
 *	Selon la conformité technique et l’ancienneté du contrôle, la disponibilité pour le défense incendie publique est déduite automatiquement.
