@@ -24,7 +24,7 @@ Pour rappel des grands principes :
 
 ## Schéma fonctionnel
 
-![schema_fonctionnel](img/schema_fonctionnelpng)
+![schema_fonctionnel](img/schema_fonctionnel.png)
 
 Dans le détail :
 
