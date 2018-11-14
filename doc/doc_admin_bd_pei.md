@@ -22,6 +22,10 @@ Pour rappel des grands principes :
 * gestion différentiée entre un patrimoine de données hérité du SDIS, un autre sur lequel on agit en tant que gestionnaire
 * implémentation de controleurs de saisie utilisateur permettant de ne pas conserver les saisies incohérentes
 
+## Schéma fonctionnel
+
+![schema_fonctionnel](img/schema_fonctionnelpng)
+
 Dans le détail :
 
 #### Les droits
