@@ -449,6 +449,31 @@ Particularité(s) à noter :
 
 ---
 
+## Projet QGIS pour la gestion
+
+Un projet QGIS a été réalisé pour la gestion interne des données. Il est stocké ici :
+R:\Projets\Metiers\1712ENV-ARC-PointEauIncendie\3-BaseDeDonnees
+dans l'attente d'être placé ici Y:\Ressources\4-Partage\3-Procedures\QGIS
+
+## Traitement automatisé mis en place (Workflow de l'ETL FME)
+
+### Initialisation des données - Etat 0
+
+Le fichier a utilisé est placé ici `R:\Projets\Metiers\1712ENV-ARC-PointEauIncendie\3-BaseDeDonnees\2-Production\init_data_PEI_sdis2arc.fmw`.
+
+
+### Mise à jour régulière des données SDIS
+
+Le processus de traitement est en cours de développement.
+
+
+## Export Open Data
+
+Le processus de traitement est en cours de développement.
+
+
+---
+
 ## Schéma fonctionnel
 
 ### Modèle conceptuel simplifié
