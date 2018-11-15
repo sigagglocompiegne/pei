@@ -151,6 +151,33 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 
 ---
 
+`m_defense_incendie.geo_v_pei_ctr` : Vue éditable de gestion interne au service IG permettant la visualisation des données et son édition
+
+* 2 triggers :
+  * `t_t1_geo_v_pei_ctr` : trigger de mise à jour des données PEI
+  * `t_t2_log_pei` : trigger intégrant de valeurs dans la table de log 
+
+`m_defense_incendie.geo_v_pei_zonedefense` : Vue simple permettant de visualiser les périmètres de 200m autour des PEI uniquement sur la DECI est vrai
+
+---
+
+### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
+ 
+`x_apps.xapps_geo_v_pei_ctr` : Vue éditable depuis l'application permettant la saisie ou la mise à jour des données des PEI
+
+  * `t_t1_geo_v_pei_ctr` :trigger gérant la saisie ou la mise à jour des données PEI, intégrant les contrôles de saisies et la génération des messages d'erreur
+  * `t_t2_log_pei` : intégration de valeurs dans la table de log 
+  
+`x_apps.xapps_geo_v_pei_zonedefense` : Vue applicative affichant les périmètres de 200 mètres autour des PEI pour ceux ayant une DECI disponible
+
+### classes d'objets applicatives grands publics sont classés dans le schéma x_apps_public :
+
+En cours de traitement
+
+### classes d'objets opendata sont classés dans le schéma x_opendata :
+
+En cours de traitement
+
 ## Liste de valeurs
 
 
