@@ -455,6 +455,3 @@ Particularité(s) à noter :
 
 ![mcd](img/mcd.jpg)
 
-### Schéma fonctionnel
-
-![schema_fonctionnel](img/schema_fonctionnel.jpg)
