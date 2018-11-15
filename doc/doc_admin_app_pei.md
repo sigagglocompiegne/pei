@@ -72,12 +72,17 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |diam_cana    |||Diamètre de canalisation||Fiche d'information PEI||
 |diam_pei     |||Diamètre intérieur||Fiche d'information PEI||
 |disponible     ||x|Disponible pour la DECI|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
+|disponible_false      |x|x||Lien http du picto NON DISPONIBLE|Champ calculé `{disponible_img}` ||
+|disponible_img       |x|x|Disponible|Champ IMAGE gérant l'affichage du picto selon la disponiblité DECI|Fiche d'information PEI|`CASE WHEN {disponible} = 't' THEN {disponible_true} WHEN {disponible} = 'f' THEN {disponible_false} END `|
+|disponible_recherche      |x|x||Format HTML gérant l'affichage des pictos selon la disponiblité DECI des résultats après recherche|résultat recherche|`CASE WHEN {disponible} = 't' THEN '<img src="http://...." width=100 alt="" >' WHEN {disponible} = 'f' THEN '<img src="http://...." width=100 alt="">' END `|
+|disponible_false      |x|x||Lien http du picto DISPONIBLE|Champ calculé `{disponible_img}` ||
 |epci     |||Nom de l'EPCI||Fiche d'information PEI||
 |etat_acces     ||x|Accès conforme|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
 |etat_anom      ||x|Absence d'anomalie|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
 |etat_conf      ||x|Conformité technique|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
 |etat_pei      ||x|Etat|Liste de domaine lt_pei_etat_pei liée|Fiche d'information PEI||
 |etat_sign      ||x|Signalisation conforme|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
+|etiquette      |x|x||Gestion affichage étiquette sur la cartographie au niveau des pictos représentant les PEI|Cartographie |`CASE WHEN {type_pei}='NR' OR {etat_pei}='03' THEN NULL ELSE {type_pei} END`|
 |gestion       ||x|Gestionnaire|Liste de domaine lt_pei_gestion liée|Fiche d'information PEI||
 |id_contrat       ||x|Référence du contrat de sous traitance|Liste de domaine lt_pei_id_contrat liée|Fiche d'information PEI||
 |id_pei       |||Identifiant||Fiche d'information PEI||
@@ -92,9 +97,11 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |prec         |||Précision||Fiche d'information PEI||
 |press_dyn         |||Pression dynamique||Fiche d'information PEI||
 |ref_terr          |||Référence sur le terrain||Fiche d'information PEI||
+|resultat          |x|x|Résultat|Formatage du contenu informatif du résultat d'une recherche|Résultat de recherches|`CASE WHEN {id_sdis} IS NULL THEN CONCAT('PEI n°',{id_pei}) ELSE CONCAT('PEI n°',{id_pei},' - SDIS n°',{id_sdis}) END`|
 |source_pei         |||Source||Fiche d'information PEI||
 |src_date         |||Date du référentiel||Fiche d'information PEI||
 |src_pei         |||Source de la donnée||Fiche d'information PEI||
+|style          |x|x||Création d'un attribut style pour la réprésentation des PEI selon le statut, l'état ou la disponibilité du PEI |Cartographies|`CASE -- pei statut non renseigné WHEN {statut}='00' THEN 'Snr' -- pei statut privé WHEN {statut}='02' AND {etat_pei} IN ('00','01','02') THEN 'Spri_Enr-proj-exi' -- pei statut privé WHEN {statut}='02' AND {etat_pei}='03' THEN 'Spri_Esup' -- pei statut public et état projet ou non renseigné WHEN {statut}='01' AND {etat_pei} IN ('00','01') THEN 'Spub_Enr-proj' -- pei statut public supprimé WHEN {statut}='01' AND {etat_pei}='03' THEN 'Spub_Esup' -- pei statut public existant et dispo non renseignée WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='0' THEN 'Spub_Eexi_Dnr' -- pei statut public existant et conforme WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='t' THEN 'Spub_Eexi_Dt' -- pei statut public existant et non conforme WHEN {statut}='01' AND {etat_pei}='02' AND {disponible}='f' THEN 'Spub_Eexi_Df' END `|
 |type_pei         |||Type||Fiche d'information PEI||
 |type_rd         |||Type dans le règlement départemental||Fiche d'information PEI||
 |verrou         ||x||Booléen Oui pour vrai et Non pour faux|Fiche d'information PEI||
