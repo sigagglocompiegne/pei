@@ -262,11 +262,302 @@ Source : `xapps_geo_v_pei_ctr`
 
  * Fiches d'information active : Fiche d'information PEI
  
+## Recherche : `PEI par date de contrôle`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée sur un PEI en fonction d'une période de contrôle et d'un découpage administratif ou par rapport au gestionnaire ou d'un contrat.
+
+  * Configuration :
+
+Source : `xapps_geo_v_pei_ctr`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Résultat|x|||||
+|Type|x|||||
+|Commune|x|||||
+|disponible_recherche|x|||||
+|geom||||x||
+|id_pei|||||x|
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`||
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par date de contrôle|x|date_ct|Alphanumérique la valeur est comprise entre une valeur 1 saisie||||||Titre invite 1 : Dernier controle effectué entre et Titre invite 2 : et|
 
 
-## Fiche d'information : `Fiche adresse`
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
 
-Source : `xapps_geo_vmr_adresse`
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par EPCI||epci|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de l'EPCI|
+|PEI par commune||commune|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de la commune|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`||
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI gestionnaire||gestion|Prédéfinis à liste de choix||||||Titre : Gestionnaire du PEI|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`||
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI Contrat||id_contrat|Alphanumérique la valeur est égale à une valeur de liste de choix |lt_pei_id_contrat|valeur|code|valeur|x|Titre : N° de contrat et filtre non utilisable par le ou les prestataire(s)|
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information PEI
+
+## Recherche : `PEI par gestionnaire`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée sur un PEI en fonciton du gestionnaire et du découpage administratif.
+
+  * Configuration :
+
+Source : `xapps_geo_v_pei_ctr`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Résultat|x|||||
+|Type|x|||||
+|Commune|x|||||
+|disponible_recherche|x|||||
+|geom||||x||
+|id_pei|||||x|
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par EPCI|x|epci|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de l'EPCI|
+|PEI par commune||commune|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de la commune|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`||
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI gestionnaire|x|gestion|Prédéfinis à liste de choix||||||Titre : Gestionnaire du PEI|
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information PEI
+ 
+ ## Recherche : `PEI par état d'actualité`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée sur un PEI par son état d'actualité et un découpage adminsitratif.
+
+  * Configuration :
+
+Source : `xapps_geo_v_pei_ctr`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Résultat|x|||||
+|Type|x|||||
+|Commune|x|||||
+|disponible_recherche|x|||||
+|geom||||x||
+|id_pei|||||x|
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`||
+
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par état d'actualité|x|etat_pei|Prédéfinis à liste de choix||||||Titre : Etat d'actualité du PEI|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par EPCI||epci|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de l'EPCI|
+|PEI par commune||commune|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de la commune|
+
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information PEI
+ 
+## Recherche : `PEI par caractéristiques techniques`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée sur un PEI par ses caractéristiques techniques et un découpage adminsitratif.
+
+  * Configuration :
+
+Source : `xapps_geo_v_pei_ctr`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Résultat|x|||||
+|Type|x|||||
+|Commune|x|||||
+|disponible_recherche|x|||||
+|geom||||x||
+|id_pei|||||x|
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`||
+
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`||
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par type||type_pei|Prédéfinis à liste de choix||||||Titre : Type de PEI|
+|PEI par diam_pei||diam_pei|Prédéfinis à liste de choix||||||Titre : Diamètre intérieur|
+|PEI par source||source|Prédéfinis à liste de choix||||||Titre : Source du point d'eau|
+|PEI par raccord||raccord|Prédéfinis à liste de choix||||||Titre : Raccords de sortie|
+|PEI par marque||marque|Prédéfinis à liste de choix||||||Titre : Marque du matériel|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par EPCI||epci|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de l'EPCI|
+|PEI par commune||commune|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de la commune|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI gestionnaire||gestion|Prédéfinis à liste de choix||||||Titre : Gestionnaire du PEI|
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI Contrat||id_contrat|Alphanumérique la valeur est égale à une valeur de liste de choix |lt_pei_id_contrat|valeur|code|valeur|x|Titre : N° de contrat et filtre non utilisable par le ou les prestataire(s)|
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information PEI
+ 
+## Recherche : `PEI par commune`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée sur un PEI par sa commune de positionnement.
+
+  * Configuration :
+
+Source : `xapps_geo_v_pei_ctr`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Résultat|x|||||
+|Type|x|||||
+|Commune|x|||||
+|disponible_recherche|x|||||
+|geom||||x||
+|id_pei|||||x|
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI par EPCI||epci|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de l'EPCI|
+|PEI par commune||commune|Prédéfinis - Filtre à liste de choix||||||Titre : Nom de la commune|
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information PEI
+ 
+ ## Recherche : `PEI par contrat`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée sur un PEI par son contrat de contrôle.
+Ce filtre n'est pas accessible au(x) prestataire(s).
+
+  * Configuration :
+
+Source : `xapps_geo_v_pei_ctr`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Résultat|x|||||
+|Type|x|||||
+|Commune|x|||||
+|disponible_recherche|x|||||
+|geom||||x||
+|id_pei|||||x|
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|PEI Contrat|x|id_contrat|Alphanumérique la valeur est égale à une valeur de liste de choix |lt_pei_id_contrat|valeur|code|valeur|x|Titre : N° de contrat et filtre non utilisable par le ou les prestataire(s)|
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information PEI
+
+## Fiche d'information : `Fiche d'information PEI`
+
+Source : `xapps_geo_v_pei_ctr`
 
 * Statistique : aucune
  
@@ -274,113 +565,21 @@ Source : `xapps_geo_vmr_adresse`
  
 |Mode d'ouverture|Taille|Agencement des sections|
 |:---|:---|:---|
-|dans le gabarit|530x650|Vertical|
+|dans le gabarit|530x650|Accordéon|
 
 |Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
 |:---|:---|:---|:---|:---|:---|:---|
-|Adresse|adresse,nuemro,repet,libvoie_c,complement,codepostal, commune|Par défaut|Vertical||||
-|Historique des adresses (sous-section de Adresse)|adresse_h,date_arr,date_sai|Par défaut|Vertical||||
-|Qualité des adresses|||Vertical||||
-|Conformité (sous-section de Qualité des adresses)|diag_adr,qual_adr,etat_adr,observ|Par défaut|Vertical||||
-|Positionnement (sous-section de Qualité des adresses)|position,groupee,secondaire,refcad|Par défaut|Vertical||||
-|Destination de l'adresse|dest_adr,nb_log,pc|Par défaut|Vertical||||
-|Informations complémentaires|id_adresse,rivoli,insee|Par défaut|Vertical||||
-|Source|src_adr,src_geom|Par défaut|Vertical||||
-|Suivi des mises à jour|date_sai, date_maj|Par défaut|Vertical||||
+|Général|affiche_message|masqué|Vertical||||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|n° SDIS (id_sdis),Identifiant(id_pei),Verrou (verrou),Référence sur le terrain (ref_terr),Nom de l'EPCI (epci),Insee (insee),Commune (commune),Type (type_pei),Type dans le règlement départemental (type_rd),Situation (situation),Disponible (disponible_img),Etat (etat_pei)|à gauche|Vertical||||
+
+
 
  * Saisie : aucune
 
  * Modèle d'impression : Fiche standard + carte
-
-## Fiche d'information : `Fiche d'information sur la voie`
-
-Source : `xapps_geo_v_voie`
-
-* Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|700x650|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|(vide)|affiche_voie_commune|Par défaut|Vertical||||
-|Caractéristique(s)|long,affiche_message|Par défaut|Vertical||||
-|Tronçon(s) composant la voie|long_troncon,statut_jur,doman,gestion,proprio|Par défaut|Vertical||Fiche d'information sur un tronçon (Accès à)||
-
- * Saisie : aucune
-
- * Modèle d'impression : aucun
-
-## Fiche d'information : `Fiche équipement`
-
-Détail dans le répertoire GitHub `docurba`
-
-## Fiche d'information : `Fiche parcelle` et `Fiche local`
-
-Source : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3)`
-
-Ces fiches sont liées au module GeoCadastre de l'éditeur et ne sont pas modifiable par l'ARC. 
-
-## Fiche d'information : `Fiche de suivi d'un signalement voie/adresse`
-
-Source : `geo_rva_signal`
-
-* Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|530x700|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|Gestion des signalement|traite_sig,type_rva,nat_signal,acte_admin,observ,op_sai,mail,date_sai,affiche_info|Par défaut|Vertical||||
-
- * Saisie :
- 
- Sont présent ici uniquement les attributs éditables ou disposant d'un mode de représentation spécifique.
-
-|Attribut|Obligatoire|Valeur par défaut|Liste de domaine|Représentation|
-|:---|:---|:---|:---|:---|
-|Type de signalement (type_rva)|x|0|Type de signalement|Liste de choix|
-|Nature du signalement (nat_signal)|x|0|Nature du signalement|Liste de choix|
-|Document administratif (acte_admin)|x|false||Boutons radios|
-|Description du signalement (observ)|x|||Champ texte à plusieurs lignes|
-|Nom du contributeur (op_sai)|x|%USER_LOGIN%|||
-|Email du contributeur (mail)|x|%USER_MAIL%|||
-|Suivi de la demande (traite_sig)|(non saisie par les utilisateurs)|1|Suivi de la demande d'un signalement|Liste de choix|
-
- * Modèle d'impression : aucun
-
-## Fiche d'information : `Fiche d'information sur un tronçon`
-
-Source : `xapps_geo_v_troncon_voirie`
-
-* Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|530x650|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|Caractéristiques du tronçon|id_tronc,type de tronçon,hierarchie,franchiss,nb_voie,long_troncon,projet,fictif,observ|Par défaut|Vertical||||
-|Voie d'appartenance|id_voie,libvoie,rivoli,insee,commune|Par défaut|Vertical||||
-|Informations complémentaires sur la voie (sous-secteur de Voie d'appartenance)|long|Par défaut|Vertical||Fiche d'information sur la voie (+ d'infos)||
-|Historique des noms de voies (sous-secteur de Voie d'appartenance) |troncon_h,date_lib,date_sai |Par défaut|Vertical||||
-|Informations de gestion|statut_jur,num_statut,doman,gestion,proprio,date_rem|Par défaut|Vertical||||
-|Informations de circulation|date_ouv,type_circu,sens_circu,v_max,autres restriciton,pente|Par défaut|Vertical||||
-|Informations de suivi|date_sai,date_maj|Par défaut|Vertical||||
-
- * Saisie : aucune
-
- * Modèle d'impression : aucun
 
  
 ## Analyse :
@@ -391,17 +590,18 @@ Aucune
 
 Aucune
 
-## Modification géométrique : `Faire un signalement d'adresses ou de voies`
+## Modification géométrique : `Ajouter ou déplacer un PEI`
 
-Cette recherche permet à l'utilisateur de saisir un sigbnalement concernant une voie ou une adresse.
+Cette recherche permet à l'utilisateur de saisir ou modifier l'emplacement d'un PEI.
+Cette fonctionnalité n'est accessible au(x) prestataire(s).
 
   * Configuration :
   
-Source : `geo_rva_signal`
+Source : `xapps_geo_v_pei_ctr`
 
  * Filtres : aucun
  * Accrochage : aucun
- * Fiches d'information active : Fiche de suivi d'un signalement voie/adresse
+ * Fiches d'information active : Fiche d'informationPEI
  * Topologie : aucune 
  
  # La cartothèque
