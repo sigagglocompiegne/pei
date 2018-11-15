@@ -260,7 +260,7 @@ Source : `xapps_geo_v_pei_ctr`
 
 (1) si liste de domaine
 
- * Fiches d'information active : Fiche adresse
+ * Fiches d'information active : Fiche d'information PEI
  
 
 
