@@ -59,7 +59,47 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|affiche_info_bulle|x|x||Définit le contenu de l'info bulle affichée au survol d'un PEI|Cartographie|`CASE WHEN {id_sdis} is null or {id_sdis} ='' THEN 'N° SDIS : non renseigné' ELSE 'N° SDIS : {id_sdis} END`|
+|affiche_info_bulle|x|x||Définit le contenu de l'info bulle affichée au survol d'un PEI|Cartographie|`CASE WHEN {id_sdis} is null or {id_sdis} ='' THEN 'N° SDIS : non renseigné' ELSE 'N° SDIS : ' {id_sdis} END`|
+|cs_sdis ||x|Centre de secours de 1er appel|Liste de domaine  lt_pei_cs_sdis liée|Fiche d'information PEI||
+|date_ct  |||Date du dernier contrôle technique||Fiche d'information PEI||
+|date_maj ||x|Date de mise à jour|Prédéfini dd/mm/aaaa|Fiche d'information PEI||
+|date_mes   ||x|Date de mise en service|Prédéfini dd/mm/aaaa|Fiche d'information PEI||
+|date_sai   ||x|Date de saisie|Prédéfini dd/mm/aaaa|Fiche d'information PEI||
+|debit   |||Débit||Fiche d'information PEI||
+|debit_max ||Débit Max|||Fiche d'information PEI||
+|debit_r_ci  ||Débit de remplissage|||Fiche d'information PEI||
+|delegat   ||x|Délégataire|Liste de domaine   lt_pei_delegat liée|Fiche d'information PEI||
+|diam_cana    |||Diamètre de canalisation||Fiche d'information PEI||
+|diam_pei     |||Diamètre intérieur||Fiche d'information PEI||
+|disponible     ||x|Disponible pour la DECI|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
+|epci     |||Nom de l'EPCI||Fiche d'information PEI||
+|etat_acces     ||x|Accès conforme|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
+|etat_anom      ||x|Absence d'anomalie|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
+|etat_conf      ||x|Conformité technique|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
+|etat_pei      ||x|Etat|Liste de domaine lt_pei_etat_pei liée|Fiche d'information PEI||
+|etat_sign      ||x|Signalisation conforme|Liste de domaine lt_pei_etat_boolean liée|Fiche d'information PEI||
+|gestion       ||x|Gestionnaire|Liste de domaine lt_pei_gestion liée|Fiche d'information PEI||
+|id_contrat       ||x|Référence du contrat de sous traitance|Liste de domaine lt_pei_id_contrat liée|Fiche d'information PEI||
+|id_pei       |||Identifiant||Fiche d'information PEI||
+|id_sdis        |||n° SDIS||Fiche d'information PEI||
+|lt_anom        |||Anomalie(s)||Fiche d'information PEI||
+|marque        ||x||Liste de domaine lt_pei_marque liée|Fiche d'information PEI||
+|nom_etab        |||Nom de l'établissement||Fiche d'information PEI||
+|observ        |||Observations||Fiche d'information PEI||
+|ope_ct         |||Opérateur du contrôle||Fiche d'information PEI||
+|ope_sai         |||Opérateur de saisie||Fiche d'information PEI||
+|photo_url         ||x|Photo|Lien avec texte de remplacement (Cliquez ici pour visualiser le PEI)|Fiche d'information PEI||
+|prec         |||Précision||Fiche d'information PEI||
+|press_dyn         |||Pression dynamique||Fiche d'information PEI||
+|ref_terr          |||Référence sur le terrain||Fiche d'information PEI||
+|source_pei         |||Source||Fiche d'information PEI||
+|src_date         |||Date du référentiel||Fiche d'information PEI||
+|src_pei         |||Source de la donnée||Fiche d'information PEI||
+|type_pei         |||Type||Fiche d'information PEI||
+|type_rd         |||Type dans le règlement départemental||Fiche d'information PEI||
+|verrou         ||x||Booléen Oui pour vrai et Non pour faux|Fiche d'information PEI||
+|x_l93         |||Coordonnée X (L93)||Fiche d'information PEI||
+|y_l93         |||Coordonnée Y (L93)||Fiche d'information PEI||
 
 
    * filtres :
