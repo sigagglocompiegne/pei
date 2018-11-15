@@ -447,6 +447,20 @@ Valeurs possibles :
 Particularité(s) à noter :
 * Table de log liée à la vue de gestion des données PEI
 
+## Erreur
+
+`x_apps.xapps_geo_v_pei_ctr_erreur` : table des messages d'erreurs remontant dans l'application par rapport à la saisie des données via la fiche d'information applicative.
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|
+|gid|Identifiant unique du message|integer|NOT NULL|
+|id_pei|Identifiant du PEI|integer| |
+|erreur|Message à afficher dans la fiche d'information|character varying(500)| |
+|horodatage|Date d'intégration du message|timestamp without time zone| |
+
+Particularité(s) à noter :
+* Cette table est uniquement liée dans GEO à la vue applicative.
+
 ---
 
 ## Projet QGIS pour la gestion
