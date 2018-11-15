@@ -147,45 +147,15 @@ Sans objet
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|affiche_titre   |x|x||Formate le résultat affiché dans le menu Résultat depuis la Recherche d'une voie|||
-|affiche_voie   |x|x||Format l'affichage de la voie avec le mot directeur |Plus utilisé||
-|affiche_voie_commune   |x|x||Formate l'affichage du libellé de la voie et de la commune dans le menu Résultat depuis la Recherche dans la Base Voie Locale |||
-|voie_apostrophe   |x|x||Replace l'apostrophe dans le libellé de la voie|Utiliser dans les recherches par voie||
+|affiche_message    |x|x|null|Formate en HTML le message à afficher dans la fiche d'information en cas d'erreur selon un temps définit (évite un affichage permanent du message)|Fiche d'information PEI|CASE WHEN extract(epoch from  now()::timestamp) - extract(epoch from {horodatage}::timestamp) <= 3 then 
+`'<table width=100%><td bgcolor="#FF000"> <font size=4 color="#ffffff"><center><b>' {erreur} '</b></center></font></td></table>' ELSE '' END`|
+
 
    * filtres : aucun
    * relations : aucune
    * particularité(s) : aucune
    
-## Table : `xapps_an_v_adresse_h`
 
-|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
-|:---|:-:|:-:|:---|:---|:---|:---|
-|adresse_h    ||x|Ancienne adresse||Fiche adresse||
-|affiche_ancienne_adresse    |x|x||Formate en HTML l'affichage d'une ancienne adresse si supprimée ou historisée  | Recherche d'une ancienne adresse||
-|date_arr   ||x|Arrêté communal du||Fiche adresse||
-|date_sai    ||x|Intégrée le||Fiche adresse||
-|numero_complet    |x|x||Concaténation du n° et l'indice de répétition  | Filtre pour la recherche avancée d'une adresse historique||
-
-   * filtres : aucun
-   * relations :
-
-|Géotables ou Tables| Champs de jointure | Type |
-|:---|:---|:---|
-| xapps_geo_v_adresse | id_adresse | 0 à n (égal) |
-| xapps_an_voie | id_voie | 1 (égal) |
-
-   * particularité(s) : aucune
-   
-   
-## Table : `xapps_an_commune`
-
-|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
-|:---|:-:|:-:|:---|:---|:---|:---|
-|affiche_lien_export_liste_voie_open_data     |x|x||Formate en HTML le lien de téléchargement vers le fichier OpenData de la liste des voies au format excel|Recherche Exporter la liste des voies (avec linéaire)||
-
-   * filtres : aucun
-   * relations : aucune
-   * particularité(s) : aucune
 
 # Les fonctionnalités
 
