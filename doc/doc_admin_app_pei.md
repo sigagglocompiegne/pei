@@ -21,26 +21,31 @@
 
 |Représentation| Nom de l'application |Résumé|
 |:---|:---|:---|
-|![picto](/doc/img/pei_bleu.png)|Voies-Adresses|Cette application est dédiée à la consultation des données détaillées des Voies et Adresses ainsi qu'à la possibilité d'insérer un signalement pour en améliorer le contenu.|
+|![picto](/doc/img/pei_bleu.png)|Défense Extérieure Contre l'Incendie (DECI)|Cette application est dédiée à la gestion et la consultation des PEI (Points d'Eau Incendie) déterminant leur niveau de DECI.|
 
 # Accès
 
 |Public|Métier|Accès restreint|
 |:-:|:-:|:---|
-||X|Accès réservé aux personnels des communes et des EPCI ayant les droits d'accès.|
+||X|Accès réservé aux personnels gestionnaires des données des EPCI ayant les droits d'accès.|
 
 # Droit par profil de connexion
 
 * **Prestataires**
 
-Sans Objet
+|Fonctionnalités|Lecture|Ecriture|Précisions|
+|:---|:-:|:-:|:---|
+|Recherches|x||Uniquement recherche par adresse, voie et PEI (sauf par contrat pour ce dernier).|
+|Cartographie|x||Visibilité uniquement sur les PEI définis pouyr chaque contrat.|
+|Fiche d'information PEI|x|x|Peut modifier uniquement les données accessibles.|
 
 * **Personnes du service métier**
 
 |Fonctionnalités|Lecture|Ecriture|Précisions|
 |:---|:-:|:-:|:---|
 |Toutes|x||L'ensemble des fonctionnalités (recherches, cartographie, fiches d'informations, ...) sont accessibles par tous les utilisateurs connectés.|
-|Modification géométrique - Faire un signalement d'adresses ou de voies|x||Cette fonctionnalité est uniquement visible par les utilisateurs inclus dans les groupes ADMIN et RVA_EDIT|
+|Fiche d'infromation PEI|x|x|Peut modifier les données PEI.|
+|Modification géométrique - Ajouter ou déplacer un PEI|x||Cette fonctionnalité est uniquement visible par les utilisateurs inclus dans les groupes ADMIN et PEI_EDIT. Attention, un PEI déjà saisie sur une commune ne peut pas être déplacé sur une autre commune.|
 
 * **Autres profils**
 
@@ -50,189 +55,52 @@ Sans objet
 
 Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les besoins de l'application. Les autres données servant d'habillage (pour la cartographie ou les recherches) sont listées dans les autres parties ci-après. Le tableau ci-dessous présente uniquement les changements (type de champ, formatage du résultat, ...) ou les ajouts (champs calculés, filtre, ...) non présents dans la donnée source. 
 
-## GeoTable : `public.geo_rva_signal`
+## GeoTable : `xapps_geo_v_pei_ctr`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|acte_admin||x|Document administratif||Fiche de suivi d'un signalement voie/adresse||
-|affche_info|x|x|`null`|Champ HTML formatant le type de traitement fait par le service SIG (décodage du champ `traite_sig`) |Fiche de suivi d'un signalement voie/adresse||
-|affiche_result |x|||Champ HTML formatant le type de traitement fait par le service SIG (décodage du champ `traite_sig`) |Affichage dans le menu résultat||
-|affiche_titre |x|||Titre  |Affichage du titre de la demande dans le menu résultat à partir de la recherche d'un signalement||
-|date_maj ||x|Date du traitement|Formate la date en dd/mm/yyyy |Fiche de suivi d'un signalement voie/adresse||
-|date_sai  ||x|Date du signalement|Formate la date en dd/mm/yyyy |Fiche de suivi d'un signalement voie/adresse||
-|id_signal  ||x|Signalement n°||Fiche de suivi d'un signalement voie/adresse||
-|insee  ||x|Code INSEE||Fiche de suivi d'un signalement voie/adresse||
-|mail   ||x|Email du contributeur||Fiche de suivi d'un signalement voie/adresse||
-|nat_signal   ||x|Nature du signalement||Fiche de suivi d'un signalement voie/adresse||
-|observ    ||x|Description du signalement||Fiche de suivi d'un signalement voie/adresse||
-|op_sai    ||x|Nom du contributeur||Fiche de suivi d'un signalement voie/adresse||
-|traite_sig     ||x|Suivi de la demande||Fiche de suivi d'un signalement voie/adresse||
-|type_rva     ||x|Type de signalement||Fiche de suivi d'un signalement voie/adresse||
+|affiche_info_bulle|x|x||Définit le contenu de l'info bulle affichée au survol d'un PEI|Cartographie|`CASE WHEN {id_sdis} is null or {id_sdis} ='' THEN
+'N° SDIS : non renseigné'
+ELSE
+'N° SDIS : ' || {id_sdis}
+END`|
+
 
    * filtres :
 
 |Nom|Attribut| Au chargement | Type | Condition |Valeur|Description|
 |:---|:---|:-:|:---:|:---:|:---|:---|
-|Demande traitée|traite_sig|x|Alphanumérique|est différent de une valeur par défaut|3|Ne charge pas les demandes de signalements traitées par le service SIG,n'apparaît donc pas sur la carte|
+|PEI_SECU_PRESTA|id_contrat|x|Alphanumérique|est égale à une valeur de contaxte|id_presta|Permet de filtrer l'affichage des PEI en fonction des contrats affectés au profil de connexion du ou des prestataires|
+|DECI_SECU|insee|x|Alphanumérique|est égale à une valeur de contaxte|ccocom|Permet de filtrer l'affichage des PEI en fonction des communes autorisées pour chaque profil de connexion EPCI|
    
    * relations :
 
 |Géotables ou Tables| Champs de jointure | Type |
 |:---|:---|:---|
-| an_rva_signal_media |id_signal = id | 0..n (égal) |
+| xapps_geo_v_pei_ctr_erreur |id_pei| 0..1 (égal) |
 
    * particularité(s) : aucune
 
-## GeoTable : `xapps_geo_vmr_adresse`
+## GeoTable : `xapps_geo_v_pei_zonedefense`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|adresse|x|x|Adresse complète|Reconstitution (format HTML) de l'adresse complète avec la gestion des indices de répétition non rempli|Suggestion dans la Recherche dans la Base Adresse Locale et dans la fiche d'information Fiche adresse ||
-|adresse_apostrophe |x|x||Gestion de l'apostrophe pour la recherche d'adresse |Rechercher dans la Recherche dans la Base Adresse Locale ||
-|adresse_apostrophe_histo |x|x||Gestion de l'apostrophe pour la rechercge d'adresse hisrotisée|Rechercher dans la Recherche dans la Base Adresse Locale ||
-|affiche_adresse |x|x||Formate en HTML l'affichage de l'adresse|Afficher dans la Recherche dans la Base Adresse Locale ||
-|affiche_nouvelle_adresse |x|x||Formate en HTML l'affichage de la nouvelle adresse si l'adresse n'est pas supprimée|Afficher dans Recherche d'une ancienne adresse ||
-|affiche_result  |x|x||Formate le titre du résultat dans le menu Résultat (si adresse trouvée ou supprimée) |Afficher dans la Recherche dans la Base Adresse Locale ||
-|affiche_qual_adr  |x|x||Formate l'affichage de la qualité par rapport à l'adresse supprimée (`si supprimé affiche Conforme (supprimé) sinon la valeur de qual_adr`|Plus utilisée ||
-|angle_geo  |x|x||Multiplie l'angle par -1 pour lagestion des étiquettes de n° de voies dans GEO|Cartothèque ||
-|complement   ||x|Complément| |Fiche d'information Fiche adresse et utilisé dans les champs calculés gérant l'affichage ou la recherche des adresses ||
-|date_maj    ||x|Date  de mise à jour| |Fiche d'information Fiche adresse ||
-|date_sai    ||x|Date de saisie| |Fiche d'information Fiche adresse ||
-|dest_adr    ||x|Destination| |Fiche d'information Fiche adresse ||
-|diag_adr     ||x|Diagnostic| |Fiche d'information Fiche adresse ||
-|etat_adr      ||x|Etat| |Fiche d'information Fiche adresse ||
-|groupee       ||x|Groupée| |Fiche d'information Fiche adresse ||
-|id_adresse        ||x|Identifiant||Fiche d'information Fiche adresse ||
-|id_tronc         ||x|Identifiant du tronçon de voie||Fiche d'information Fiche adresse ||
-|id_voie          ||x|Identifiant de la voie| |Fiche d'information Fiche adresse ||
-|infobulle           |x|x||Formatage en HTML du contenu de l'info bulle au survol d'une adresse |Cartothèque ||
-|lat           ||x|Latitude| |Fiche d'information Fiche adresse ||
-|libvoie_c            ||x|Voie| |Fiche d'information Fiche adresse ||
-|long            ||x|Longitude| |Fiche d'information Fiche adresse ||
-|nb_log            ||x|Logement| |Fiche d'information Fiche adresse ||
-|numero             ||x|Numéro| |Fiche d'information Fiche adresse ||
-|numero_complet              |x|x|Numéro complet| Concaténisation du numéro et de l'indice de répétition|Filtre dans Recherche avancée d'une adresse ||
-|observ             ||x|Observations| |Fiche d'information Fiche adresse ||
-|pc              ||x|N° du permis de construire| |Fiche d'information Fiche adresse ||
-|qual_adr               ||x|Qualité| |Fiche d'information Fiche adresse ||
-|refcad               ||x|Parcelle(s)| |Fiche d'information Fiche adresse ||
-|repet                ||x|Indice de répétition| |Fiche d'information Fiche adresse ||
-|rivoli                 ||x|N° Rivoli| |Fiche d'information Fiche adresse ||
-|rivoli_cle                 ||x|Clé Rivoli| |Fiche d'information Fiche adresse ||
-|secondaire                 ||x|Accès secondaire| |Fiche d'information Fiche adresse ||
-|src_adr                  ||x|Source de l'adresse| |Fiche d'information Fiche adresse ||
-|src_date                  ||x|Date de la source de l'adresse| |Fiche d'information Fiche adresse ||
-|src_geom                   ||x|Référentiel de saisie| |Fiche d'information Fiche adresse ||
-|x_l93                    ||x|Coordonnée X en Lambert 93| |Fiche d'information Fiche adresse ||
-|y_l93                    ||x|Coordonnée Y en Lambert 93| |Fiche d'information Fiche adresse ||
 
-   * filtres : aucun
-   * relations :
+Sans objet
 
-|Géotables ou Tables| Champs de jointure | Type |
-|:---|:---|:---|
-| xapps_an_v_adresse_h |id_adresse | 0..n (égal) |
+   * filtres :
 
-   * particularité(s) : aucune
-   
-## GeoTable : `xapps_geo_v_voie`
+|Nom|Attribut| Au chargement | Type | Condition |Valeur|Description|
+|:---|:---|:-:|:---:|:---:|:---|:---|
+|PEI_SECU_PRESTA|id_contrat|x|Alphanumérique|est égale à une valeur de contaxte|id_presta|Permet de filtrer l'affichage des PEI en fonction des contrats affectés au profil de connexion du ou des prestataires|
+|DECI_SECU|insee|x|Alphanumérique|est égale à une valeur de contaxte|ccocom|Permet de filtrer l'affichage des PEI en fonction des communes autorisées pour chaque profil de connexion EPCI|
 
-|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
-|:---|:-:|:-:|:---|:---|:---|:---|
-|affiche_message |x|x|`null`||Fiche d'information sur la voie||
-|long||x|Linéaire||Fiche d'information sur la voie||
-
-   * filtres : aucun
-   * relations :
-
-|Géotables ou Tables| Champs de jointure | Type |
-|:---|:---|:---|
-| xapps_v_troncon_voirie | id_voie | 0 à n (égal) |
-| xapps_an_voie | id_voie | 1 (égal) |
-
-   * particularité(s) : aucune
-   
-## GeoTable : `xapps_geo_v_troncon_voirie`
-
-|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
-|:---|:-:|:-:|:---|:---|:---|:---|
-|affiche_commune|x|x||Formate en HTML le titre Commune de |Fiche d'information sur un tronçon||
-|affiche_message |x|x|`null`|Format en HTML un message sur la donnée|Fiche d'information sur un tronçon||
-|affiche_result |x|x|`null`|Format en HTML un message sur la donnée|Fiche d'information sur un tronçon||
-|affiche_troncon  |x|x|`null`|Format en HTML l'affichage du n° du tronçon avec un titre|Résultat de la recherche Recherche avancée d'une voie||
-|c_circu||x|Types de restrictions||Fiche d'information sur un tronçon||
-|c_observ||x|Autres restrictions||Fiche d'information sur un tronçon||
-|date_extract ||x|Date d'extraction||Visible dans les résultats pour les recherches générant l'export des synthèses communales||
-|date_lib||x|Période de création du libellé de la voie||Fiche d'information sur un tronçon||
-|date_maj ||x|Date de mise à jour|Formate la date en dd/mm/yyyy|Fiche d'information sur un tronçon||
-|date_ouv ||x|Année d'ouverture à la circulation||Fiche d'information sur un tronçon||
-|date_rem ||x|Dernière année de remise en état de la chaussée||Fiche d'information sur un tronçon||
-|date_sai ||x|Date de saisie|Formate la date en dd/mm/yyyy|Fiche d'information sur un tronçon||
-|doman  ||x|Domanialité||Fiche d'information sur un tronçon||
-|fictif   ||x|Fictif (ne rentre pas en compte dans le calcul du linéaire de voie)||Fiche d'information sur un tronçon||
-|franchiss    ||x|Franchissement||Fiche d'information sur un tronçon||
-|hierarchie     ||x|Hiérarchie||Fiche d'information sur un tronçon||
-|id_tronc      ||x|Identifiant du tronçon||Fiche d'information sur un tronçon||
-|id_voie       ||x|Identifiant de la voie||Fiche d'information sur un tronçon||
-|insee        ||x|Code Insee||Fiche d'information sur un tronçon||
-|libvoie        ||x|Libellé de la voie||Fiche d'information sur un tronçon||
-|long        ||x|Longueur de la voie (en m)||Fiche d'information sur un tronçon||
-|long_troncon        ||x|Longueur du tronçon (en m)||Fiche d'information sur un tronçon||
-|nb_voie         ||x|Nombre de voies||Fiche d'information sur un tronçon||
-|noeud_d          ||x|Identifiant du noeud de départ||||
-|noeud_d          ||x|Identifiant du noeud de fin||||
-|num_statut          ||x|N° de statut||Fiche d'information sur un tronçon||
-|observ           ||x|Observation(s)||Fiche d'information sur un tronçon||
-|proprio            ||x|Propriétaire||Fiche d'information sur un tronçon||
-|rivoli             ||x|Code RIVOLI||Fiche d'information sur un tronçon||
-|sens_circu             ||x|Sens de circulation||Fiche d'information sur un tronçon||
-|statut_jur              ||x|Statut juridique||Fiche d'information sur un tronçon||
-|titre_info_bulle_troncon              |x|x||Formatage en HTML du titre pour les informations au tronçon dans l'info bulle |champ calculé `voie_info_bulle `||
-|titre_info_bulle_voie              |x|x||Formatage en HTML du titre pour les informations sur la voie dans l'info bulle |champ calculé `voie_info_bulle `||
-|type_circu               ||x|Type de circulation||Fiche d'information sur un tronçon||
-|type_tronc                ||x|Type de tronçon||Fiche d'information sur un tronçon||
-|v_max                ||x|Vitesse maximum||Fiche d'information sur un tronçon||
-|voie_info_bulle              |x|x||Formatage en HTML des informations du tronçonn et de la voie affichées dans l'info bulle du tronçon |Cartothèque||
-
-   * filtres : aucun
-   * relations :
-
-|Géotables ou Tables| Champs de jointure | Type |
-|:---|:---|:---|
-| r_bg_edigeo.PARCELLE (Parcelle (Alpha) V3 dans GEO | idu | 0 à n (égal) |
-
-   * particularité(s) : aucune
-   
-## GeoTable : `geo_objet_noeud`
-
-|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
-|:---|:-:|:-:|:---|:---|:---|:---|
-|date_maj||x|Horodatage de la mise à jour en base de l'objet||||
-|date_sai||x|Horodatage de l'intégration en base de l'objet||||
-|id_noeud ||x|Identifiant unique de l'objet noeud||||
-|id_voie  ||x|Identifiant unique de l'objet voie||||
-|observ  ||x|Observations||||
-|x_l93 ||x|Coordonnée X en mètre||||
-|y_l93 ||x|Coordonnée Y en mètre||||
-|z_ngf ||x|Altimétrie ngf du noeud en mètre||||
-
-   * filtres : aucun
    * relations : aucune
+
    * particularité(s) : aucune
    
-## Table : `xapps_an_v_troncon_h`
-
-|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
-|:---|:-:|:-:|:---|:---|:---|:---|
-|date_lib||x|Arrêté communal du||Fiche d'information sur un tronçon||
-|date_sai ||x|Intégré le||Fiche d'information sur un tronçon||
-|troncon_h ||x|Ancien libellé||Fiche d'information sur un tronçon||
-
-   * filtres : aucun
-   * relations : aucune
-   * particularité(s) : aucune
-   
-## Table : `xapps_an_voie`
+  
+## Table : `xapps_geo_v_pei_ctr_erreur`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
