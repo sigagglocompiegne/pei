@@ -646,9 +646,55 @@ Source : `xapps_geo_v_pei_ctr`
 |:---|:---|:---|:---|:---|:---|:---|
 |(vide)|Opérateur de saisie (ope_sai), Date de saisie (date_sai), Date de mise à jour (date_maj)|à gauche|Vertical||||
 
- * Saisie : aucune
+* Saisie :
 
- * Modèle d'impression : Fiche standard + carte
+Sont présent ici uniquement les attributs éditables ou disposant d'un mode de représentation spécifique.
+
+|Attribut|Obligatoire|Valeur par défaut|Liste de domaine|Représentation|
+|:---|:---|:---|:---|:---|
+|n° SDIS|||||
+|Type|x|NR|lt_pei_type_pei|Liste de choix|
+|Diamètre intérieur||NR|lt_pei_diam_pei|Liste de choix|
+|Raccord ||00|lt_pei_raccord|Liste de choix|
+|Marque ||00|lt_pei_marque|Liste de choix|
+|Source ||NR|lt_pei_source|Liste de choix|
+|Volume |||||
+|Diamètre de canalisation|||||
+|Etat|x|00|lt_pei_etat_pei|Liste de choix|
+|Press statique|||||
+|Pression dynamique|||||
+|Débit |||||
+|Débit Max |||||
+|Debit de remplissage |||||
+|Absence d'anomalie ||0|lt_pei_etat_boolean|Liste de choix|
+|Signalisation conforme ||0|lt_pei_etat_boolean|Liste de choix|
+|Date de disponibilité |||||
+|Date de mise en service |||||
+|Date du dernier contrôle technique |||||
+|Opérateur du contrôle |||||
+|Date de la dernière reconnaissanve opérationnelle |||||
+|Statut  ||00|lt_pei_statut|Liste de choix|
+|Gestionnaire   ||00|lt_pei_gestion|Liste de choix|
+|Délégataire   ||00|lt_pei_delegat|Liste de choix|
+|Centre de secours de 1er appel   ||00000|lt_pei_cs_sdis|Liste de choix|
+|Situation   |||||
+|Observations    ||||Champ texte à plusieurs lignes|
+|Photo     |||||
+|Source de la donnée     |||||
+|Référentiel géographique     ||00|valeur_src_geom|Liste de choix|
+|Date du référentiel      ||0000|||
+|Opérateur de saisie     ||%USER_LOGIN%||| 
+|Anomalie(s)      |||lt_pei_anomalie|Cases à cocher multiples| 
+|Type dans le règlement départemental   |||||
+|Précision   |||||
+|Référence sur le terrain   |||||
+|Référence du contrat de sous-traitance  |||||
+|Type dans le règlement départemental   ||00|lt_pei_id_contrat|Liste de choix|
+|Verrou    |x|false||Caser à cocher|
+
+**IMPORTANT** : L'édition des données jointes est désactivée.
+
+ * Modèle d'impression : Fiche standard + carte et fiche standard
 
  
 ## Analyse :
