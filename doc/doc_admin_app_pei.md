@@ -575,7 +575,76 @@ Source : `xapps_geo_v_pei_ctr`
 |:---|:---|:---|:---|:---|:---|:---|
 |(vide)|n° SDIS (id_sdis),Identifiant(id_pei),Verrou (verrou),Référence sur le terrain (ref_terr),Nom de l'EPCI (epci),Insee (insee),Commune (commune),Type (type_pei),Type dans le règlement départemental (type_rd),Situation (situation),Disponible (disponible_img),Etat (etat_pei)|à gauche|Vertical||||
 
+|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Caractéristiques techniques|affiche_message|masqué|Vertical||||
 
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Diamètre intérieur (diam_int),Raccord(raccord),Marque (marque),Source (source_pei),Date de mise en service (date_mes)|à gauche|Vertical||||
+
+
+|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Mesures et contrôle|affiche_message|masqué|Vertical||||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Référence du contrat de sous-traitance (id_contrat)|à gauche|Vertical||||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Mesure||à gauche|Vertical||||
+
+|Nom de la sous-sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Press statique (press_stat),Pression dynamique (press_dyn),Débit (debit),Débit max (debit_max)|à gauche|Vertical|type_pei=='CI' et (type_pei=='PA' && source != 'CE')|||
+
+|Nom de la sous-sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Volmume (press_stat),Débit de remplissage (press_dyn)|à gauche|Vertical|type_pei=='CI' et (type_pei=='PA' && source != 'CE')|||
+
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Anomalies|Absence d'anomalie|à gauche|Vertical||||
+
+
+|Nom de la sous-sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Anomalie(s) (lt_anom)|à gauche|Vertical|etat_anom='f'|||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Conformité|Accès conforme (etat_access), Signalisation conforme (etat_sign),Conformité technique (etat_conf),Date du dernier contrôle technique (date_ct),disponible pour la DECI (disponible)|à gauche|Vertical||||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Opérateur|Opérateur du contrôle (ope_ct)|à gauche|Vertical||||
+
+|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Gestion|affiche_message|masqué|Vertical||||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Statut (statut), Nom de l'établissement (nom_etab),Gestionnaire (gestion),Délégataire (delegat),Centre de secours de 1er appel (cs_sdis)|à gauche|Vertical||||
+
+|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Qualité|affiche_message|masqué|Vertical||||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Observations (observ), Source de la donnée (src_pei),Photo (photo_url),Coordonnées X (L93) (x_l93),Coordonnées Y (L93) (y_l93), Référentiel géographique ()|à gauche|Vertical||||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Date du référentiel (src_date), Précision (prec)|à gauche|Vertical|src_geom != '00'|||
+
+|Nom de la sous-section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|Opérateur de saisie (ope_sai), Date de saisie (date_sai), Date de mise à jour (date_maj)|à gauche|Vertical||||
 
  * Saisie : aucune
 
