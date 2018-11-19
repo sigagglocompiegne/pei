@@ -1837,7 +1837,7 @@ NEW.date_maj,
 NEW.geom,
 ST_Buffer(NEW.geom, 200);
 
-INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_ro)
+INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_ro)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
 CASE WHEN NEW.id_contrat IS NULL THEN '00' ELSE NEW.id_contrat END,
