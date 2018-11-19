@@ -57,6 +57,7 @@
 2018-11-10 : GB / Intégration de la gestion des messages d'erreurs retournée à GEO (création d'une table d'erreur et intégration de contrôles dans le trigger de la vue applicative)
 2018-11-19 : GB / Modification table des anomalies (ajout d'une anomalie pour gérer le cas des citernes et point d'aspiration en manque d'eau
              GB / Adaptation du trigger sur l'etat_conf pour prendre en compte cette anomalie qui génère une non-conformité
+2018-11-19 : GB / Modification de la structure, le champ debit_r_ci passe de la table an_pei_ctr à la table geo_pei car il s'agit d'une caractéristique technique. Modification dans les vues et trigger au besoin.
 
 Généralités sur le domaine métier PEI
 
@@ -777,6 +778,7 @@ CREATE TABLE m_defense_incendie.geo_pei
   raccord character varying(2),
   marque character varying(2),
   source_pei character varying(3),
+  debit_r_ci real,
   volume integer,
   diam_cana integer,
   etat_pei character varying(2),
@@ -826,6 +828,7 @@ COMMENT ON COLUMN m_defense_incendie.geo_pei.raccord IS 'Descriptif des raccords
 COMMENT ON COLUMN m_defense_incendie.geo_pei.marque IS 'Marque du fabriquant du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.source_pei IS 'Source du point d''eau';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.volume IS 'Capacité volumique utile de la source d''eau en m3/h. Si la source est inépuisable (cour d''eau ou plan d''eau pérenne), l''information est nulle';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.debit_r_ci IS 'Valeur de débit de remplissage pour les CI en m3/h';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_cana IS 'Diamètre de la canalisation exprimé en mm pour les PI et BI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.etat_pei IS 'Etat d''actualité du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.statut IS 'Statut juridique';
@@ -901,7 +904,6 @@ CREATE TABLE m_defense_incendie.an_pei_ctr
   press_dyn real,
   debit real,
   debit_max real,
-  debit_r_ci real,
   etat_anom character varying(1) NOT NULL,
   lt_anom character varying(254),
   etat_acces character varying(1) NOT NULL,
@@ -930,7 +932,6 @@ COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.press_stat IS 'Pression statique
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.press_dyn IS 'Pression dynamique résiduelle en bar à un débit de 60 m3/h';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.debit IS 'Valeur de débit mesuré exprimé en m3/h sous une pression de 1 bar';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.debit_max IS 'Valeur de débit maximal à gueule bée mesuré exprimé en m3/h';
-COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.debit_r_ci IS 'Valeur de débit de remplissage pour les CI en m3/h';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.etat_anom IS 'Etat d''anomalies du PEI';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.lt_anom IS 'Liste des anomalies du PEI';
 COMMENT ON COLUMN m_defense_incendie.an_pei_ctr.etat_acces IS 'Etat de l''accessibilité du PEI';
@@ -1226,7 +1227,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
     a.press_dyn,
     a.debit,
     a.debit_max,
-    a.debit_r_ci,
+    g.debit_r_ci,
     a.etat_anom,
     a.lt_anom,
     a.etat_acces,
@@ -1300,7 +1301,7 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
     a.press_dyn,
     a.debit,
     a.debit_max,
-    a.debit_r_ci,
+    g.debit_r_ci,
     a.etat_anom,
     a.lt_anom,
     a.etat_acces,
@@ -1506,7 +1507,7 @@ BEGIN
 IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, nom_etab, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, debit_r_ci,volume, diam_cana, etat_pei, statut, nom_etab, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
 NEW.verrou,
@@ -1518,6 +1519,7 @@ CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
 CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
 CASE WHEN NEW.source_pei IS NULL THEN 'NR' ELSE NEW.source_pei END,
+NEW.debit_r_ci,				  
 NEW.volume,
 NEW.diam_cana,
 CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
@@ -1541,7 +1543,7 @@ NEW.date_maj,
 NEW.geom,
 ST_Buffer(NEW.geom, 200);
 
-INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, debit_r_ci, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_ro)
+INSERT INTO m_defense_incendie.an_pei_ctr (id_pei, id_sdis, id_contrat, press_stat, press_dyn, debit, debit_max, etat_anom, lt_anom, etat_acces, etat_sign, etat_conf, date_mes, date_ct, ope_ct, date_ro)
 SELECT v_id_pei,
 NEW.id_sdis,
 NEW.id_contrat,
@@ -1549,7 +1551,6 @@ NEW.press_stat,
 NEW.press_dyn,
 NEW.debit,
 NEW.debit_max,
-NEW.debit_r_ci,
 CASE WHEN NEW.etat_anom IS NULL THEN '0' ELSE NEW.etat_anom END,
 CASE WHEN NEW.lt_anom = '' THEN NULL ELSE NEW.lt_anom END,
 CASE WHEN NEW.etat_acces IS NULL THEN '0' ELSE NEW.etat_acces END,
@@ -1583,6 +1584,7 @@ diam_pei=CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
 raccord=CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 marque=CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
 source_pei=CASE WHEN NEW.source_pei IS NULL THEN '00' ELSE NEW.source_pei END,
+debit_r_ci=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE') THEN NULL ELSE NEW.debit_r_ci END, 
 volume=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE') THEN NULL ELSE NEW.volume END,
 diam_cana=NEW.diam_cana,
 etat_pei=CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
@@ -1617,7 +1619,6 @@ press_stat=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.press_stat E
 press_dyn=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.press_dyn END,
 debit=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.debit END,
 debit_max=CASE WHEN NEW.type_pei IN ('CI','PA') THEN NULL ELSE NEW.debit_max END,
-debit_r_ci=CASE WHEN NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE') THEN NULL ELSE NEW.debit_r_ci END,
 etat_anom=CASE WHEN NEW.etat_anom IS NULL THEN '0' ELSE NEW.etat_anom END,
 lt_anom=CASE WHEN NEW.lt_anom = '' OR NEW.etat_anom IN ('0','t') THEN NULL ELSE NEW.lt_anom END,
 etat_acces=CASE WHEN NEW.etat_anom = 't' THEN 't' ELSE v_etat_acces END,
@@ -1652,6 +1653,7 @@ diam_pei=OLD.diam_pei,
 raccord=OLD.raccord,
 marque=OLD.marque,
 source_pei=OLD.source_pei,
+debit_r_ci=OLD.debit_r_ci,											    
 volume=OLD.volume,
 diam_cana=OLD.diam_cana,
 etat_pei='03',
@@ -1686,7 +1688,6 @@ press_stat=OLD.press_stat,
 press_dyn=OLD.press_dyn,
 debit=OLD.debit,
 debit_max=OLD.debit_max,
-debit_r_ci=OLD.debit_r_ci,
 etat_anom=OLD.etat_anom,
 lt_anom=OLD.lt_anom,
 etat_acces=OLD.etat_acces,
@@ -1782,7 +1783,7 @@ IF (TG_OP = 'INSERT') THEN
 
 v_id_pei := nextval('m_defense_incendie.geo_pei_id_seq'::regclass);
 
-INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei, volume, diam_cana, etat_pei, statut, nom_etab, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
+INSERT INTO m_defense_incendie.geo_pei (id_pei, id_sdis, verrou, ref_terr, insee, type_pei, type_rd, diam_pei, raccord, marque, source_pei,debit_r_ci, volume, diam_cana, etat_pei, statut, nom_etab, gestion, delegat, cs_sdis, situation, observ, photo_url, src_pei, x_l93, y_l93, src_geom, src_date, prec, ope_sai, date_sai, date_maj, geom, geom1)
 
 SELECT v_id_pei,
 
@@ -1811,6 +1812,7 @@ CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
 CASE WHEN NEW.raccord IS NULL THEN '00' ELSE NEW.raccord END,
 CASE WHEN NEW.marque IS NULL THEN '00' ELSE NEW.marque END,
 CASE WHEN NEW.source_pei IS NULL THEN 'NR' ELSE NEW.source_pei END,
+NEW.debit_r_ci,
 NEW.volume,
 NEW.diam_cana,
 CASE WHEN NEW.etat_pei IS NULL THEN '00' ELSE NEW.etat_pei END,
@@ -1842,7 +1844,6 @@ NEW.press_stat,
 NEW.press_dyn,
 NEW.debit,
 NEW.debit_max,
-NEW.debit_r_ci,
 CASE WHEN NEW.etat_anom IS NULL THEN '0' ELSE NEW.etat_anom END,
 CASE WHEN NEW.lt_anom = '' THEN NULL ELSE NEW.lt_anom END,
 CASE WHEN NEW.etat_acces IS NULL THEN '0' ELSE NEW.etat_acces END,
@@ -1966,6 +1967,13 @@ source_pei=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.source_pei
 		ELSE NEW.source_pei
 		END,
 
+
+-- debit_r_ci devient "null" si jamais le type de PEI est PI, BI ou PA pour un cours d'eau (car illimité dans ce cas)
+debit_r_ci=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_r_ci
+		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE')) THEN NULL
+		ELSE NEW.debit_r_ci
+		END,
+											     
 -- volume devient "null" si jamais le type de PEI est PI, BI ou PA pour un cours d'eau (car illimité dans ce cas)		
 volume=		CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.volume
 		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE')) THEN NULL
@@ -2112,11 +2120,6 @@ debit_max=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_max
 		ELSE NEW.debit_max
 		END,
 
--- debit_r_ci devient "null" si jamais le type de PEI est PI, BI ou PA pour un cours d'eau (car illimité dans ce cas)
-debit_r_ci=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.debit_r_ci
-		WHEN v_gestion = 'IN' AND (NEW.type_pei IN ('PI','BI') OR (NEW.type_pei = 'PA' AND NEW.source_pei = 'CE')) THEN NULL
-		ELSE NEW.debit_r_ci
-		END,
 
 etat_anom=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_anom
 		WHEN v_gestion = 'IN' AND NEW.etat_anom IS NULL THEN '0'
@@ -2245,6 +2248,8 @@ raccord=	OLD.raccord,
 marque=		OLD.marque,
 
 source_pei=		OLD.source_pei,
+									   
+debit_r_ci= OLD.debit_r_ci,
 
 volume=		OLD.volume,
 
@@ -2311,7 +2316,6 @@ press_stat=	OLD.press_stat,
 press_dyn=	OLD.press_dyn,
 debit=		OLD.debit,
 debit_max=	OLD.debit_max,
-debit_r_ci=	OLD.debit_r_ci,
 etat_anom=	OLD.etat_anom,
 lt_anom=	OLD.lt_anom,
 etat_acces=	OLD.etat_acces,
