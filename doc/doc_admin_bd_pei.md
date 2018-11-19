@@ -434,28 +434,32 @@ Valeurs possibles :
 |:---|:---|:---|:---|    
 |code|Code de la liste énumérée relative au type d'anomalie d'un PEI|character varying(2)| |
 |valeur|Valeur de la liste énumérée relative au type d'anomalie d'un PEI|character varying(80)| |
+|csq_acces|Impact de l'anomalie sur l''état de l''accessibilité du PEI|character varying(1)| |
+|csq_sign|Impact de l'anomalie sur l''état de la signalisation du PEI|character varying(1)| |
+|csq_conf|Impact de l''anomalie sur l'état de la conformité technique du PEI|character varying(1)| |
 
 Particularité(s) à noter :
 * Le fonctionnement du générateur d'application web permet la saisie de choix multiple par la concaténation des différents `code` séparées par un `;`. Il n'y a donc pas de nécessiter à gérer une cardinalité 1-n depuis la classe `an_pei_ctr` et donc pas de clé étrangère depuis cette dernière.
 
 Valeurs possibles :
 
-|code | valeur |
+|code | valeur |csq_acces |csq_sign |csq_conf |
 |:---|:---|    
-|01|Manque bouchon|
-|02|Manque capot ou capot HS|
-|03|Manque de débit ou volume|
-|04|Manque de signalisation|
-|05|Problème d'accès|
-|06|Ouverture point d'eau difficile|
-|07|Fuite hydrant|
-|08|Manque butée sur la vis d'ouverture|
-|09|Purge HS|
-|10|Pas d'écoulement d'eau|
-|11|Végétation génante|
-|12|Gêne accès extérieur|
-|13|Equipement à remplacer|
-|14|Hors service|
+|01|Manque bouchon|0|0|0|
+|02|Manque capot ou capot HS|0|0|0|
+|03|Manque de débit ou volume|0|0|1|
+|04|Manque de signalisation|0|1|0|
+|05|Problème d'accès|1|0|1|
+|06|Ouverture point d'eau difficile|0|0|0|
+|07|Fuite hydrant|0|0|0|
+|08|Manque butée sur la vis d'ouverture|0|0|0|
+|09|Purge HS|0|0|0|
+|10|Pas d'écoulement d'eau|0|0|1|
+|11|Végétation génante|0|0|0|
+|12|Gêne accès extérieur|1|0|0|
+|13|Equipement à remplacer|0|0|0|
+|14|Hors service|0|0|1|
+|15|Manqued'eau (pour citerne ou point d'aspiration seulement)|0|0|1|
 
 ---
 
