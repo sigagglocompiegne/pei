@@ -109,6 +109,7 @@ ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_etat_acces_fkey
 ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_etat_sign_fkey;
 ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_etat_conf_fkey; 
 -- classe
+DROP TABLE IF EXISTS x_apps.xapps_geo_v_pei_ctr_erreur;
 DROP TABLE IF EXISTS m_defense_incendie.an_pei_ctr;
 DROP TABLE IF EXISTS m_defense_incendie.geo_pei;
 DROP TABLE IF EXISTS m_defense_incendie.log_pei;
