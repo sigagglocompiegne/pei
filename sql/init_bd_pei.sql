@@ -913,7 +913,9 @@ CREATE TABLE m_defense_incendie.an_pei_ctr
   date_mes date,
   date_ct date,
   ope_ct character varying(254),
-  date_ro date
+  date_ro date,
+CONSTRAINT an_pei_ctr_pkey PRIMARY KEY (id_pei),
+  CONSTRAINT an_pei_ctr_ukey UNIQUE (id_sdis)
 )
 WITH (
   OIDS=FALSE
