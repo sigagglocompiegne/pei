@@ -58,6 +58,7 @@
 2018-11-19 : GB / Modification table des anomalies (ajout d'une anomalie pour gérer le cas des citernes et point d'aspiration en manque d'eau
              GB / Adaptation du trigger sur l'etat_conf pour prendre en compte cette anomalie qui génère une non-conformité
 2018-11-19 : GB / Modification de la structure, le champ debit_r_ci passe de la table an_pei_ctr à la table geo_pei car il s'agit d'une caractéristique technique. Modification dans les vues et trigger au besoin.
+2018-11-22 : GB / Modification triggres des vues concernant le état de conformité sur les caractéristiques techniques des citernes
 
 Généralités sur le domaine métier PEI
 
