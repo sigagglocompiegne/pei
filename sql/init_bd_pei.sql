@@ -1628,7 +1628,7 @@ etat_acces=CASE WHEN NEW.etat_anom = 't' THEN 't' ELSE v_etat_acces END,
 etat_sign=CASE WHEN v_lt_anom LIKE '%04%' THEN 'f' ELSE NEW.etat_sign END,
 --etat_conf, les pts de controle sont différents selon le type de PEI
 etat_conf=CASE WHEN NEW.type_pei IN ('PI','BI') AND (NEW.debit < 60 OR NEW.press_dyn < 1 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f' 
-               WHEN NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci < 60) OR NEW.volume < 60 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f' 
+               WHEN NEW.type_pei = 'CI' AND (NEW.volume < 15 OR (NEW.debit_r_ci*2 + NEW.volume) < 120 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f' 
                WHEN NEW.type_pei = 'PA' AND NEW.source_pei = 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f'
                WHEN NEW.type_pei = 'PA' AND NEW.source_pei != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f'
                WHEN v_gestion = 'IN' AND NEW.type_pei = 'NR' THEN 'f' ELSE 't' END,
@@ -2148,7 +2148,7 @@ etat_conf=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_conf
 		-- pour un type PI ou BI, CT ok dans le cas où : débit > 60 m3/h ou pression dynamique > 1 bar et certains types d'anomalies ne sont pas présentes
 		WHEN v_gestion = 'IN' AND NEW.type_pei IN ('PI','BI') AND (NEW.debit >= 60 OR NEW.press_dyn >= 1) AND (v_lt_anom ='' OR v_lt_anom IS NULL OR (v_lt_anom NOT LIKE '%03%' AND v_lt_anom NOT LIKE '%05%' AND v_lt_anom NOT LIKE '%10%' AND v_lt_anom NOT LIKE '%14%') ) THEN 't' 
 		-- pour un type CI ok dans le cas où : volume > 120 m" ou si volume est entre 60 et 120 avec un débit de remplissage de 60 m3/h et certains types d'anomalies ne sont pas présentes
-		WHEN v_gestion = 'IN' AND NEW.type_pei = 'CI' AND ((NEW.volume BETWEEN 60 AND 120 AND NEW.debit_r_ci >= 60) OR NEW.volume >= 120) AND (v_lt_anom ='' OR v_lt_anom IS NULL OR (v_lt_anom NOT LIKE '%03%' AND v_lt_anom NOT LIKE '%05%' AND v_lt_anom NOT LIKE '%10%' AND v_lt_anom NOT LIKE '%14%' AND v_lt_anom NOT LIKE '%15%') ) THEN 't' 
+		WHEN v_gestion = 'IN' AND NEW.type_pei = 'CI' AND NEW.volume >=15 AND (NEW.debit_r_ci*2 + NEW.volume) >= 120 AND (v_lt_anom ='' OR v_lt_anom IS NULL OR (v_lt_anom NOT LIKE '%03%' AND v_lt_anom NOT LIKE '%05%' AND v_lt_anom NOT LIKE '%10%' AND v_lt_anom NOT LIKE '%14%' AND v_lt_anom NOT LIKE '%15%') ) THEN 't' 
 		-- pour un type PA ok dans le cas où : certains types d'anomalies ne sont pas présentes
 		WHEN v_gestion = 'IN' AND NEW.type_pei = 'PA' AND (v_lt_anom ='' OR v_lt_anom IS NULL OR (v_lt_anom NOT LIKE '%03%' AND v_lt_anom NOT LIKE '%05%' AND v_lt_anom NOT LIKE '%10%' AND v_lt_anom NOT LIKE '%14%' AND v_lt_anom NOT LIKE '%15%') ) THEN 't'
 		-- autre cas correspondent à une NON conformité technique 		
