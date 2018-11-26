@@ -1647,7 +1647,7 @@ ELSIF (TG_OP = 'DELETE') THEN
 UPDATE
 m_defense_incendie.geo_pei
 SET
-etat_pei='03',
+etat_pei='03'
 WHERE m_defense_incendie.geo_pei.id_pei = OLD.id_pei;
 
 RETURN NEW;
