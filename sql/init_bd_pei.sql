@@ -59,6 +59,7 @@
              GB / Adaptation du trigger sur l'etat_conf pour prendre en compte cette anomalie qui génère une non-conformité
 2018-11-19 : GB / Modification de la structure, le champ debit_r_ci passe de la table an_pei_ctr à la table geo_pei car il s'agit d'une caractéristique technique. Modification dans les vues et trigger au besoin.
 2018-11-22 : GB / Modification triggres des vues concernant le état de conformité sur les caractéristiques techniques des citernes
+2018-11-26 : GB / Modification des triggers pour le DELETE (seules les valeurs modifiées sont conservées, les variables = old.variable sont inutiles car un update est utilisé
 
 Généralités sur le domaine métier PEI
 
@@ -1646,62 +1647,9 @@ ELSIF (TG_OP = 'DELETE') THEN
 UPDATE
 m_defense_incendie.geo_pei
 SET
-id_pei=OLD.id_pei,
-id_sdis=OLD.id_sdis,
-verrou=OLD.verrou,
-ref_terr=OLD.ref_terr,
-insee=OLD.insee,
-type_pei=OLD.type_pei,
-type_rd=OLD.type_rd,
-diam_pei=OLD.diam_pei,
-raccord=OLD.raccord,
-marque=OLD.marque,
-source_pei=OLD.source_pei,
-debit_r_ci=OLD.debit_r_ci,											    
-volume=OLD.volume,
-diam_cana=OLD.diam_cana,
 etat_pei='03',
-statut=OLD.statut,
-nom_etab=OLD.nom_etab,
-gestion=OLD.gestion,
-delegat=OLD.delegat,
-cs_sdis=OLD.cs_sdis,
-situation=OLD.situation,
-observ=OLD.observ,
-photo_url=OLD.photo_url,
-src_pei=OLD.src_pei,
-x_l93=OLD.x_l93,
-y_l93=OLD.y_l93,
-src_geom=OLD.src_geom,
-src_date=OLD.src_date,
-prec=OLD.prec,
-ope_sai=OLD.ope_sai,
-date_sai=OLD.date_sai,
-date_maj=now(),
-geom=OLD.geom,
-geom1=OLD.geom1
 WHERE m_defense_incendie.geo_pei.id_pei = OLD.id_pei;
 
-UPDATE
-m_defense_incendie.an_pei_ctr
-SET
-id_pei=OLD.id_pei,
-id_sdis=OLD.id_sdis,
-id_contrat=NEW.id_contrat,
-press_stat=OLD.press_stat,
-press_dyn=OLD.press_dyn,
-debit=OLD.debit,
-debit_max=OLD.debit_max,
-etat_anom=OLD.etat_anom,
-lt_anom=OLD.lt_anom,
-etat_acces=OLD.etat_acces,
-etat_sign=OLD.etat_sign,
-etat_conf=OLD.etat_conf,
-date_mes=OLD.date_mes,
-date_ct=OLD.date_ct,
-ope_ct=OLD.ope_ct,
-date_ro=OLD.date_ro
-WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 RETURN NEW;
 
 END IF;
