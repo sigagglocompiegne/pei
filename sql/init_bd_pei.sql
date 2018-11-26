@@ -2231,106 +2231,17 @@ m_defense_incendie.geo_pei
 
 SET
 
-id_pei=		OLD.id_pei,
-
-id_sdis=	OLD.id_sdis,
-
-verrou=		OLD.verrou,
-
-ref_terr=	OLD.ref_terr,
-
-insee=		OLD.insee,
-
-type_pei=	OLD.type_pei,
-
-type_rd=	OLD.type_rd,
-
-diam_pei=	OLD.diam_pei,
-
-raccord=	OLD.raccord,
-
-marque=		OLD.marque,
-
-source_pei=		OLD.source_pei,
-									   
-debit_r_ci= OLD.debit_r_ci,
-
-volume=		OLD.volume,
-
-diam_cana=	OLD.diam_cana,
-
 -- dans le cas où la suppression s'applique sur un patrimoine PEI non verouillé et géré par le service, alors l'état du PEI est modifié et passe à "supprimer", dans le cas inverse (verrou ou gestion OUT), alors rien n'est modifié
 etat_pei=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.etat_pei
 		ELSE '03'
 		END,
-
-statut=		OLD.statut,
-
-nom_etab= OLD.nom_etab,
-
-gestion=	OLD.gestion,
-
-delegat=	OLD.delegat,
-
-cs_sdis=	OLD.cs_sdis,
-
-situation=	OLD.situation,
-
-observ=		OLD.observ,
-
-photo_url=	OLD.photo_url,
-
-src_pei=	OLD.src_pei,
-
-x_l93=		OLD.x_l93,
-
-y_l93=		OLD.y_l93,
-
-src_geom=	OLD.src_geom,
-
-src_date=	OLD.src_date,
-
-prec=		OLD.prec,
-
-ope_sai=	OLD.ope_sai,
-
-date_sai=	OLD.date_sai,
 
 -- dans le cas où la suppression s'applique sur un patrimoine PEI non verouillé et géré par le service, alors la date de mise à jour du PEI est modifié, dans le cas inverse (verrou ou gestion OUT), non
 date_maj=	CASE WHEN v_gestion = 'OUT' OR v_verrou IS TRUE THEN OLD.date_maj
 		ELSE now()
 		END,
 
-geom=		OLD.geom,
-
-geom1=		OLD.geom1
-
 WHERE m_defense_incendie.geo_pei.id_pei = OLD.id_pei;
-
-UPDATE
-
-m_defense_incendie.an_pei_ctr
-
-SET
-
-id_pei=		OLD.id_pei,
-id_sdis=	OLD.id_sdis,
-id_contrat=	OLD.id_contrat,
-press_stat=	OLD.press_stat,
-press_dyn=	OLD.press_dyn,
-debit=		OLD.debit,
-debit_max=	OLD.debit_max,
-etat_anom=	OLD.etat_anom,
-lt_anom=	OLD.lt_anom,
-etat_acces=	OLD.etat_acces,
-etat_sign=	OLD.etat_sign,
-etat_conf=	OLD.etat_conf,
-date_mes=	OLD.date_mes,
-date_ct=	OLD.date_ct,
-ope_ct=		OLD.ope_ct,
-date_ro=	OLD.date_ro
-
-WHERE m_defense_incendie.an_pei_ctr.id_pei = OLD.id_pei;
 
 RETURN NEW;
 
