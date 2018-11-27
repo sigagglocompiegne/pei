@@ -723,17 +723,11 @@ Source : `xapps_geo_v_pei_ctr`
 
 |Groupe|Sous-groupe|Visible dans la légende|Visible au démarrage|Détails visibles|Déplié par défaut|Geotable|Renommée|Issue d'une autre carte|Visible dans la légende|Visible au démarrage|Déplié par défaut|Couche sélectionnable|Couche accrochable|Catégorisation|Seuil de visibilité|Symbologie|Autres|
 |:---|:---|:-:|:-:|:-:|:-:|:---|:---|:-:|:-:|:-:|:-:|:-:|:---|:---|:---|:---|:---|
-|||||||geo_rva_signal|Suivi des signalements||x|x|x||x|traite_sig||Symbole signalement_rouge.svg pour Nvlle demande et signalement_orange.svg pour Prise en compte,taille 25|Interactivité avec le champ infobulle|
-|||||||geo_v_osm_commune_apc|Limite communale|||x||||||Contour marron épais||
-|Adresse||x|x|x|x|xapps_geo_vmr_adresse|Conformité||x|x|x|||affiche_qual_adr|0 à 1999è|Couleur par conformité|Interactivité avec le champ infobulle|
-|Adresse||x|x|x|x|xapps_geo_vmr_adresse|Points d'adresse||x|x|||||1999 à 10000è|Carré bleu de taille 5|Interactivité avec le champ infobulle (avec seuil de zoom de 1999 à 5000è)|
-|Voie||x|x|x|x|xapps_geo_v_voie|Voie (agrégée pour clic carte)|||x|||||0 à 100 000è|aucune symbologie||
-|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Tronçon (pour clic carte)|||x|||||0 à 100 000è|aucune symbologie||
-|Voie|Tronçons|x||||geo_objet_noeud|Noeuds||x|x|||x||0 à 50 000è|Point gris de taille 3||
-|Voie|Tronçons|x||||xapps_geo_v_troncon_voirie|Tronçons||x|x|||x||0 à 50 000è|trait de 0.5 noir||
-|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Statut juridique des voies||x|||||statut_jur|0 à 50000è|Couleur par statut|Interactivité avec le champ voie_info_bulle (avec seuil de zoom de 0 à 25000è)|
-|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Gestionnaire des voies||x|x|x|||gestion|0 à 50000è|Couleur par gestionnaire|Interactivité avec le champ voie_info_bulle (avec seuil de zoom de 0 à 25000è)|
-|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Domanialité||x|||||doman|0 à 50000è|Couleur par domanialité|Interactivité avec le champ voie_info_bulle (avec seuil de zoom de 0 à 25000è)|
+|Défense incendie||x|x|x|x|xapps_geo_v_pei_ctr|Point d'Eau Incendie|||x||||style|1/120000-1/140000|pei_picto_[].svg selon la catégorie,taille 16|Interactivité avec le champ calculé affiche_info_bulle|
+|||||||xapps_geo_v_pei_ctr|Point d'Eau Incendie||x|x|x|||style|0-1/20000|pei_picto_[].svg selon la catégorie,taille 35|Interactivité avec le champ calculé affiche_info_bulle|
+|||||||xapps_geo_v_pei_zonedefense|Zone de défense publique||x|x|||x||0-1/25000|Fond #BBBBBB 5% d'opacité et contour #343434 4ème symbole de tiret épaisseur 1||
+|||||||xapps_geo_zone_gestion|Zone de gestion||x||x|||gest||Fond #6699BB 25% opaque et coutour noir pour ARC, Fond #FFFABB 25% opaque et coutour noir pour Compiègne|Interactivité avec le champ calculé affiche_info_bulle|
+|Foncier||x||x||eo_v_fon_proprio_pu_arc|Propriétés institutionnelles|x|x||x||x|||Cf carte CADASTRE||
 
 # L'application
 
