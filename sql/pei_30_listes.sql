@@ -70,11 +70,6 @@ CREATE TABLE m_defense_incendie.lt_pei_type_pei
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_type_pei
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_type_pei TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_type_pei TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_type_pei TO create_sig;
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_type_pei
   IS 'Code permettant de décrire le type de point d''eau incendie';
@@ -98,11 +93,6 @@ CREATE TABLE m_defense_incendie.lt_pei_diam_pei
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_diam_pei
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_diam_pei TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_diam_pei TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_diam_pei TO create_sig;
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_diam_pei
   IS 'Code permettant de décrire le diamètre intérieur du point d''eau incendie (poteau ou bouche)';
@@ -126,11 +116,6 @@ CREATE TABLE m_defense_incendie.lt_pei_source_pei
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_source_pei
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_source_pei TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_source_pei TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_source_pei TO create_sig;
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_source_pei
   IS 'Code permettant de décrire le type de source d''alimentation du PEI';
@@ -155,11 +140,6 @@ CREATE TABLE m_defense_incendie.lt_pei_statut
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_statut
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_statut TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_statut TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_statut TO create_sig;
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_statut
   IS 'Code permettant de décrire le statut juridique du PEI';
@@ -184,11 +164,7 @@ CREATE TABLE m_defense_incendie.lt_pei_gestion
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_gestion
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_gestion TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_gestion TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_gestion TO create_sig;
+
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_gestion
   IS 'Code permettant de décrire le gestionnaire du point d''eau incendie';
@@ -211,11 +187,7 @@ CREATE TABLE m_defense_incendie.lt_pei_etat_pei
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_etat_pei
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_etat_pei TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_etat_pei TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_pei TO create_sig;
+
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_etat_pei
   IS 'Code permettant de décrire l''état d''actualité du PEI';
@@ -238,11 +210,7 @@ CREATE TABLE m_defense_incendie.lt_pei_cs_sdis
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_cs_sdis
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_cs_sdis TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_cs_sdis TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_cs_sdis TO create_sig;
+
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_cs_sdis
   IS 'Code permettant de décrire le nom du centre de secours de 1er appel du SDIS en charge du PEI';
@@ -267,11 +235,7 @@ CREATE TABLE m_defense_incendie.lt_pei_etat_boolean
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_etat_boolean
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_etat_boolean TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_etat_boolean TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_etat_boolean TO create_sig;
+
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_etat_boolean
   IS 'Code permettant de décrire l''état d''un attribut boolean';
@@ -299,11 +263,7 @@ CREATE TABLE m_defense_incendie.lt_pei_anomalie
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_anomalie
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_anomalie TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_anomalie TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_anomalie TO create_sig;
+
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_anomalie
   IS 'Liste des anomalies possibles pour un PEI et de leurs incidences sur la conformité';
@@ -332,11 +292,7 @@ CREATE TABLE m_defense_incendie.lt_pei_id_contrat
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_id_contrat
-  OWNER TO sig_create;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_id_contrat TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_id_contrat TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_defense_incendie.lt_pei_id_contrat TO edit_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_id_contrat
   IS 'Code permettant de décrire un contrat pour l''entretien et de contrôle de PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_id_contrat.code IS 'Code de la liste énumérée relative au numéro de contrat pour l''entretien et de contrôle de PEI';
@@ -356,10 +312,7 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE m_defense_incendie.lt_pei_id_contrat_seq
-  OWNER TO sig_create;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO sig_create;
-GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq TO public;
+
 ALTER TABLE m_defense_incendie.lt_pei_id_contrat ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_id_contrat_seq'::regclass),'FM00');
 
 
@@ -378,11 +331,7 @@ CREATE TABLE m_defense_incendie.lt_pei_marque
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_marque
-  OWNER TO sig_create;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_marque TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_marque TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_defense_incendie.lt_pei_marque TO edit_sig;
+
 COMMENT ON TABLE m_defense_incendie.lt_pei_marque
   IS 'Code permettant de décrire la marque du PEI';
 COMMENT ON COLUMN m_defense_incendie.lt_pei_marque.code IS 'Code de la liste énumérée relative à la marque du PEI';
@@ -400,10 +349,7 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_marque_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE m_defense_incendie.lt_pei_marque_seq
-  OWNER TO sig_create;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_marque_seq TO sig_create;
-GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_marque_seq TO public;
+
 ALTER TABLE m_defense_incendie.lt_pei_marque ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_marque_seq'::regclass),'FM00');
 
 
@@ -424,11 +370,6 @@ CREATE TABLE m_defense_incendie.lt_pei_delegat
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_delegat
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_delegat TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_delegat TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_delegat TO create_sig;
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_delegat
   IS 'Code permettant de décrire le délégataire du réseaux surlequel est lié un PEI';
@@ -446,10 +387,7 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_delegat_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE m_defense_incendie.lt_pei_delegat_seq
-  OWNER TO sig_create;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_delegat_seq TO sig_create;
-GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_delegat_seq TO public;
+
 ALTER TABLE m_defense_incendie.lt_pei_delegat ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_delegat_seq'::regclass),'FM00');
 
 
@@ -469,11 +407,7 @@ CREATE TABLE m_defense_incendie.lt_pei_raccord
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE m_defense_incendie.lt_pei_raccord
-  OWNER TO sig_create;
-GRANT SELECT ON TABLE m_defense_incendie.lt_pei_raccord TO read_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_defense_incendie.lt_pei_raccord TO edit_sig;
-GRANT ALL ON TABLE m_defense_incendie.lt_pei_raccord TO create_sig;
+
 
 COMMENT ON TABLE m_defense_incendie.lt_pei_raccord
   IS 'Code permettant de décrire le type de raccord du PEI';
@@ -491,10 +425,7 @@ CREATE SEQUENCE m_defense_incendie.lt_pei_raccord_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE m_defense_incendie.lt_pei_raccord_seq
-  OWNER TO sig_create;
-GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO sig_create;
-GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO public;
+
 
 ALTER TABLE m_defense_incendie.lt_pei_raccord ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_raccord_seq'::regclass),'FM00');
 
