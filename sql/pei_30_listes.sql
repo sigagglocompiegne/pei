@@ -1,6 +1,6 @@
 /*PEI V1.0*/
 /*Creation des tables contenant les listes des valeurs */
-/* pei_20_listes.sql */
+/* pei_30_listes.sql */
 /*PostGIS*/
 
 /* Propriétaire : GeoCompiegnois - http://geo.compiegnois.fr/ */
@@ -39,12 +39,6 @@ DROP TABLE IF EXISTS m_defense_incendie.lt_pei_raccord;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_source_pei;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_statut;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_type_pei;
-
--- sequence
-DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_delegat_seq;
-DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_id_contrat_seq;
-DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_marque_seq;
-DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_raccord_seq;
 
 
 -- ####################################################################################################################################################
