@@ -8,7 +8,7 @@ Ensemble des éléments constituant la mise en oeuvre d'une application websig d
   * [Suivi et exécution des scripts sql](sql/pei_00_trace.sql)
   * [Création du schéma](sql/pei_10_schema.sql)
   * [Création des séquences](sql/pei_20_seq.sql)
-  * [création des table de liste de valeur](sql/pei_30_lists.sql)
+  * [création des table de liste de valeur](sql/pei_30_listes.sql)
   * [Insertion des valeurs de liste](sql/pei_31_inserts.sql)
   * [Création des tables](sql/pei_40_tables.sql)
   * [Création des index](sql/pei_50_index.sql)
