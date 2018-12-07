@@ -7,6 +7,7 @@
 /* Auteur : FLorent Vanhoutte */
 /* Participant : Grégory Bodet */
 
+DROP VIEW IF EXISTS x_opendata.xopendata_geo_v_open_pei;
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
