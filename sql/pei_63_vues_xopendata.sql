@@ -1,3 +1,12 @@
+/*PEI V1.0*/
+/*Creation des vues applicatives OpenData stockées dans le schéma x_opendata */
+/* pei_63_vues_xopendata.sql */
+/*PostGIS*/
+
+/* Propriétaire : GeoCompiegnois - http://geo.compiegnois.fr/ */
+/* Auteur : FLorent Vanhoutte */
+/* Participant : Grégory Bodet */
+
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
