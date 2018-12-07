@@ -6,7 +6,16 @@ Ensemble des éléments constituant la mise en oeuvre d'une application websig d
 
 - Script d'initialisation de la base de données
   * [création des table de liste de valeur](sql/pei_10_lists.sql)
-  * [Insertion des valeurs](sql/pei_20_inserts.sql)
+  * [Insertion des valeurs de liste](sql/pei_11_inserts.sql)
+  * [Création des séquences](sql/pei_20_seq.sql)
+  * [Création des tables](sql/pei_21_tables.sql)
+  * [Création des index](sql/pei_30_index.sql)
+  * [Création des vues de gestion](sql/pei_40_vues_gestion.sql)
+  * [Création des vues applicatives](sql/pei_41_vues_xapps.sql)
+  * [Création des vues applicatives gd public](sql/pei_42_vues_xapps_public.sql)
+  * [Création des vues open data](sql/pei_43_vues_xopendata.sql)
+  * [Création des triggers](sql/pei_50_triggers.sql)
+  * [Création des privilèges](sql/pei_99_grant.sql)
 - [Script d'initialisation des dépendances de la base de données](sql/init_bd_pei_dependencies.sql)
 - [Documentation d'administration de la base de données](doc/doc_admin_bd_pei.md)
 - [Documentation d'administration de l'application](doc/doc_admin_app_pei.md)
