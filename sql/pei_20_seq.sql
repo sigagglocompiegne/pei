@@ -8,6 +8,12 @@
 /* Participant : Grégory Bodet */
 
 
+DROP SEQUENCE IF EXISTS m_defense_incendie.geo_pei_id_seq;
+DROP SEQUENCE IF EXISTS m_defense_incendie.log_pei_id_seq;
+DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_delegat_seq;
+DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_id_contrat_seq;
+DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_marque_seq;
+DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_raccord_seq;
 
 -- ################################################################# Séquence sur domaine valeur ouvert - contrat  ###############################################
 
