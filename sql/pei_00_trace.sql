@@ -59,7 +59,7 @@
 2018-11-19 : GB / Modification de la structure, le champ debit_r_ci passe de la table an_pei_ctr à la table geo_pei car il s'agit d'une caractéristique technique. Modification dans les vues et trigger au besoin.
 2018-11-22 : GB / Modification triggres des vues concernant le état de conformité sur les caractéristiques techniques des citernes
 2018-11-26 : GB / Modification des triggers pour le DELETE (seules les valeurs modifiées sont conservées, les variables = old.variable sont inutiles car un update est utilisé
-2018-12-07 : GB / Réorganisation du code SQL en éclatant par fichier de procédure
+2018-12-07 : GB / Réorganisation du code SQL en éclatant par fichier de procédure (test)
 
 Généralités sur le domaine métier PEI
 
