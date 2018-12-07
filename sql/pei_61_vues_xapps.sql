@@ -7,6 +7,11 @@
 /* Auteur : FLorent Vanhoutte */
 /* Participant : Grégory Bodet */
 
+
+DROP VIEW IF EXISTS x_apps.xapps_geo_v_pei_ctr;
+DROP VIEW IF EXISTS x_apps.xapps_geo_v_pei_zonedefense;
+
+
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
 -- ###                                                              VUES APPLICATIVES                                                                ###
