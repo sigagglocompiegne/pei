@@ -1,6 +1,6 @@
 /*PEI V1.0*/
 /*Creation des tables contenant les listes des valeurs */
-/* pei_20_lists.sql */
+/* pei_20_listes.sql */
 /*PostGIS*/
 
 /* Propriétaire : GeoCompiegnois - http://geo.compiegnois.fr/ */
