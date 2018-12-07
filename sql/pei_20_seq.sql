@@ -81,3 +81,40 @@ ALTER TABLE m_defense_incendie.lt_pei_raccord_seq
 GRANT ALL ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO sig_create;
 GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.lt_pei_raccord_seq TO public;
 
+-- ################################################################# Séquence sur table - geo_pei  ###############################################
+
+
+-- Sequence: m_defense_incendie.geo_pei_id_seq
+
+-- DROP SEQUENCE m_defense_incendie.geo_pei_id_seq;
+
+CREATE SEQUENCE m_defense_incendie.geo_pei_id_seq
+  INCREMENT 1
+  MINVALUE 0
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+ALTER TABLE m_defense_incendie.geo_pei_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE m_defense_incendie.geo_pei_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.geo_pei_id_seq TO public;
+
+-- ################################################################# Séquence sur table - log_pei  ###############################################
+
+
+-- Sequence: m_defense_incendie.log_pei_id_seq
+
+-- DROP SEQUENCE m_defense_incendie.log_pei_id_seq;
+
+CREATE SEQUENCE m_defense_incendie.log_pei_id_seq
+  INCREMENT 1
+  MINVALUE 0
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+ALTER TABLE m_defense_incendie.log_pei_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE m_defense_incendie.log_pei_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE m_defense_incendie.log_pei_id_seq TO public;
+
+
