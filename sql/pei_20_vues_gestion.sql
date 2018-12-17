@@ -292,3 +292,82 @@ CREATE TRIGGER t_t1_geo_v_pei_ctr
   ON m_defense_incendie.geo_v_pei_ctr
   FOR EACH ROW
   EXECUTE PROCEDURE m_defense_incendie.ft_geo_v_pei_ctr();
+										   
+										   
+-- #################################################################### FONCTION TRIGGER - LOG_PEI ###################################################
+
+-- Function: m_defense_incendie.ft_log_pei()
+
+-- DROP FUNCTION m_defense_incendie.ft_log_pei();
+
+CREATE OR REPLACE FUNCTION m_defense_incendie.ft_log_pei()
+  RETURNS trigger AS
+$BODY$
+
+DECLARE v_id_audit integer;
+DECLARE v_id_pei integer;
+
+BEGIN
+
+-- INSERT
+IF (TG_OP = 'INSERT') THEN
+
+v_id_audit := nextval('m_defense_incendie.log_pei_id_seq'::regclass);
+v_id_pei := currval('m_defense_incendie.geo_pei_id_seq'::regclass);
+INSERT INTO m_defense_incendie.log_pei (id_audit, type_ope, ope_sai, id_pei, date_maj)
+SELECT
+v_id_audit,
+'INSERT',
+NEW.ope_sai,
+v_id_pei,
+now();
+RETURN NEW;
+
+
+-- UPDATE
+ELSIF (TG_OP = 'UPDATE') THEN
+
+v_id_audit := nextval('m_defense_incendie.log_pei_id_seq'::regclass);
+INSERT INTO m_defense_incendie.log_pei (id_audit, type_ope, ope_sai, id_pei, date_maj)
+SELECT
+v_id_audit,
+'UPDATE',
+NEW.ope_sai,
+NEW.id_pei,
+now();
+RETURN NEW;
+
+
+-- DELETE
+ELSIF (TG_OP = 'DELETE') THEN
+
+v_id_audit := nextval('m_defense_incendie.log_pei_id_seq'::regclass);
+INSERT INTO m_defense_incendie.log_pei (id_audit, type_ope, ope_sai, id_pei, date_maj)
+SELECT
+v_id_audit,
+'DELETE',
+NEW.ope_sai,
+NEW.id_pei,
+now();
+RETURN NEW;
+
+END IF;
+
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+									   
+COMMENT ON FUNCTION m_defense_incendie.ft_log_pei() IS 'audit';
+
+
+-- Trigger: m_defense_incendie.t_log_pei on m_defense_incendie.geo_v_pei_ctr
+
+-- DROP TRIGGER m_defense_incendie.t_log_pei ON m_defense_incendie.geo_v_pei_ctr;
+
+CREATE TRIGGER t_t2_log_pei
+  INSTEAD OF INSERT OR UPDATE OR DELETE
+  ON m_defense_incendie.geo_v_pei_ctr
+  FOR EACH ROW
+  EXECUTE PROCEDURE m_defense_incendie.ft_log_pei();
