@@ -6,7 +6,7 @@ Ensemble des éléments constituant la mise en oeuvre d'une application websig d
 
 - Script d'initialisation de la base de données
   * [Ancien script d'initialisation complet](sql/old_init_bd_pei.sql)
-  * [Suivi et exécution des scripts sql](sql/pei_00_trace.sql)
+  * [Suivi des modifications](sql/pei_00_trace.sql)
   * [Création du schéma](sql/pei_10_schema.sql)
   * [Création des séquences](sql/pei_20_seq.sql)
   * [Création des table de liste de valeur](sql/pei_30_listes.sql)
