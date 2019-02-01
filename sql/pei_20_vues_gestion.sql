@@ -112,11 +112,11 @@ COMMENT ON VIEW m_defense_incendie.geo_v_pei_zonedefense
 
 -- #################################################################### FONCTION TRIGGER - GEO_V_PEI_CTR ###################################################
 
--- Function: m_defense_incendie.ft_geo_v_pei_ctr()
+-- Function: m_defense_incendie.ft_m_geo_v_pei_ctr()
 
--- DROP FUNCTION m_defense_incendie.ft_geo_v_pei_ctr();
+-- DROP FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr();
 
-CREATE OR REPLACE FUNCTION m_defense_incendie.ft_geo_v_pei_ctr()
+CREATE OR REPLACE FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr()
   RETURNS trigger AS
 $BODY$
 
@@ -137,7 +137,7 @@ SELECT v_id_pei,
 CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
 NEW.verrou,
 CASE WHEN NEW.ref_terr = '' THEN NULL ELSE NEW.ref_terr END,
-CASE WHEN NEW.insee IS NULL THEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom)) ELSE NEW.insee END,
+CASE WHEN NEW.insee IS NULL THEN (SELECT insee FROM r_osm.geo_vm_osm_commune_apc WHERE st_intersects(NEW.geom,geom)) ELSE NEW.insee END,
 CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
 NEW.type_rd,
 CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
@@ -202,7 +202,7 @@ id_pei=OLD.id_pei,
 id_sdis=CASE WHEN NEW.id_sdis = '' THEN NULL ELSE NEW.id_sdis END,
 verrou=NEW.verrou,
 -- refus de mise à jour si le point est déplacé dans une autre commune
-insee=CASE WHEN (SELECT insee FROM r_osm.geo_v_osm_commune_apc WHERE st_intersects(NEW.geom,geom))=OLD.insee THEN OLD.insee ELSE NULL END,
+insee=CASE WHEN (SELECT insee FROM r_osm.geo_vm_osm_commune_apc WHERE st_intersects(NEW.geom,geom))=OLD.insee THEN OLD.insee ELSE NULL END,
 type_pei=CASE WHEN NEW.type_pei IS NULL THEN 'NR' ELSE NEW.type_pei END,
 type_rd=NEW.type_rd,
 diam_pei=CASE WHEN NEW.diam_pei IS NULL THEN 0 ELSE NEW.diam_pei END,
@@ -250,7 +250,10 @@ etat_acces=CASE WHEN NEW.etat_anom = 't' THEN 't' ELSE v_etat_acces END,
 etat_sign=CASE WHEN v_lt_anom LIKE '%04%' THEN 'f' ELSE NEW.etat_sign END,
 --etat_conf, les pts de controle sont différents selon le type de PEI
 etat_conf=CASE WHEN NEW.type_pei IN ('PI','BI') AND (NEW.debit < 60 OR NEW.press_dyn < 1 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_etat_acces = 'f') THEN 'f' 
-               WHEN NEW.type_pei = 'CI' AND (NEW.volume < 15 OR (NEW.debit_r_ci*2 + NEW.volume) < 120 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f' 
+               WHEN NEW.type_pei = 'CI' AND (NEW.volume < 15 OR 
+		(
+		(CASE WHEN NEW.debit_r_ci is null THEN 0 ELSE NEW.debit_r_ci*2 END) 
+		+ NEW.volume) < 120 OR v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f' 
                WHEN NEW.type_pei = 'PA' AND NEW.source_pei = 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f'
                WHEN NEW.type_pei = 'PA' AND NEW.source_pei != 'CE' AND (v_lt_anom LIKE '%14%' OR v_lt_anom LIKE '%03%' OR v_lt_anom LIKE '%10%' OR v_lt_anom LIKE '%15%' OR v_etat_acces = 'f') THEN 'f'
                WHEN v_gestion = 'IN' AND NEW.type_pei = 'NR' THEN 'f' ELSE 't' END,
@@ -268,7 +271,9 @@ UPDATE
 m_defense_incendie.geo_pei
 SET
 etat_pei='03'
+
 WHERE m_defense_incendie.geo_pei.id_pei = OLD.id_pei;
+
 
 RETURN NEW;
 
@@ -278,8 +283,10 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-												    
-COMMENT ON FUNCTION  m_defense_incendie.ft_geo_v_pei_ctr() IS 'Fonction trigger pour mise à jour de la vue de gestion des points d''eau incendie et contrôles';
+ALTER FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr()
+  OWNER TO sig_create;
+
+COMMENT ON FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr() IS 'Fonction trigger pour mise à jour de la vue de gestion des points d''eau incendie et contrôles';
 
 
 
@@ -291,16 +298,16 @@ CREATE TRIGGER t_t1_geo_v_pei_ctr
   INSTEAD OF INSERT OR UPDATE OR DELETE
   ON m_defense_incendie.geo_v_pei_ctr
   FOR EACH ROW
-  EXECUTE PROCEDURE m_defense_incendie.ft_geo_v_pei_ctr();
+  EXECUTE PROCEDURE m_defense_incendie.ft_m_geo_v_pei_ctr();
 										   
 										   
 -- #################################################################### FONCTION TRIGGER - LOG_PEI ###################################################
 
--- Function: m_defense_incendie.ft_log_pei()
+-- Function: m_defense_incendie.ft_m_log_pei()
 
--- DROP FUNCTION m_defense_incendie.ft_log_pei();
+-- DROP FUNCTION m_defense_incendie.ft_m_log_pei();
 
-CREATE OR REPLACE FUNCTION m_defense_incendie.ft_log_pei()
+CREATE OR REPLACE FUNCTION m_defense_incendie.ft_m_log_pei()
   RETURNS trigger AS
 $BODY$
 
@@ -357,9 +364,11 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
+ALTER FUNCTION m_defense_incendie.ft_m_log_pei()
+  OWNER TO sig_create;
 
-									   
-COMMENT ON FUNCTION m_defense_incendie.ft_log_pei() IS 'audit';
+COMMENT ON FUNCTION m_defense_incendie.ft_m_log_pei() IS 'audit';
+
 
 
 -- Trigger: m_defense_incendie.t_log_pei on m_defense_incendie.geo_v_pei_ctr
@@ -370,4 +379,4 @@ CREATE TRIGGER t_t2_log_pei
   INSTEAD OF INSERT OR UPDATE OR DELETE
   ON m_defense_incendie.geo_v_pei_ctr
   FOR EACH ROW
-  EXECUTE PROCEDURE m_defense_incendie.ft_log_pei();
+  EXECUTE PROCEDURE m_defense_incendie.ft_m_log_pei();
