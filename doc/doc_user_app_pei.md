@@ -7,7 +7,7 @@
 - [Imprimer la fiche d'un point d'eau incendie](http://geo.compiegnois.fr/documents/cms/fiche_aide/pei_guideutil2_imprimer_controle.pdf)
 
 **Pour le prestataire effectuant les contrôles** :
-- [Mettre à jour des informations des pojtns d'eau incendie](http://geo.compiegnois.fr/documents/cms/fiche_aide/pei_guideutil2_modifier_controle.pdf)
+- [Mettre à jour des informations des points d'eau incendie](http://geo.compiegnois.fr/documents/cms/fiche_aide/pei_guideutil2_modifier_controle.pdf)
 
 **Pour les administrateurs** :
 - [Créer un point d'eau incendie](http://geo.compiegnois.fr/documents/cms/fiche_aide/pei_guideadmin1_saisie_controle.pdf)
