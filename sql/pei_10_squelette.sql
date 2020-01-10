@@ -502,43 +502,6 @@ INSERT INTO m_defense_incendie.lt_pei_anomalie(
     ('15','Manque d''eau (uniquement citerne ou point d''aspiration)','0','0','1');
 
 
--- ################################################################# Domaine valeur ouvert - id_contrat  ###############################################
-
--- Table: r_objet.lt_contrat
-
--- DROP TABLE r_objet.lt_contrat;
-
-CREATE TABLE r_objet.lt_contrat
-(
-  code character varying(2) NOT NULL DEFAULT to_char(nextval('m_reseau_sec.lt_ecl_id_contrat_seq'::regclass), 'FM00'::text), -- Code de la liste énumérée relative au numéro de contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
-  valeur character varying(80) NOT NULL, -- Valeur de la référence du marché du contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
-  presta character varying(254), -- Nom du prestataire retenu par le contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
-  ddebut timestamp without time zone, -- Date de début du contrat
-  dfin timestamp without time zone, -- Date de fin du contrat
-  definition character varying(254), -- Definition du contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
-  CONSTRAINT lt_contrat_pkey PRIMARY KEY (code)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE r_objet.lt_contrat
-  OWNER TO sig_create;
-GRANT ALL ON TABLE r_objet.lt_contrat TO sig_create;
-GRANT ALL ON TABLE r_objet.lt_contrat TO create_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.lt_contrat TO edit_sig;
-GRANT SELECT ON TABLE r_objet.lt_contrat TO read_sig;
-COMMENT ON TABLE r_objet.lt_contrat
-  IS 'Liste des contrats pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
-COMMENT ON COLUMN r_objet.lt_contrat.code IS 'Code de la liste énumérée relative au numéro de contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
-COMMENT ON COLUMN r_objet.lt_contrat.valeur IS 'Valeur de la référence du marché du contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
-COMMENT ON COLUMN r_objet.lt_contrat.presta IS 'Nom du prestataire retenu par le contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
-COMMENT ON COLUMN r_objet.lt_contrat.ddebut IS 'Date de début du contrat';
-COMMENT ON COLUMN r_objet.lt_contrat.dfin IS 'Date de fin du contrat';
-COMMENT ON COLUMN r_objet.lt_contrat.definition IS 'Definition du contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
-
-
--- cette table de contrat est commune à l'ensemble des données gérées par contrat. Cette table est donc non supprimables mais le code est
--- mis à disposition ici. Les valeurs intégrant cette liste sont confidentielles.
 
 -- ################################################################# Domaine valeur ouvert - marque  ###############################################
 
