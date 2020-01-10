@@ -73,6 +73,7 @@ La base de données PEI s'appuie sur des référentiels préexistants constituan
 
 |schéma | table | description | usage |
 |:---|:---|:---|:---|   
+|r_objet|lt_contrat|domaine de valeur des références de contrat sur les données gérées par les services|Gestion des accès aux prestataires|
 |r_objet|lt_src_geom|domaine de valeur générique d'une table géographique|source du positionnement du PEI|
 |r_administratif|an_geo|donnée de référence alphanumérique du découpage administratif |jointure insee commune<>siret epci|
 |r_osm|geo_osm_commune|donnée de référence géographique du découpage communal OSM|nom de la commune|
@@ -180,6 +181,7 @@ En cours de traitement
 
 ## Liste de valeurs
 
+La liste de valeurs de contrat n'est pas mentionnée ici pour des raisons de confidentialité.
 
 `lt_pei_type_pei` : Liste des types de PEI
 
