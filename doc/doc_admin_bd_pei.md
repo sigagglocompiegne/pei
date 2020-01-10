@@ -525,5 +525,5 @@ Le processus de traitement est en cours de développement.
 
 ### Modèle conceptuel simplifié
 
-![mcd](img/mcd.jpg)
+(non disponible)
 
