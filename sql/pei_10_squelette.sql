@@ -716,7 +716,7 @@ CREATE TABLE m_defense_incendie.an_pei_ctr
 (
   id_pei bigint NOT NULL, 
   id_sdis character varying(254),
-  id_contrat character varying(254),
+  id_contrat character varying(2),
   press_stat real,
   press_dyn real,
   debit real,
