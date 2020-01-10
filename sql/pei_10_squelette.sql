@@ -35,26 +35,8 @@ COMMENT ON SCHEMA m_defense_incendie
 DROP SEQUENCE IF EXISTS m_defense_incendie.geo_pei_id_seq;
 DROP SEQUENCE IF EXISTS m_defense_incendie.log_pei_id_seq;
 DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_delegat_seq;
-DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_id_contrat_seq;
 DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_marque_seq;
 DROP SEQUENCE IF EXISTS m_defense_incendie.lt_pei_raccord_seq;
-
--- ################################################################# Séquence sur domaine valeur ouvert - contrat  ###############################################
-
-
--- Sequence: m_defense_incendie.lt_pei_id_contrat_seq
-
--- DROP SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq;
-
-CREATE SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq
-  INCREMENT 1
-  MINVALUE 0
-  MAXVALUE 9223372036854775807
-  START 1
-  CACHE 1;
-
-
-
 
 -- ################################################################# Séquence sur domaine valeur ouvert - marque  ###############################################
 
@@ -128,20 +110,6 @@ CREATE SEQUENCE m_defense_incendie.log_pei_id_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
- 
- -- ################################################################# Séquence sur table - lt_pei_id_contrat  ###############################################
-
- 
--- Sequence: m_defense_incendie.lt_pei_id_contrat_seq
-
--- DROP SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq;
-
-CREATE SEQUENCE m_defense_incendie.lt_pei_id_contrat_seq
-  INCREMENT 1
-  MINVALUE 0
-  MAXVALUE 9223372036854775807
-  START 1
-  CACHE 1;
   
   
 -- ################################################################# Séquence sur table - lt_pei_marque  ###############################################
@@ -206,7 +174,6 @@ ALTER TABLE m_defense_incendie.geo_pei DROP CONSTRAINT IF EXISTS lt_pei_marque_f
 ALTER TABLE m_defense_incendie.geo_pei DROP CONSTRAINT IF EXISTS lt_pei_raccord_fkey;
 ALTER TABLE m_defense_incendie.geo_pei DROP CONSTRAINT IF EXISTS lt_pei_delegat_fkey;
 ALTER TABLE m_defense_incendie.geo_pei DROP CONSTRAINT IF EXISTS lt_pei_src_geom_fkey;
-ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT IF EXISTS lt_pei_id_contrat_fkey;
 ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_etat_anom_fkey;
 ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_etat_acces_fkey;
 ALTER TABLE m_defense_incendie.an_pei_ctr DROP CONSTRAINT lt_pei_etat_sign_fkey;
@@ -220,7 +187,6 @@ DROP TABLE IF EXISTS m_defense_incendie.lt_pei_diam_pei;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_etat_boolean;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_etat_pei;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_gestion;
-DROP TABLE IF EXISTS m_defense_incendie.lt_pei_id_contrat;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_marque;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_raccord;
 DROP TABLE IF EXISTS m_defense_incendie.lt_pei_source_pei;
@@ -538,37 +504,41 @@ INSERT INTO m_defense_incendie.lt_pei_anomalie(
 
 -- ################################################################# Domaine valeur ouvert - id_contrat  ###############################################
 
--- Table: m_defense_incendie.lt_pei_id_contrat
+-- Table: r_objet.lt_contrat
 
--- DROP TABLE m_defense_incendie.lt_pei_id_contrat;
+-- DROP TABLE r_objet.lt_contrat;
 
-CREATE TABLE m_defense_incendie.lt_pei_id_contrat
+CREATE TABLE r_objet.lt_contrat
 (
-  code character varying(2) NOT NULL,
-  valeur character varying(80) NOT NULL,
-  definition character varying(254),
-  CONSTRAINT lt_pei_id_contrat_pkey PRIMARY KEY (code)
+  code character varying(2) NOT NULL DEFAULT to_char(nextval('m_reseau_sec.lt_ecl_id_contrat_seq'::regclass), 'FM00'::text), -- Code de la liste énumérée relative au numéro de contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
+  valeur character varying(80) NOT NULL, -- Valeur de la référence du marché du contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
+  presta character varying(254), -- Nom du prestataire retenu par le contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
+  ddebut timestamp without time zone, -- Date de début du contrat
+  dfin timestamp without time zone, -- Date de fin du contrat
+  definition character varying(254), -- Definition du contrat pour l'entretien et/ou le contrôle de réseau public par la ville ou l'ARC
+  CONSTRAINT lt_contrat_pkey PRIMARY KEY (code)
 )
 WITH (
   OIDS=FALSE
 );
+ALTER TABLE r_objet.lt_contrat
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_objet.lt_contrat TO sig_create;
+GRANT ALL ON TABLE r_objet.lt_contrat TO create_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.lt_contrat TO edit_sig;
+GRANT SELECT ON TABLE r_objet.lt_contrat TO read_sig;
+COMMENT ON TABLE r_objet.lt_contrat
+  IS 'Liste des contrats pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
+COMMENT ON COLUMN r_objet.lt_contrat.code IS 'Code de la liste énumérée relative au numéro de contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
+COMMENT ON COLUMN r_objet.lt_contrat.valeur IS 'Valeur de la référence du marché du contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
+COMMENT ON COLUMN r_objet.lt_contrat.presta IS 'Nom du prestataire retenu par le contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
+COMMENT ON COLUMN r_objet.lt_contrat.ddebut IS 'Date de début du contrat';
+COMMENT ON COLUMN r_objet.lt_contrat.dfin IS 'Date de fin du contrat';
+COMMENT ON COLUMN r_objet.lt_contrat.definition IS 'Definition du contrat pour l''entretien et/ou le contrôle de réseau public par la ville ou l''ARC';
 
-COMMENT ON TABLE m_defense_incendie.lt_pei_id_contrat
-  IS 'Code permettant de décrire un contrat pour l''entretien et de contrôle de PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_id_contrat.code IS 'Code de la liste énumérée relative au numéro de contrat pour l''entretien et de contrôle de PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_id_contrat.valeur IS 'Valeur de la référence du marché du contrat pour l''entretien et de contrôle de PEI';
-COMMENT ON COLUMN m_defense_incendie.lt_pei_id_contrat.definition IS 'Definition du contrat pour l''entretien et de contrôle de PEI';
 
-ALTER TABLE m_defense_incendie.lt_pei_id_contrat ALTER COLUMN code SET DEFAULT to_char(nextval('m_defense_incendie.lt_pei_id_contrat_seq'::regclass),'FM00');
-
-INSERT INTO m_defense_incendie.lt_pei_id_contrat(
-            code, valeur, definition)
-    VALUES
-    ('00','Non renseigné',NULL),
-    ('ZZ','Non concerné',NULL),
-    (to_char(nextval('m_defense_incendie.lt_pei_id_contrat_seq'::regclass),'FM00'),'Compiègne n°37/2018','Contrat PEI de la ville de Compiègne'),
-    (to_char(nextval('m_defense_incendie.lt_pei_id_contrat_seq'::regclass),'FM00'),'ARC n°30/2018','Contrat PEI de l''Agglomération de Compiègne');
-
+-- cette table de contrat est commune à l'ensemble des données gérées par contrat. Cette table est donc non supprimables mais le code est
+-- mis à disposition ici. Les valeurs intégrant cette liste sont confidentielles.
 
 -- ################################################################# Domaine valeur ouvert - marque  ###############################################
 
@@ -1008,7 +978,7 @@ ALTER TABLE m_defense_incendie.geo_pei
 
 ALTER TABLE m_defense_incendie.an_pei_ctr
   ADD CONSTRAINT lt_pei_id_contrat_fkey FOREIGN KEY (id_contrat)
-      REFERENCES m_defense_incendie.lt_pei_id_contrat (code) MATCH SIMPLE
+      REFERENCES r_objet.lt_contrat (code) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 -- Foreign Key: m_defense_incendie.lt_pei_etat_anom_fkey
