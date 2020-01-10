@@ -133,7 +133,7 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |:---|:---|:---|:---|  
 |id_pei|Identifiant unique du PEI|bigint| |
 |id_sdis|Identifiant unique du PEI du SDIS|character varying(254)| |
-|id_contrat|Référence du contrat de prestation pour le contrôle technique du PEI|character varying(254)| |
+|id_contrat|Référence du contrat de prestation pour le contrôle technique du PEI|character varying(2)| |
 |press_stat|Pression statique en bar à un débit de 0 m3/h|real| |
 |press_dyn|Pression dynamique résiduelle en bar au débit nominal|real| |
 |debit|Valeur de débit mesuré exprimé en m3/h sous une pression de 1 bar|real| |
