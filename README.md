@@ -1,4 +1,4 @@
-![GeoCompiegnois](doc/img/Logo_web-GeoCompiegnois.png)
+![GeoCompiegnois](doc/img/geocompiegnois_2020_reduit_v2.png)
 
 # Point d'Eau Incendie
 
