@@ -452,7 +452,8 @@ INSERT INTO m_defense_incendie.lt_pei_etat_boolean(
     VALUES
     ('0','Non renseigné',NULL),
     ('t','Oui','1'),
-    ('f','Non','0');
+    ('f','Non','0'),
+    ('z','Non concerné',NULL);
 
 -- ################################################################# Domaine valeur - anomalie  ###############################################
 
