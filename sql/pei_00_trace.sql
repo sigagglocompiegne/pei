@@ -70,6 +70,7 @@
 2018-11-26 : GB / Modification des triggers pour le DELETE (seules les valeurs modifiées sont conservées, les variables = old.variable sont inutiles car un update est utilisé
 2018-12-07 : GB / Réorganisation du code SQL en éclatant par fichier de procédure (test)
 2020-01-10 : GB / Centralisation de la gestion des contrats. La listedes valeurs des contrats a été détaché et centralisé dans le schéma r_objet
+2022-11-23 : GB / Basculement des vues de gestion applicative (avec fonction de mise à jour) du schéma x_apps vers le schéma m_defense_incendie
 
 Généralités sur le domaine métier PEI
 
