@@ -8,8 +8,8 @@
 /* Participant : Grégory Bodet */
 
 
-DROP VIEW IF EXISTS x_apps.xapps_geo_v_pei_ctr;
-DROP VIEW IF EXISTS x_apps.xapps_geo_v_pei_zonedefense;
+DROP VIEW IF EXISTS m_defense_incendie.xapps_geo_v_pei_ctr;
+DROP VIEW IF EXISTS m_defense_incendie.xapps_geo_v_pei_zonedefense;
 
 
 -- ####################################################################################################################################################
@@ -19,11 +19,11 @@ DROP VIEW IF EXISTS x_apps.xapps_geo_v_pei_zonedefense;
 -- ####################################################################################################################################################
 
 
--- View: x_apps.xapps_geo_v_pei_ctr
+-- View: m_defense_incendie.xapps_geo_v_pei_ctr
 
--- DROP VIEW x_apps.xapps_geo_v_pei_ctr;
+-- DROP VIEW m_defense_incendie.xapps_geo_v_pei_ctr;
 
-CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS 
+CREATE OR REPLACE VIEW m_defense_incendie.xapps_geo_v_pei_ctr AS 
  SELECT g.id_pei,
     g.id_sdis,
     g.verrou,
@@ -84,15 +84,15 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_ctr AS
      INNER JOIN r_administratif.an_geo lk ON lk.insee::text = g.insee::text;
 
 
-COMMENT ON VIEW x_apps.xapps_geo_v_pei_ctr
+COMMENT ON VIEW m_defense_incendie.xapps_geo_v_pei_ctr
   IS 'Vue applicative destinée à la modification des données PEI sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
 
 
--- View: x_apps.xapps_geo_v_pei_zonedefense
+-- View: m_defense_incendie.xapps_geo_v_pei_zonedefense
 
--- DROP VIEW x_apps.xapps_geo_v_pei_zonedefense;
+-- DROP VIEW m_defense_incendie.xapps_geo_v_pei_zonedefense;
 
-CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_zonedefense AS 
+CREATE OR REPLACE VIEW m_defense_incendie.xapps_geo_v_pei_zonedefense AS 
  SELECT 
   g.id_pei,
   g.insee,
@@ -105,7 +105,7 @@ CREATE OR REPLACE VIEW x_apps.xapps_geo_v_pei_zonedefense AS
    WHERE g.statut='01' AND a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02';
 
 								       
-COMMENT ON VIEW x_apps.xapps_geo_v_pei_zonedefense
+COMMENT ON VIEW m_defense_incendie.xapps_geo_v_pei_zonedefense
   IS 'Vue applicative des zones indicatives de défense incendie publique';
 								       
 								       
@@ -141,11 +141,11 @@ ras, l'insertion doit être possible
 	3a2- > 
 3b- patrimoine non arc = interdiction > ni delete ni update
 */
--- Function: x_apps.ft_xapps_geo_v_pei_ctr()
+-- Function: m_defense_incendie.ft_xapps_geo_v_pei_ctr()
 
--- DROP FUNCTION x_apps.ft_xapps_geo_v_pei_ctr();
+-- DROP FUNCTION m_defense_incendie.ft_xapps_geo_v_pei_ctr();
 
-CREATE OR REPLACE FUNCTION x_apps.ft_xapps_geo_v_pei_ctr()
+CREATE OR REPLACE FUNCTION m_defense_incendie.ft_xapps_geo_v_pei_ctr()
   RETURNS trigger AS
 $BODY$
 
@@ -642,15 +642,15 @@ $BODY$
   COST 100;
 
 									   
-COMMENT ON FUNCTION x_apps.ft_xapps_geo_v_pei_ctr() IS 'Fonction trigger de mise à jour de la vue applicative destinée à la modification des données relatives aux PEI et aux contrôles sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
+COMMENT ON FUNCTION m_defense_incendie.ft_xapps_geo_v_pei_ctr() IS 'Fonction trigger de mise à jour de la vue applicative destinée à la modification des données relatives aux PEI et aux contrôles sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI';
 
 
--- Trigger: t_t1_xapps_geo_v_pei_ctr on x_apps.xapps_geo_v_pei_ctr
+-- Trigger: t_t1_xapps_geo_v_pei_ctr on m_defense_incendie.xapps_geo_v_pei_ctr
 
--- DROP TRIGGER t_t1_xapps_geo_v_pei_ctr ON x_apps.xapps_geo_v_pei_ctr;
+-- DROP TRIGGER t_t1_xapps_geo_v_pei_ctr ON m_defense_incendie.xapps_geo_v_pei_ctr;
 
 CREATE TRIGGER t_t1_xapps_geo_v_pei_ctr
   INSTEAD OF INSERT OR UPDATE OR DELETE
-  ON x_apps.xapps_geo_v_pei_ctr
+  ON m_defense_incendie.xapps_geo_v_pei_ctr
   FOR EACH ROW
-  EXECUTE PROCEDURE x_apps.ft_xapps_geo_v_pei_ctr();
+  EXECUTE PROCEDURE m_defense_incendie.ft_xapps_geo_v_pei_ctr();
