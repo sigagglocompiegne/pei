@@ -7,7 +7,7 @@
 /* Auteur : FLorent Vanhoutte */
 /* Participant : Grégory Bodet */
 
-DROP VIEW IF EXISTS m_defense_incendie.geo_v_pei_ctr;
+DROP VIEW IF EXISTS m_defense_incendie.geo_v_pei_ctr_qgis;
 DROP VIEW IF EXISTS m_defense_incendie.geo_v_pei_zonedefense;
 
 -- ####################################################################################################################################################
@@ -17,11 +17,11 @@ DROP VIEW IF EXISTS m_defense_incendie.geo_v_pei_zonedefense;
 -- ####################################################################################################################################################
 
 
--- View: m_defense_incendie.geo_v_pei_ctr
+-- View: m_defense_incendie.geo_v_pei_ctr_qgis
 
--- DROP VIEW m_defense_incendie.geo_v_pei_ctr;
+-- DROP VIEW m_defense_incendie.geo_v_pei_ctr_qgis;
 
-CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS 
+CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr_qgis AS 
  SELECT g.id_pei,
     g.id_sdis,
     g.verrou,
@@ -80,7 +80,7 @@ CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_ctr AS
      JOIN m_defense_incendie.an_pei_ctr a ON g.id_pei = a.id_pei
      INNER JOIN r_administratif.an_geo lk ON lk.insee::text = g.insee::text;
 
-COMMENT ON VIEW m_defense_incendie.geo_v_pei_ctr
+COMMENT ON VIEW m_defense_incendie.geo_v_pei_ctr_qgis
   IS 'Vue éditable destinée à la modification des données relatives aux PEI et aux contrôles';
 
 
@@ -112,11 +112,11 @@ COMMENT ON VIEW m_defense_incendie.geo_v_pei_zonedefense
 
 -- #################################################################### FONCTION TRIGGER - GEO_V_PEI_CTR ###################################################
 
--- Function: m_defense_incendie.ft_m_geo_v_pei_ctr()
+-- Function: m_defense_incendie.ft_m_qgis_geo_v_pei_ctr()
 
--- DROP FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr();
+-- DROP FUNCTION m_defense_incendie.ft_m_qgis_geo_v_pei_ctr();
 
-CREATE OR REPLACE FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr()
+CREATE OR REPLACE FUNCTION m_defense_incendie.ft_m_qgis_geo_v_pei_ctr()
   RETURNS trigger AS
 $BODY$
 
@@ -283,22 +283,22 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr()
+ALTER FUNCTION m_defense_incendie.ft_m_qgis_geo_v_pei_ctr()
   OWNER TO sig_create;
 
-COMMENT ON FUNCTION m_defense_incendie.ft_m_geo_v_pei_ctr() IS 'Fonction trigger pour mise à jour de la vue de gestion des points d''eau incendie et contrôles';
+COMMENT ON FUNCTION m_defense_incendie.ft_m_qgis_geo_v_pei_ctr() IS 'Fonction trigger pour mise à jour de la vue de gestion des points d''eau incendie et contrôles';
 
 
 
--- Trigger: t_t1_geo_v_pei_ctr on m_defense_incendie.geo_v_pei_ctr
+-- Trigger: t_t1_geo_v_pei_ctr on m_defense_incendie.geo_v_pei_ctr_qgis
 
--- DROP TRIGGER t_t1_geo_v_pei_ctr ON m_defense_incendie.geo_v_pei_ctr;
+-- DROP TRIGGER t_t1_geo_v_pei_ctr ON m_defense_incendie.geo_v_pei_ctr_qgis;
 
 CREATE TRIGGER t_t1_geo_v_pei_ctr
   INSTEAD OF INSERT OR UPDATE OR DELETE
-  ON m_defense_incendie.geo_v_pei_ctr
+  ON m_defense_incendie.geo_v_pei_ctr_qgis
   FOR EACH ROW
-  EXECUTE PROCEDURE m_defense_incendie.ft_m_geo_v_pei_ctr();
+  EXECUTE PROCEDURE m_defense_incendie.ft_m_qgis_geo_v_pei_ctr();
 										   
 										   
 -- #################################################################### FONCTION TRIGGER - LOG_PEI ###################################################
@@ -371,12 +371,12 @@ COMMENT ON FUNCTION m_defense_incendie.ft_m_log_pei() IS 'audit';
 
 
 
--- Trigger: m_defense_incendie.t_log_pei on m_defense_incendie.geo_v_pei_ctr
+-- Trigger: m_defense_incendie.t_log_pei on m_defense_incendie.geo_v_pei_ctr_qgis
 
--- DROP TRIGGER m_defense_incendie.t_log_pei ON m_defense_incendie.geo_v_pei_ctr;
+-- DROP TRIGGER m_defense_incendie.t_log_pei ON m_defense_incendie.geo_v_pei_ctr_qgis;
 
 CREATE TRIGGER t_t2_log_pei
   INSTEAD OF INSERT OR UPDATE OR DELETE
-  ON m_defense_incendie.geo_v_pei_ctr
+  ON m_defense_incendie.geo_v_pei_ctr_qgis
   FOR EACH ROW
   EXECUTE PROCEDURE m_defense_incendie.ft_m_log_pei();
