@@ -85,26 +85,7 @@ COMMENT ON VIEW m_defense_incendie.geo_v_pei_ctr_qgis
   IS 'Vue éditable destinée à la modification des données relatives aux PEI et aux contrôles';
 
 
--- View: m_defense_incendie.geo_v_pei_zonedefense
-
--- DROP VIEW m_defense_incendie.geo_v_pei_zonedefense;
-
-CREATE OR REPLACE VIEW m_defense_incendie.geo_v_pei_zonedefense AS 
- SELECT 
-  g.id_pei,
-  g.insee,
-  g.geom1
-
-   FROM m_defense_incendie.geo_pei g
-   LEFT JOIN m_defense_incendie.an_pei_ctr a ON a.id_pei = g.id_pei
-   WHERE g.statut='01' AND a.etat_conf = 't' AND DATE_PART('year',(AGE(CURRENT_DATE,a.date_ct))) < 2 AND g.etat_pei ='02';
-
-								       
-COMMENT ON VIEW m_defense_incendie.geo_v_pei_zonedefense
-  IS 'Vue des zones indicatives de défense incendie publique';
-
-
--- m_defense_incendie.xapps_geo_v_pei_ctr source
+-- m_defense_incendie.xapps_geo_v_pei_ctr
 
 CREATE OR REPLACE VIEW m_defense_incendie.xapps_geo_v_pei_ctr
 AS SELECT g.id_pei,
@@ -168,28 +149,11 @@ AS SELECT g.id_pei,
 
 COMMENT ON VIEW m_defense_incendie.xapps_geo_v_pei_ctr IS 'Vue applicative destinée à la modification des données PEI sur le patrimoine géré par le service mutualisé eau potable et la consultation des autres PEI à partir de l''application GEO (avec contrôle de saisies)';
 
--- View Triggers
 
-create trigger t_t1_xapps_geo_v_pei_ctr instead of
-insert
-    or
-delete
-    or
-update
-    on
-    m_defense_incendie.xapps_geo_v_pei_ctr for each row execute procedure m_defense_incendie.ft_m_xapps_geo_v_pei_ctr();
-create trigger t_t2_log_pei instead of
-insert
-    or
-delete
-    or
-update
-    on
-    m_defense_incendie.xapps_geo_v_pei_ctr for each row execute procedure m_defense_incendie.ft_m_log_pei();
 						       
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
--- ###                                                                      TRIGGER                                                                 ###
+-- ###                                                             FONCTION TRIGGER                                                                 ###
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
 
