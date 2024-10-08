@@ -103,7 +103,8 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |marque|Marque du fabriquant du PEI|character varying(2)| |
 |source_pei|Source du point d'eau|character varying(3)| |
 |volume|Capacité volumique utile de la source d'eau en m3/h. Si la source est inépuisable (cour d'eau ou plan d'eau pérenne), l'information est nulle|integer| |
-|diam_cana|Diamètre de la canalisation exprimé en mm pour les PI et BI|integer| |
+|mate_cana|Matériau de la canalisation sur lequel le PEI est connecté (ne concerne que les poteaux incendies et les bouches incendies)I|integer| |
+|diam_cana|Diamètre de la canalisation desservant le PEI exprimé en mm pour les PI et BI|integer| |
 |etat_pei|Etat d'actualité du PEI|character varying(2)| |
 |statut|Statut juridique|character varying(2)| |
 |nom_etab|Nom de l'établissement propriétaire dans le cas d'un statut privé|character varying(254)| |
@@ -464,6 +465,138 @@ Valeurs possibles :
 |15|Manqued'eau (pour citerne ou point d'aspiration seulement)|0|0|1|
 
 ---
+
+`lt_pei_materiau` : Liste permettant de décrire les matériaux des canalisations desservant les PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code du matériau|character varying(2)| |
+|valeur|Valeur de la liste du matériau|character varying(80)| |
+
+Valeurs possibles :
+
+|code | valeur | 
+|:---|:---|   
+|10|Fonte indéterminée|
+|11|Acier|
+|12|Fonte grise|
+|13|Fonte bluetop|
+|14|Fonte ductile|
+|20|PVC indéterminé|
+|21|PVC|
+|22|PE noir|
+|23|PE bandes bleues|
+|00|Non renseigné|
+|ZZ|Non concerné|
+
+
+---
+
+`lt_pei_diam_materiau` : Liste permettant de décrire les diamètres des matériaux des canalisations reliés au PEI
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code du diamètre|character varying(2)| |
+|valeur|Valeur de la liste du diamètre|character varying(80)| |
+
+Valeurs possibles :
+
+|code | valeur | typ |
+|:---|:---|:---| 
+|01|<60|11|
+|01|<60|12|
+|01|<60|13|
+|01|<60|14|
+|01|<60|10|
+|02|60|11|
+|02|60|13|
+|02|60|14|
+|02|60|12|
+|02|60|10|
+|03|80|11|
+|03|80|12|
+|03|80|13|
+|03|80|14|
+|03|80|10|
+|04|100|11|
+|04|100|12|
+|04|100|13|
+|04|100|14|
+|04|100|10|
+|05|125|11|
+|05|125|12|
+|05|125|13|
+|05|125|14|
+|05|125|10|
+|06|150|10|
+|06|150|11|
+|06|150|12|
+|06|150|13|
+|06|150|14|
+|07|200|11|
+|07|200|12|
+|07|200|13|
+|07|200|14|
+|07|200|10|
+|08|250|11|
+|08|250|12|
+|08|250|13|
+|08|250|14|
+|08|250|10|
+|09|300|12|
+|09|300|13|
+|09|300|14|
+|10|350|12|
+|10|350|13|
+|10|350|14|
+|11|400|12|
+|11|400|13|
+|11|400|14|
+|12|450|12|
+|12|450|13|
+|12|450|14|
+|13|500|12|
+|13|500|13|
+|13|500|14|
+|14|600|12|
+|14|600|13|
+|14|600|14|
+|15|<63|21|
+|15|<63|22|
+|15|<63|23|
+|16|63|21|
+|16|63|22|
+|16|63|23|
+|17|90|21|
+|17|90|22|
+|17|90|23|
+|18|110|21|
+|18|110|22|
+|18|110|23|
+|19|160|21|
+|19|160|22|
+|19|160|23|
+|20|180|21|
+|20|180|22|
+|20|180|23|
+|21|335|21|
+|21|335|22|
+|21|335|23|
+|15|<63|20|
+|16|63|20|
+|17|90|20|
+|18|110|20|
+|19|160|20|
+|20|180|20|
+|21|335|20|
+|ZZ|Non concerné|ZZ|
+|00|Non renseigné|00|
+|09|300|11|
+|10|350|11|
+|11|400|11|
+|12|450|11|
+|13|500|11|
+|14|600|11|
 
 ## Log
 
