@@ -103,8 +103,8 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 |marque|Marque du fabriquant du PEI|character varying(2)| |
 |source_pei|Source du point d'eau|character varying(3)| |
 |volume|Capacité volumique utile de la source d'eau en m3/h. Si la source est inépuisable (cour d'eau ou plan d'eau pérenne), l'information est nulle|integer| |
-|mate_cana|Matériau de la canalisation sur lequel le PEI est connecté (ne concerne que les poteaux incendies et les bouches incendies)I|integer| |
-|diam_cana|Diamètre de la canalisation desservant le PEI exprimé en mm pour les PI et BI|integer| |
+|mate_cana|Matériau de la canalisation sur lequel le PEI est connecté (ne concerne que les poteaux incendies et les bouches incendies)I|varchar(2)| |
+|diam_cana|Diamètre de la canalisation desservant le PEI exprimé en mm pour les PI et BI|varchar(2)| |
 |etat_pei|Etat d'actualité du PEI|character varying(2)| |
 |statut|Statut juridique|character varying(2)| |
 |nom_etab|Nom de l'établissement propriétaire dans le cas d'un statut privé|character varying(254)| |
