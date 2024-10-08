@@ -166,9 +166,13 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 ### classes d'objets applicatives métiers :
  
 `xapps_geo_v_pei_ctr` : Vue éditable depuis l'application permettant la saisie ou la mise à jour des données des PEI
+
+  * `t_t1_geo_v_pei_ctr` : trigger gérant la saisie ou la mise à jour des données PEI, intégrant les contrôles de saisies et la génération des messages d'erreur
+  * `t_t2_log_pei` : intégration de valeurs dans la table de log 
+
 `geo_v_pei_ctr_qgis` : Vue éditable destinée à la modification des données relatives aux PEI et aux contrôles depuis un projet QGIS interne (sans contrôle ici)
 
-  * `t_t1_geo_v_pei_ctr` :trigger gérant la saisie ou la mise à jour des données PEI, intégrant les contrôles de saisies et la génération des messages d'erreur
+  * `t_t1_geo_v_pei_ctr` : trigger gérant la saisie ou la mise à jour des données PEI, intégrant les contrôles de saisies et la génération des messages d'erreur
   * `t_t2_log_pei` : intégration de valeurs dans la table de log 
   
 `xapps_geo_v_pei_zonedefense` : Vue applicative affichant les périmètres de 200 mètres autour des PEI pour ceux ayant une DECI disponible
