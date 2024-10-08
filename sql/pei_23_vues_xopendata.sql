@@ -7,7 +7,7 @@
 /* Auteur : FLorent Vanhoutte */
 /* Participant : Grégory Bodet */
 
-DROP VIEW IF EXISTS x_opendata.xopendata_geo_v_open_pei;
+DROP VIEW IF EXISTS m_defense_incendie.xopendata_geo_v_open_pei;
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
@@ -16,11 +16,11 @@ DROP VIEW IF EXISTS x_opendata.xopendata_geo_v_open_pei;
 -- ####################################################################################################################################################
 
 
--- View: x_opendata.xopendata_geo_v_open_pei
+-- View: m_defense_incendie.xopendata_geo_v_open_pei
 
--- DROP VIEW x_opendata.xopendata_geo_v_open_pei;
+-- DROP VIEW m_defense_incendie.xopendata_geo_v_open_pei;
 
-CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_open_pei AS 
+CREATE OR REPLACE VIEW m_defense_incendie.xopendata_geo_v_open_pei AS 
  SELECT g.insee,
     g.id_sdis,
     g.id_pei::text AS id_gestion,
