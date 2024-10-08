@@ -71,6 +71,7 @@
 2018-12-07 : GB / Réorganisation du code SQL en éclatant par fichier de procédure (test)
 2020-01-10 : GB / Centralisation de la gestion des contrats. La listedes valeurs des contrats a été détaché et centralisé dans le schéma r_objet
 2022-11-23 : GB / Basculement des vues de gestion applicative (avec fonction de mise à jour) du schéma x_apps vers le schéma m_defense_incendie
+2024-10-08 : GB / Intégration d'attributs matériau et diamètre pour les canalisations desservant le PEI et modification de la mise à joru automatique de l'information "Type dans le règlement départemental"
 
 Généralités sur le domaine métier PEI
 
