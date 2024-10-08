@@ -602,6 +602,170 @@ INSERT INTO m_defense_incendie.lt_pei_raccord(
     (to_char(nextval('m_defense_incendie.lt_pei_raccord_seq'::regclass),'FM00'),'3x100'),
     (to_char(nextval('m_defense_incendie.lt_pei_raccord_seq'::regclass),'FM00'),'1x65 - 2x40');
 
+
+-- ################################################################# Domaine valeur - lt_pei_materiau  ###############################################
+
+-- Table: m_defense_incendie.lt_pei_materiau
+
+-- DROP TABLE m_defense_incendie.lt_pei_materiau;
+
+CREATE TABLE m_defense_incendie.lt_pei_materiau
+(
+  code character varying(2) NOT NULL,
+  valeur character varying(80) NOT NULL,
+  CONSTRAINT lt_pei_materiau_pkey PRIMARY KEY (code)
+)
+WITH (
+  OIDS=FALSE
+);
+
+
+COMMENT ON TABLE m_defense_incendie.lt_pei_materiau
+  IS 'Code permettant de décrire les types de matériaux des canalisations reliés au PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_materiau.code IS 'Code du matériau';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_materiau.valeur IS 'Valeur du matériau';
+
+INSERT INTO m_defense_incendie.lt_pei_materiau(
+            code, valeur)
+    VALUES
+    ('00','Non renseigné'),
+    ('10','Fonte intdéterminée'),
+    ('11','Acier'),
+    ('12','Fonte grise'),
+    ('13','Fonte bluetop'),
+    ('14','Fonte ductile'),
+    ('20','PVC indéterminé'),
+    ('21','PVC'),
+    ('22','PE noir'),
+    ('23','PE bandes bleues'),
+    ('ZZ','Non concerné');
+
+-- ################################################################# Domaine valeur - lt_pei_diam_materiau  ###############################################
+
+-- Table: m_defense_incendie.lt_pei_diam_materiau
+
+-- DROP TABLE m_defense_incendie.lt_pei_diam_materiau;
+
+CREATE TABLE m_defense_incendie.lt_pei_diam_materiau
+(
+  code character varying(2) NOT NULL,
+  valeur character varying(80) NOT NULL
+)
+WITH (
+  OIDS=FALSE
+);
+
+
+COMMENT ON TABLE m_defense_incendie.lt_pei_diam_materiau
+  IS 'Code permettant de décrire les diamètres des matériaux des canalisations reliés au PEI';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_diam_materiau.code IS 'Code du diamètre';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_diam_materiau.valeur IS 'Valeur du diamètre';
+COMMENT ON COLUMN m_defense_incendie.lt_pei_diam_materiau.typ IS 'Type de matériau (permettant de faire des listes imbriquées dans GEO)';
+
+INSERT INTO m_defense_incendie.lt_pei_diam_materiau(
+            code, valeur,typ)
+    VALUES
+    ('00','Non renseigné','00'),
+    ('01','<60','10'),
+    ('01','<60','11'),
+    ('01','<60','12'),
+    ('01','<60','13'),
+    ('01','<60','14'),
+    ('02','60','10'),
+    ('02','60','11'),
+    ('02','60','12'),
+    ('02','60','13'),
+    ('02','60','14'),
+    ('03','80','10'),
+    ('03','80','11'),
+    ('03','80','12'),
+    ('03','80','13'),
+    ('03','80','14'),
+    ('04','100','10'),
+    ('04','100','11'),
+    ('04','100','12'),
+    ('04','100','13'),
+    ('04','100','14'),  
+    ('05','125','10'),
+    ('05','125','11'),
+    ('05','125','12'),
+    ('05','125','13'),
+    ('05','125','14'),    
+    ('06','150','10'),
+    ('06','150','11'),
+    ('06','150','12'),
+    ('06','150','13'),
+    ('06','150','14'),    
+    ('07','200','10'),
+    ('07','200','11'),
+    ('07','200','12'),
+    ('07','200','13'),
+    ('07','200','14'),      
+    ('08','250','10'),
+    ('08','250','11'),
+    ('08','250','12'),
+    ('08','250','13'),
+    ('08','250','14'),        
+    ('09','300','10'),
+    ('09','300','11'),
+    ('09','300','12'),
+    ('09','300','13'),
+    ('09','300','14'),          
+    ('10','350','10'),
+    ('10','350','11'),
+    ('10','350','12'),
+    ('10','350','13'),
+    ('10','350','14'),            
+    ('11','400','10'),
+    ('11','400','11'),
+    ('11','400','12'),
+    ('11','400','13'),
+    ('11','400','14'),              
+    ('12','450','10'),
+    ('12','450','11'),
+    ('12','450','12'),
+    ('12','450','13'),
+    ('12','450','14'),                
+    ('13','500','10'),
+    ('13','500','11'),
+    ('13','500','12'),
+    ('13','500','13'),
+    ('13','500','14'),                  
+    ('14','600','10'),
+    ('14','600','11'),
+    ('14','600','12'),
+    ('14','600','13'),
+    ('14','600','14'),                    
+    ('15','<63','20'),
+    ('15','<63','21'),
+    ('15','<63','22'),
+    ('15','63','23'),
+    ('16','63','20'),
+    ('16','63','21'),
+    ('16','63','22'),
+    ('16','63','23'),
+    ('17','90','20'),
+    ('17','90','21'),
+    ('17','90','22'),
+    ('17','90','23'),
+    ('18','110','20'),
+    ('18','110','21'),
+    ('18','110','22'),
+    ('18','110','23'),  
+    ('19','160','20'),
+    ('19','160','21'),
+    ('19','160','22'),
+    ('19','160','23'),    
+    ('20','180','20'),
+    ('20','180','21'),
+    ('20','180','22'),
+    ('20','180','23'),      
+    ('21','335','20'),
+    ('21','335','21'),
+    ('21','335','22'),
+    ('21','335','23'),        
+    ('ZZ','Non concerné','ZZ');
+
 -- ################################################################# Domaine valeur - src_geom  ###############################################
 
 -- Type d'énumération urbanisé et présent dans le schéma r_objet
@@ -639,7 +803,8 @@ CREATE TABLE m_defense_incendie.geo_pei
   source_pei character varying(3),
   debit_r_ci real,
   volume integer,
-  diam_cana integer,
+  mate_cana varchar(2),
+  diam_cana varchar(2),
   etat_pei character varying(2),
   statut character varying(2),
   nom_etab character varying(254),
@@ -683,7 +848,8 @@ COMMENT ON COLUMN m_defense_incendie.geo_pei.marque IS 'Marque du fabriquant du 
 COMMENT ON COLUMN m_defense_incendie.geo_pei.source_pei IS 'Source du point d''eau';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.volume IS 'Capacité volumique utile de la source d''eau en m3/h. Si la source est inépuisable (cour d''eau ou plan d''eau pérenne), l''information est nulle';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.debit_r_ci IS 'Valeur de débit de remplissage pour les CI en m3/h';
-COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_cana IS 'Diamètre de la canalisation exprimé en mm pour les PI et BI';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.diam_cana IS 'Diamètre de la canalisation desservant le PEI exprimé en mm pour les PI et BI';
+COMMENT ON COLUMN m_defense_incendie.geo_pei.mate_cana IS 'Matériau de la canalisation desservant le PEI pour les PI et BI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.etat_pei IS 'Etat d''actualité du PEI';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.statut IS 'Statut juridique';
 COMMENT ON COLUMN m_defense_incendie.geo_pei.nom_etab IS 'Dans le cas d''un PEI de statut privé, nom de l''établissement propriétaire';
@@ -981,6 +1147,13 @@ ALTER TABLE m_defense_incendie.an_pei_ctr
   ADD CONSTRAINT lt_pei_etat_conf_fkey FOREIGN KEY (etat_conf)
       REFERENCES m_defense_incendie.lt_pei_etat_boolean (code) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION; 
+
+-- ALTER TABLE m_defense_incendie.geo_pei DROP CONSTRAINT geo_pei_materiau_fkey;
+
+ALTER TABLE m_defense_incendie.geo_pei 
+  ADD CONSTRAINT geo_pei_materiau_fkey FOREIGN KEY (mate_cana) 
+  REFERENCES m_defense_incendie.lt_pei_materiau(code)
+  ON UPDATE NO ACTION ON DELETE NO ACTION; 
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
