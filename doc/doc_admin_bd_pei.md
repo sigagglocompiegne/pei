@@ -163,22 +163,23 @@ L'ensemble des classes d'objets unitaires sont stockées dans le schéma m_defen
 
 ---
 
-### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
+### classes d'objets applicatives métiers :
  
-`x_apps.xapps_geo_v_pei_ctr` : Vue éditable depuis l'application permettant la saisie ou la mise à jour des données des PEI
+`xapps_geo_v_pei_ctr` : Vue éditable depuis l'application permettant la saisie ou la mise à jour des données des PEI
+`geo_v_pei_ctr_qgis` : Vue éditable destinée à la modification des données relatives aux PEI et aux contrôles depuis un projet QGIS interne (sans contrôle ici)
 
   * `t_t1_geo_v_pei_ctr` :trigger gérant la saisie ou la mise à jour des données PEI, intégrant les contrôles de saisies et la génération des messages d'erreur
   * `t_t2_log_pei` : intégration de valeurs dans la table de log 
   
-`x_apps.xapps_geo_v_pei_zonedefense` : Vue applicative affichant les périmètres de 200 mètres autour des PEI pour ceux ayant une DECI disponible
+`xapps_geo_v_pei_zonedefense` : Vue applicative affichant les périmètres de 200 mètres autour des PEI pour ceux ayant une DECI disponible
 
 ### classes d'objets applicatives grands publics sont classés dans le schéma x_apps_public :
 
-En cours de traitement
+Sans objet
 
-### classes d'objets opendata sont classés dans le schéma x_opendata :
+### classes d'objets opendata sont classés :
 
-En cours de traitement
+`xopendata_geo_v_open_pei` : Vue des PEI existants destinée aux échanges de données en opendata selon le format PEI AFIGEO
 
 ## Liste de valeurs
 
