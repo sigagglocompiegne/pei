@@ -452,7 +452,7 @@ Particularité(s) à noter :
 Valeurs possibles :
 
 |code | valeur |csq_acces |csq_sign |csq_conf |
-|:---|:---|    
+|:---|:---|:---|:---|:---|            
 |01|Manque bouchon|0|0|0|
 |02|Manque capot ou capot HS|0|0|0|
 |03|Manque de débit ou volume|0|0|1|
